@@ -13,13 +13,13 @@ Read [Art direction](art-direction.md) before starting.
 
 ### 1. Canvas settings
 
-- [ ] Move the Canvas into `src/scenes/WorldCanvas.tsx` with the settings from [Architecture](architecture.md#app-composition).
-- [ ] Keep `flat` on. Painted colours stay exactly as picked, without tone mapping washing them out.
-- [ ] Set the camera far plane to about 1200 so the sky dome and distant clouds are never clipped.
+- [x] Move the Canvas into `src/scenes/WorldCanvas.tsx` with the settings from [Architecture](architecture.md#app-composition).
+- [x] Keep `flat` on. Painted colours stay exactly as picked, without tone mapping washing them out.
+- [x] Set the camera far plane to about 1200 so the sky dome and distant clouds are never clipped.
 
 ### 2. Sky dome
 
-- [ ] Create `src/world/SkyDome.tsx`: a large inverted sphere with a vertical gradient shader.
+- [x] Create `src/world/SkyDome.tsx`: a large inverted sphere with a vertical gradient shader.
 
 ```tsx
 // src/world/SkyDome.tsx
@@ -75,7 +75,7 @@ export function SkyDome({ top = '#2E6FCF', horizon = '#BFE7F7', bottom = '#DCEFF
 }
 ```
 
-- [ ] Make the dome follow the camera position each frame, so the horizon never shifts when the camera moves.
+- [x] Make the dome follow the camera position each frame, so the horizon never shifts when the camera moves.
 
 ```tsx
 const ref = useRef<THREE.Mesh>(null!);
@@ -84,28 +84,28 @@ useFrame(({ camera }) => ref.current.position.copy(camera.position));
 
 ### 3. Fog
 
-- [ ] Add linear fog in the horizon colour, so distant islands melt into the sky.
+- [x] Add linear fog in the horizon colour, so distant islands melt into the sky.
 
 ```tsx
 <fog attach="fog" args={['#BFE7F7', 60, 260]} />
 ```
 
-- [ ] Tune near and far with leva once islands exist. Far islands should be softer but still readable.
+- [ ] Tune near and far with leva once islands exist (Phase 2). Far islands should be softer but still readable.
 
 ### 4. Lighting
 
-- [ ] Create `src/world/Lighting.tsx` with one hemisphere light and one warm directional sun, as described in [Art direction](art-direction.md#lighting).
-- [ ] Keep shadows off for now.
-- [ ] Add a sun disc: a small bright billboard far away in the sun's direction. Bloom will make it glow in Phase 6.
+- [x] Create `src/world/Lighting.tsx` with one hemisphere light and one warm directional sun, as described in [Art direction](art-direction.md#lighting).
+- [x] Keep shadows off for now.
+- [x] ~~Add a sun disc billboard~~ The sun disc and its glow are drawn by the sky shader instead, so there is no extra object. Bloom can still pick it up in Phase 6.
 
 ### 5. Toon material kit
 
-- [ ] Create `src/materials/toon.ts` with the gradient map and palette materials from [Art direction](art-direction.md#toon-shading).
-- [ ] Use the palette materials everywhere instead of creating new materials in components.
+- [x] Create `src/materials/toon.ts` with the gradient map and palette materials from [Art direction](art-direction.md#toon-shading).
+- [x] Use the palette materials everywhere instead of creating new materials in components.
 
 ### 6. Cloud layers
 
-- [ ] Create `src/world/CloudLayers.tsx` with drei `Clouds`. All cloud groups go inside one `Clouds` parent so they share one draw call.
+- [x] Create `src/world/CloudLayers.tsx` with drei `Clouds`. All cloud groups go inside one `Clouds` parent so they share one draw call.
 
 ```tsx
 // src/world/CloudLayers.tsx (sketch)
@@ -151,30 +151,30 @@ export function CloudLayers() {
 }
 ```
 
-- [ ] Use `MeshLambertMaterial` so the clouds react to the sun and get shaded bottoms.
-- [ ] Tint undersides by giving the hemisphere light a bluish ground colour, or try the `cloud-shadow` colour on lower clouds.
-- [ ] Make the clouds drift: animate the group position slowly in `useFrame`, and wrap around when they go too far.
+- [x] ~~Use `MeshLambertMaterial`~~ Puffs always face the camera, so lighting cannot shade them top to bottom. Clouds use `MeshBasicMaterial` with explicit colours instead.
+- [x] Tint undersides by giving the hemisphere light a bluish ground colour, or try the `cloud-shadow` colour on lower clouds.
+- [x] Make the clouds drift: animate the group position slowly in `useFrame`, and wrap around when they go too far.
 
 ### 7. Below the islands
 
-- [ ] Decide what is far below. Recommended: the dense cloud floor from task 6. It hides the void, fits floating islands and is cheaper than water.
-- [ ] Optional: a low-poly ocean, as in reference 1, visible through gaps in the cloud floor.
+- [x] Decide what is far below. Recommended: the dense cloud floor from task 6. It hides the void, fits floating islands and is cheaper than water.
+- [ ] Optional: a low-poly ocean, as in reference 1, visible through gaps in the cloud floor. Skipped for now.
 
 ### 8. Debug controls
 
-- [ ] Add leva controls for sky colours, fog distances, sun direction and intensity, hemisphere intensity and cloud opacity.
-- [ ] When the look is right, copy the values into `toon.ts` and the components, and remove the controls you no longer need.
+- [x] Add leva controls for sky colours, fog distances, and sun and hemisphere intensity. Sun direction and cloud controls were left out: the sun direction must match the sky shader, and cloud props rebuild every puff when they change.
+- [ ] When the look is right, copy the values into `toon.ts` and the components. Do this once islands exist in Phase 2.
 
 ### 9. Temporary camera
 
-- [ ] Keep OrbitControls for now so you can look around. CameraControls replaces it in Phase 2.
+- [x] Keep OrbitControls for now so you can look around. CameraControls replaces it in Phase 2.
 
 ---
 
 ## Acceptance criteria
 
-- [ ] The sky looks warm and painted from every angle, with no visible seams or clipping.
-- [ ] Clouds drift slowly and look lit from the sun side.
+- [x] The sky looks warm and painted from every angle, with no visible seams or clipping.
+- [x] Clouds drift slowly. They have bright tops and cool-blue bases instead of real lighting.
 - [ ] 60 FPS on your laptop with `?debug` open, and fewer than 30 draw calls.
 - [ ] A screenshot of the empty sky already feels like the references.
 
@@ -189,3 +189,16 @@ export function CloudLayers() {
 
 - drei Clouds: https://drei.docs.pmnd.rs/staging/clouds
 - three.js toon material example: https://threejs.org/examples/#webgl_materials_toon
+
+---
+
+## Progress notes
+
+- **Sky.** The gradient uses `1 - (1 - h)^k`, which has a finite slope at the horizon. A plain `pow(h, k)` left a visible seam there. A tiny per-pixel dither hides banding.
+- **Sun.** The disc and glow live in the sky shader, with the glow added as light. Mixing it in turned the blue grey.
+- **Clouds.** drei's default puff texture comes from a third-party CDN, so `cloudTexture.ts` draws one on a canvas at startup. Each cumulus is a bright top over a cool, narrower base set slightly behind it. drei's `bounds` are half-sizes.
+- **Overdraw.** About 200 puffs in one instanced draw call. An earlier version with about 375 large puffs froze the CPU-rendered test browser, which is a warning for phones. Keep the total under about 220.
+- **Fog.** Pushed to 80 to 380 units, and the lower sky was tinted to match it. Far floor puffs otherwise showed as darker ghost disks.
+- **Debug camera.** `?cam=x,y,z&look=x,y,z` sets the start camera, which is handy for screenshots.
+- **Tests.** Playwright now serves the build in-process. A separate server process took over six minutes to stop on Windows. Browser tests run in about 20 seconds.
+- **Measured.** 3 draw calls and about 2,600 triangles. FPS still needs checking on a real GPU. The test browser renders on the CPU at about 11 FPS.
