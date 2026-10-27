@@ -8,4 +8,4 @@ import * as THREE from 'three';
 export const SUN_DIRECTION = new THREE.Vector3(-0.62, 0.55, 0.35).normalize();
 
 /** Fog starts and ends in world units from the camera. */
-export const FOG = { near: 60, far: 280 } as const;
+export const FOG = { near: 80, far: 380 } as const;

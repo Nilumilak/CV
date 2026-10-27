@@ -4,7 +4,7 @@ import * as THREE from 'three';
 export const colors = {
   skyTop: '#2E6FCF',
   skyHorizon: '#BFE7F7',
-  skyBottom: '#E4F3FA',
+  skyBottom: '#D3ECF7',
   sun: '#FFF1D6',
   cloudLight: '#FFFDF6',
   cloudShadow: '#AFC3E6',

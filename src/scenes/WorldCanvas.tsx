@@ -5,6 +5,7 @@ import { Leva } from 'leva';
 import type { Mesh } from 'three';
 import { colors, palette } from '@/materials/toon';
 import { debugCamera, isDebug } from '@/debug/isDebug';
+import { CloudLayers } from '@/world/CloudLayers';
 import { Lighting } from '@/world/Lighting';
 import { SkyDome } from '@/world/SkyDome';
 import { FOG } from '@/world/sky';
@@ -38,6 +39,9 @@ export default function WorldCanvas() {
         <fog attach="fog" args={[colors.skyHorizon, FOG.near, FOG.far]} />
         <SkyDome />
         <Lighting />
+        <Suspense fallback={null}>
+          <CloudLayers />
+        </Suspense>
         <Cube />
         <OrbitControls target={debugCamera.target ?? [0, 0, 0]} maxDistance={300} />
         {isDebug && (
