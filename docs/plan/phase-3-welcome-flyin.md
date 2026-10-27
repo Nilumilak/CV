@@ -10,6 +10,7 @@
 ## Tasks
 
 ### 1. Loading flow
+
 - [ ] Set the store's initial phase back to `'loading'`.
 - [ ] Render the welcome overlay immediately, before the 3D chunk downloads. It is plain HTML in `src/ui/Welcome.tsx`.
 - [ ] Read loading progress with drei `useProgress` inside the Canvas, and pass it out through the store or a small context.
@@ -30,6 +31,7 @@ function LoadingReporter() {
 - [ ] Load only what the overview needs before showing Enter. Island detail models can load later, see [Phase 7](phase-7-performance-mobile-a11y.md).
 
 ### 2. Welcome screen
+
 - [ ] Layout, centred over the sky:
   - "Welcome to my World" in the title font
   - name and role underneath
@@ -41,6 +43,7 @@ function LoadingReporter() {
 - [ ] Focus the Enter button when it appears, so keyboard users can just press Enter.
 
 ### 3. Fly-in path
+
 - [ ] Define the path as points in `world.ts`: start high above the clouds, dive into the cloud layer, burst out underneath, swing towards the islands, end exactly at the overview pose.
 - [ ] Create `src/scenes/FlyIn.tsx`. It moves the camera along a Catmull-Rom curve while the phase is `'flyIn'`.
 
@@ -51,7 +54,10 @@ const tmpTarget = new THREE.Vector3();
 const overviewTarget = new THREE.Vector3(...OVERVIEW.target);
 
 export function FlyIn() {
-  const curve = useMemo(() => new THREE.CatmullRomCurve3(FLY_IN_POINTS.map((p) => new THREE.Vector3(...p))), []);
+  const curve = useMemo(
+    () => new THREE.CatmullRomCurve3(FLY_IN_POINTS.map((p) => new THREE.Vector3(...p))),
+    [],
+  );
   const t = useRef(0);
 
   useFrame(({ camera }, delta) => {
@@ -67,7 +73,7 @@ export function FlyIn() {
     tmpTarget.lerpVectors(ahead, overviewTarget, smoothstep(0.65, 1, k));
     camera.lookAt(tmpTarget);
 
-    if (t.current === 1) setPhase('world');   // CameraRig mounts and takes over
+    if (t.current === 1) setPhase('world'); // CameraRig mounts and takes over
   });
 
   return null;
@@ -84,16 +90,19 @@ const smoothstep = (a: number, b: number, x: number) => {
 - [ ] If the visitor arrived with a deep link such as `#/radio`, focus that island right after the handoff.
 
 ### 4. Cloud burst effect
+
 - [ ] Add wisp clouds right on the path where the camera crosses the cloud layer.
 - [ ] Add a full-screen white overlay that fades to about 70 percent opacity inside the cloud and back to zero when leaving it.
 - [ ] Briefly widen the field of view during the dive, from 45 to about 60 and back, for a sense of speed. Call `camera.updateProjectionMatrix()` after each change.
 - [ ] Optional: tiny camera shake while inside the cloud.
 
 ### 5. Title beats during the dive (optional)
+
 - [ ] Fade in the name, then the role, then nothing, timed to the curve progress.
 - [ ] Keep them short. The world is the message.
 
 ### 6. Skip
+
 - [ ] A Skip button in the bottom-right corner during the fly-in.
 - [ ] Any key or a click also skips.
 - [ ] Skipping jumps the camera to the end of the curve with a quick fade, then sets the phase to `'world'`.
@@ -101,19 +110,31 @@ const smoothstep = (a: number, b: number, x: number) => {
 - [ ] Returning visitors (`visited` is not empty) get a 2-second version: start the curve near the cloud layer.
 
 ### 7. Sound
+
 - [ ] Create `src/audio/sound.ts` around howler.
 
 ```ts
 // src/audio/sound.ts (sketch)
 import { Howl, Howler } from 'howler';
 
-const ambient = new Howl({ src: ['/audio/ambient.webm', '/audio/ambient.mp3'], loop: true, volume: 0 });
+const ambient = new Howl({
+  src: ['/audio/ambient.webm', '/audio/ambient.mp3'],
+  loop: true,
+  volume: 0,
+});
 const whoosh = new Howl({ src: ['/audio/whoosh.mp3'], volume: 0.5 });
 
 export const sound = {
-  start() { ambient.play(); ambient.fade(0, 0.35, 2500); },
-  whoosh() { whoosh.play(); },
-  mute(m: boolean) { Howler.mute(m); },
+  start() {
+    ambient.play();
+    ambient.fade(0, 0.35, 2500);
+  },
+  whoosh() {
+    whoosh.play();
+  },
+  mute(m: boolean) {
+    Howler.mute(m);
+  },
 };
 ```
 

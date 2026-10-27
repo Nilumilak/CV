@@ -11,23 +11,24 @@ Phase 2 already built the basics: classic CV, keyboard navigation, deep links, b
 
 ## Budgets
 
-| Metric | Target |
-|---|---|
-| Initial JavaScript before the 3D chunk | 100 KB gzip or less |
-| 3D chunk (three, R3F, drei, effects) | 600 KB gzip or less |
-| Models and textures for the overview | 5 MB or less |
-| All models and textures | 10 MB or less |
-| Audio downloaded before Enter | 0 |
-| Welcome text visible | Under 2 seconds on fast 4G |
-| Draw calls in the overview | 150 or fewer |
-| Triangles in view | 300,000 or fewer |
-| Frame rate | 60 FPS on a mid laptop, 30 FPS or better on a mid phone |
+| Metric                                 | Target                                                  |
+| -------------------------------------- | ------------------------------------------------------- |
+| Initial JavaScript before the 3D chunk | 100 KB gzip or less                                     |
+| 3D chunk (three, R3F, drei, effects)   | 600 KB gzip or less                                     |
+| Models and textures for the overview   | 5 MB or less                                            |
+| All models and textures                | 10 MB or less                                           |
+| Audio downloaded before Enter          | 0                                                       |
+| Welcome text visible                   | Under 2 seconds on fast 4G                              |
+| Draw calls in the overview             | 150 or fewer                                            |
+| Triangles in view                      | 300,000 or fewer                                        |
+| Frame rate                             | 60 FPS on a mid laptop, 30 FPS or better on a mid phone |
 
 ---
 
 ## Tasks
 
 ### 1. Measure first
+
 - [ ] Use `?debug` with r3f-perf to read FPS, draw calls, triangles and GPU memory on every island.
 - [ ] Run `npx vite-bundle-visualizer` to see what is in each chunk.
 - [ ] Record a Chrome Performance trace of the fly-in and of an island flight.
@@ -35,6 +36,7 @@ Phase 2 already built the basics: classic CV, keyboard navigation, deep links, b
 - [ ] Write the numbers in a table at the bottom of this file, before and after tuning.
 
 ### 2. Loading strategy
+
 - [ ] The overview loads light versions of each island: silhouette, landmark, no interactive detail.
 - [ ] The detailed island loads when it is focused, inside its own `Suspense`. Use drei `useGLTF.preload` for the next and previous islands while the visitor reads.
 - [ ] Alternatively use drei `Detailed` for level of detail by distance, if both versions are small enough to load upfront.
@@ -42,6 +44,7 @@ Phase 2 already built the basics: classic CV, keyboard navigation, deep links, b
 - [ ] Load fonts with `font-display: swap` and preload the title font.
 
 ### 3. Adaptive quality
+
 - [ ] Wrap the scene in drei `PerformanceMonitor`. On decline, lower the pixel ratio first, then switch `quality` to `'low'`.
 
 ```tsx
@@ -58,12 +61,14 @@ Phase 2 already built the basics: classic CV, keyboard navigation, deep links, b
 - [ ] Start on low quality by default when `matchMedia('(pointer: coarse)')` matches and the screen is small.
 
 ### 4. Rendering savings
+
 - [ ] Confirm all repeated props use `Instances` or `Merged`.
 - [ ] Confirm materials are shared, not cloned per mesh.
 - [ ] Pause expensive work for islands outside the view. A simple distance check from the camera is enough to skip their `useFrame` animations.
 - [ ] R3F stops rendering when the browser tab is hidden. Also pause audio then.
 
 ### 5. Mobile
+
 - [ ] **Camera framing.** In portrait, increase the overview distance or field of view based on the aspect ratio, so all islands fit.
 - [ ] **Touch.** One finger rotates within limits, two fingers zoom. Disable panning.
 - [ ] **Tap.** There is no hover on touch. The first tap on an object shows its tooltip and plays it. Never require hover to discover anything.
@@ -73,6 +78,7 @@ Phase 2 already built the basics: classic CV, keyboard navigation, deep links, b
 - [ ] **Safe areas.** Respect `env(safe-area-inset-*)` for the top bar and the sheet on phones with notches.
 
 ### 6. Accessibility
+
 - [ ] **Reduced motion.** With `prefers-reduced-motion: reduce`: skip the fly-in, stop island bobbing, make camera flights instant cross-fades, keep only gentle ambient motion.
 - [ ] **Screen readers.** The canvas has `aria-hidden`. A visually hidden live region announces "Now viewing: Radio Gigabit, Senior Full Stack Engineer" on focus changes.
 - [ ] **Headings.** The panel uses a proper heading order: the role as h2, sections as h3.
@@ -83,6 +89,7 @@ Phase 2 already built the basics: classic CV, keyboard navigation, deep links, b
 - [ ] **Zoom.** The UI stays usable at 200 percent browser zoom.
 
 ### 7. SEO and sharing
+
 - [ ] `index.html` has a real title, "Renat Kalimulin, Senior Frontend Developer", and a meta description.
 - [ ] Open Graph and Twitter tags with a 1200 by 630 preview image: a beautiful screenshot of the overview with the name on it.
 - [ ] A favicon and an Apple touch icon: a tiny floating island.
@@ -111,5 +118,5 @@ Phase 2 already built the basics: classic CV, keyboard navigation, deep links, b
 ## Measurements
 
 | Date | Device | Scene | FPS | Draw calls | Triangles | Notes |
-|---|---|---|---|---|---|---|
-| | | | | | | |
+| ---- | ------ | ----- | --- | ---------- | --------- | ----- |
+|      |        |       |     |            |           |       |

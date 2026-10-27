@@ -12,11 +12,13 @@ Read [Art direction](art-direction.md) before starting.
 ## Tasks
 
 ### 1. Canvas settings
+
 - [ ] Move the Canvas into `src/scenes/WorldCanvas.tsx` with the settings from [Architecture](architecture.md#app-composition).
 - [ ] Keep `flat` on. Painted colours stay exactly as picked, without tone mapping washing them out.
 - [ ] Set the camera far plane to about 1200 so the sky dome and distant clouds are never clipped.
 
 ### 2. Sky dome
+
 - [ ] Create `src/world/SkyDome.tsx`: a large inverted sphere with a vertical gradient shader.
 
 ```tsx
@@ -81,6 +83,7 @@ useFrame(({ camera }) => ref.current.position.copy(camera.position));
 ```
 
 ### 3. Fog
+
 - [ ] Add linear fog in the horizon colour, so distant islands melt into the sky.
 
 ```tsx
@@ -90,15 +93,18 @@ useFrame(({ camera }) => ref.current.position.copy(camera.position));
 - [ ] Tune near and far with leva once islands exist. Far islands should be softer but still readable.
 
 ### 4. Lighting
+
 - [ ] Create `src/world/Lighting.tsx` with one hemisphere light and one warm directional sun, as described in [Art direction](art-direction.md#lighting).
 - [ ] Keep shadows off for now.
 - [ ] Add a sun disc: a small bright billboard far away in the sun's direction. Bloom will make it glow in Phase 6.
 
 ### 5. Toon material kit
+
 - [ ] Create `src/materials/toon.ts` with the gradient map and palette materials from [Art direction](art-direction.md#toon-shading).
 - [ ] Use the palette materials everywhere instead of creating new materials in components.
 
 ### 6. Cloud layers
+
 - [ ] Create `src/world/CloudLayers.tsx` with drei `Clouds`. All cloud groups go inside one `Clouds` parent so they share one draw call.
 
 ```tsx
@@ -110,13 +116,35 @@ export function CloudLayers() {
   return (
     <Clouds material={THREE.MeshLambertMaterial} limit={300}>
       {/* 1. cloud floor far below the islands */}
-      <Cloud seed={1} position={[0, -40, 0]} bounds={[160, 6, 160]} segments={60}
-             volume={40} color="#FFFDF6" fade={200} speed={0.05} />
+      <Cloud
+        seed={1}
+        position={[0, -40, 0]}
+        bounds={[160, 6, 160]}
+        segments={60}
+        volume={40}
+        color="#FFFDF6"
+        fade={200}
+        speed={0.05}
+      />
       {/* 2. mid clouds between islands */}
-      <Cloud seed={2} position={[-40, 4, -30]} bounds={[20, 4, 8]} segments={18}
-             volume={12} color="#FFFDF6" speed={0.1} />
-      <Cloud seed={3} position={[45, 8, -40]} bounds={[24, 5, 10]} segments={20}
-             volume={14} color="#FFFDF6" speed={0.1} />
+      <Cloud
+        seed={2}
+        position={[-40, 4, -30]}
+        bounds={[20, 4, 8]}
+        segments={18}
+        volume={12}
+        color="#FFFDF6"
+        speed={0.1}
+      />
+      <Cloud
+        seed={3}
+        position={[45, 8, -40]}
+        bounds={[24, 5, 10]}
+        segments={20}
+        volume={14}
+        color="#FFFDF6"
+        speed={0.1}
+      />
       {/* 3. wisps on the fly-in path, added in Phase 3 */}
     </Clouds>
   );
@@ -128,14 +156,17 @@ export function CloudLayers() {
 - [ ] Make the clouds drift: animate the group position slowly in `useFrame`, and wrap around when they go too far.
 
 ### 7. Below the islands
+
 - [ ] Decide what is far below. Recommended: the dense cloud floor from task 6. It hides the void, fits floating islands and is cheaper than water.
 - [ ] Optional: a low-poly ocean, as in reference 1, visible through gaps in the cloud floor.
 
 ### 8. Debug controls
+
 - [ ] Add leva controls for sky colours, fog distances, sun direction and intensity, hemisphere intensity and cloud opacity.
 - [ ] When the look is right, copy the values into `toon.ts` and the components, and remove the controls you no longer need.
 
 ### 9. Temporary camera
+
 - [ ] Keep OrbitControls for now so you can look around. CameraControls replaces it in Phase 2.
 
 ---

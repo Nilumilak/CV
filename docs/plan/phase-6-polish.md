@@ -12,12 +12,19 @@ Every item here must respect the `quality` setting from the store. Low quality t
 ## Tasks
 
 ### 1. Post effects
+
 - [ ] Create `src/world/Effects.tsx`.
 
 ```tsx
 // src/world/Effects.tsx (sketch)
-import { EffectComposer, Bloom, Vignette, HueSaturation, BrightnessContrast, DepthOfField }
-  from '@react-three/postprocessing';
+import {
+  EffectComposer,
+  Bloom,
+  Vignette,
+  HueSaturation,
+  BrightnessContrast,
+  DepthOfField,
+} from '@react-three/postprocessing';
 
 export function Effects() {
   const quality = useWorld((s) => s.quality);
@@ -41,6 +48,7 @@ export function Effects() {
 - [ ] Compare with and without each effect. Remove any effect you cannot clearly see.
 
 ### 2. Ambient life
+
 - [ ] **Birds.** A few small flocks of instanced V-shaped birds that follow slow looping curves. Wings flap by scaling a vertex attribute or the mesh on Y.
 - [ ] **Waterfalls.** On the Grove and maybe Home: a curved strip with a scrolling stylised water texture, ending in a puff of mist in the clouds below. Very Ghibli, cheap.
 - [ ] **Smoke.** Chimney smoke on Home and Workshop: a handful of soft sprites rising, growing and fading.
@@ -49,12 +57,14 @@ export function Effects() {
 - [ ] **Hanging roots and vines.** Gentle sway under every island.
 
 ### 3. Light details
+
 - [ ] Sun disc with bloom, slightly warm.
 - [ ] Optional god rays from the sun through clouds. Only on high quality.
 - [ ] Soft contact shadow under objects on the focused island. drei `ContactShadows` baked once with `frames={1}` is cheap.
 - [ ] Turn on the directional light's shadow only for the focused island, with a tight shadow camera around it.
 
 ### 4. UI polish
+
 - [ ] Panel opens like a journal page: a quick slide plus a slight rotation that settles.
 - [ ] Achievements fade in one after another with a small stagger.
 - [ ] Labels pop in with a little bounce when the overview appears.
@@ -63,15 +73,18 @@ export function Effects() {
 - [ ] Optional custom cursor: a small paper plane that tilts in the movement direction. Keep the system cursor on touch devices.
 
 ### 5. Sound design
+
 - [ ] Per-island ambience with drei `PositionalAudio`, or simple distance-based volume through howler: radio static, crowd, birds and water, machinery, tram bells.
 - [ ] Lower the ambient music slightly when an island is focused, so the island's own sound comes through.
 - [ ] Check the overall mix on laptop speakers and on headphones. Nothing should be startling.
 
 ### 6. First visit touches
+
 - [ ] "You are here" bubble on Home for first-time visitors, as in reference 1.
 - [ ] A subtle hint "Click an island" if nothing has been clicked after 8 seconds in the overview.
 
 ### 7. Optional golden hour
+
 - [ ] A small toggle that blends sky, sun and fog colours to a sunset palette and switches on all window and lantern glows. Fun, and a good test of the palette system.
 
 ---

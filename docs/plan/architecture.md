@@ -6,22 +6,22 @@
 
 Versions checked in October 2026. Always install the latest versions, but keep the major versions of three, R3F, drei and postprocessing compatible with each other.
 
-| Concern | Choice | Notes |
-|---|---|---|
-| Runtime | Node.js current LTS, 24 or newer | Node 20.11 is installed now. Current Vite needs 20.19 or newer, and Node 20 is end of life. Upgrade first. |
-| Build | Vite 8, React 19, TypeScript | React Three Fiber 9 needs React 19. |
-| 3D core | `three` 0.18x, `@react-three/fiber` 9 | |
-| 3D helpers | `@react-three/drei` 10 | CameraControls, Clouds, Html, Float, useGLTF, useProgress, Outlines, PerformanceMonitor, Instances |
-| Post effects | `@react-three/postprocessing` 3 with `postprocessing` | Bloom, vignette, colour grading, depth of field |
-| Frame animation | `maath` | `easing.damp` helpers inside `useFrame` |
-| DOM animation | `motion` (formerly framer-motion) | Panels, buttons, welcome screen |
-| State | `zustand` with `persist` | One store for the world, persisted visited islands and found objects |
-| Audio | `howler` | Uses Web Audio. iOS ignores the volume of plain audio elements, so fades need Web Audio. |
-| Shader extension | `three-custom-shader-material` (optional) | Wind on grass and trees while keeping toon lighting |
-| Models | Blender, GLB, `gltfjsx --transform` | Draco geometry, WebP textures, typed React components |
-| Debug | `leva`, `r3f-perf` | Loaded only when the address has `?debug` |
-| Tests | Vitest, Testing Library, Playwright | Unit tests for data and store, one browser smoke test |
-| Hosting | Vercel, or GitHub Pages | Static build, hash routing works on both |
+| Concern          | Choice                                                | Notes                                                                                                      |
+| ---------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Runtime          | Node.js current LTS, 24 or newer                      | Node 20.11 is installed now. Current Vite needs 20.19 or newer, and Node 20 is end of life. Upgrade first. |
+| Build            | Vite 8, React 19, TypeScript                          | React Three Fiber 9 needs React 19.                                                                        |
+| 3D core          | `three` 0.18x, `@react-three/fiber` 9                 |                                                                                                            |
+| 3D helpers       | `@react-three/drei` 10                                | CameraControls, Clouds, Html, Float, useGLTF, useProgress, Outlines, PerformanceMonitor, Instances         |
+| Post effects     | `@react-three/postprocessing` 3 with `postprocessing` | Bloom, vignette, colour grading, depth of field                                                            |
+| Frame animation  | `maath`                                               | `easing.damp` helpers inside `useFrame`                                                                    |
+| DOM animation    | `motion` (formerly framer-motion)                     | Panels, buttons, welcome screen                                                                            |
+| State            | `zustand` with `persist`                              | One store for the world, persisted visited islands and found objects                                       |
+| Audio            | `howler`                                              | Uses Web Audio. iOS ignores the volume of plain audio elements, so fades need Web Audio.                   |
+| Shader extension | `three-custom-shader-material` (optional)             | Wind on grass and trees while keeping toon lighting                                                        |
+| Models           | Blender, GLB, `gltfjsx --transform`                   | Draco geometry, WebP textures, typed React components                                                      |
+| Debug            | `leva`, `r3f-perf`                                    | Loaded only when the address has `?debug`                                                                  |
+| Tests            | Vitest, Testing Library, Playwright                   | Unit tests for data and store, one browser smoke test                                                      |
+| Hosting          | Vercel, or GitHub Pages                               | Static build, hash routing works on both                                                                   |
 
 GSAP is not needed. CameraControls handles camera transitions, and the fly-in is a curve driven by `useFrame`. Add GSAP later only if a long multi-step timeline appears.
 
@@ -88,7 +88,13 @@ Updating the CV never requires touching 3D code.
 ```ts
 // src/data/types.ts
 export const ISLAND_IDS = [
-  'home', 'workshop', 'grove', 'radio', 'arena', 'market', 'lighthouse',
+  'home',
+  'workshop',
+  'grove',
+  'radio',
+  'arena',
+  'market',
+  'lighthouse',
 ] as const;
 
 export type IslandId = (typeof ISLAND_IDS)[number];
@@ -96,10 +102,10 @@ export type IslandId = (typeof ISLAND_IDS)[number];
 export type Vec3 = [number, number, number];
 
 export interface Achievement {
-  id: string;          // 'radio-llm'
-  title: string;       // short headline, 6 words or fewer
-  text: string;        // the full sentence from the CV
-  objectId?: string;   // the 3D object that reveals it
+  id: string; // 'radio-llm'
+  title: string; // short headline, 6 words or fewer
+  text: string; // the full sentence from the CV
+  objectId?: string; // the 3D object that reveals it
 }
 
 export interface Chapter {
@@ -107,11 +113,11 @@ export interface Chapter {
   kind: 'job' | 'open-source' | 'about';
   company: string;
   role: string;
-  start: string;       // '2022-11'
-  end: string | null;  // null means ongoing
+  start: string; // '2022-11'
+  end: string | null; // null means ongoing
   employment?: string; // 'part-time'
   location?: string;
-  summary: string;     // one line under the title
+  summary: string; // one line under the title
   achievements: Achievement[];
   tech: string[];
   links?: { label: string; href: string }[];
@@ -131,10 +137,10 @@ export interface IslandLayout {
   id: IslandId;
   position: Vec3;
   scale: number;
-  seed: number;                       // for the placeholder shape
+  seed: number; // for the placeholder shape
   labelOffset: Vec3;
   camera: { position: Vec3; target: Vec3 };
-  accent: string;                     // theme colour for label and panel
+  accent: string; // theme colour for label and panel
 }
 ```
 
@@ -143,10 +149,24 @@ export interface IslandLayout {
 export const OVERVIEW = { position: [0, 18, 46] as Vec3, target: [0, 0, 0] as Vec3 };
 
 export const ISLANDS: IslandLayout[] = [
-  { id: 'home',     position: [0, 0, 14],    scale: 1.2, seed: 1, labelOffset: [0, 6, 0],
-    camera: { position: [6, 5, 26],   target: [0, 1, 14] },   accent: '#E08A3C' },
-  { id: 'workshop', position: [-24, 2, -6],  scale: 1,   seed: 2, labelOffset: [0, 6, 0],
-    camera: { position: [-18, 7, 6],  target: [-24, 2, -6] }, accent: '#B8733A' },
+  {
+    id: 'home',
+    position: [0, 0, 14],
+    scale: 1.2,
+    seed: 1,
+    labelOffset: [0, 6, 0],
+    camera: { position: [6, 5, 26], target: [0, 1, 14] },
+    accent: '#E08A3C',
+  },
+  {
+    id: 'workshop',
+    position: [-24, 2, -6],
+    scale: 1,
+    seed: 2,
+    labelOffset: [0, 6, 0],
+    camera: { position: [-18, 7, 6], target: [-24, 2, -6] },
+    accent: '#B8733A',
+  },
   // grove, radio, arena, market, lighthouse ...
 ];
 ```
@@ -167,12 +187,12 @@ export type Quality = 'high' | 'low';
 interface WorldState {
   phase: Phase;
   focused: IslandId | null;
-  activeObject: string | null;     // last clicked object
-  hintObject: string | null;       // object glowing because its achievement is hovered
+  activeObject: string | null; // last clicked object
+  hintObject: string | null; // object glowing because its achievement is hovered
   sound: boolean;
   quality: Quality;
-  visited: IslandId[];             // persisted
-  found: string[];                 // persisted object ids
+  visited: IslandId[]; // persisted
+  found: string[]; // persisted object ids
 
   setPhase: (p: Phase) => void;
   enter: (withSound: boolean) => void;
@@ -206,7 +226,10 @@ export const useWorld = create<WorldState>()(
         })),
       back: () => set({ focused: null, activeObject: null }),
       activateObject: (id) =>
-        set((s) => ({ activeObject: id, found: s.found.includes(id) ? s.found : [...s.found, id] })),
+        set((s) => ({
+          activeObject: id,
+          found: s.found.includes(id) ? s.found : [...s.found, id],
+        })),
       setHint: (hintObject) => set({ hintObject }),
       toggleSound: () => set((s) => ({ sound: !s.sound })),
       setQuality: (quality) => set({ quality }),
@@ -217,6 +240,7 @@ export const useWorld = create<WorldState>()(
 ```
 
 Rules for the store:
+
 - Components subscribe to the smallest slice they need: `useWorld((s) => s.focused)`.
 - Code inside `useFrame` reads with `useWorld.getState()` so it never causes re-renders.
 
@@ -226,11 +250,11 @@ Rules for the store:
 
 Hash routes work on any static host without server rewrites, including GitHub Pages.
 
-| Address | Shows |
-|---|---|
-| `#/` or empty | Overview |
-| `#/radio` | Focus on the Radio Tower island |
-| `#/cv` | Classic CV |
+| Address       | Shows                           |
+| ------------- | ------------------------------- |
+| `#/` or empty | Overview                        |
+| `#/radio`     | Focus on the Radio Tower island |
+| `#/cv`        | Classic CV                      |
 
 Opening a deep link such as `#/radio` shows the welcome screen first. After Enter, a short fly-in goes straight to that island.
 
@@ -247,8 +271,7 @@ export function parseHash(hash: string): Route {
   return { view: 'world', island: isIsland ? (part as IslandId) : null };
 }
 
-export const toHash = (r: Route) =>
-  r.view === 'cv' ? '#/cv' : `#/${r.island ?? ''}`;
+export const toHash = (r: Route) => (r.view === 'cv' ? '#/cv' : `#/${r.island ?? ''}`);
 ```
 
 `useHashSync` listens to `hashchange` and calls `focus` or `back`, and writes the hash when `focused` changes. Compare before writing so the two directions do not loop. Browser Back then works for free.
@@ -274,7 +297,7 @@ export function App() {
       <Suspense fallback={null}>
         <WorldCanvas />
       </Suspense>
-      <Overlay />   {/* Welcome, TopBar, IslandPanel: plain DOM */}
+      <Overlay /> {/* Welcome, TopBar, IslandPanel: plain DOM */}
     </>
   );
 }
@@ -283,7 +306,7 @@ export function App() {
 ```tsx
 // src/scenes/WorldCanvas.tsx (sketch)
 <Canvas
-  flat                                   // no tone mapping, keeps painted colours exact
+  flat // no tone mapping, keeps painted colours exact
   dpr={[1, 2]}
   camera={{ fov: 45, near: 0.1, far: 1200, position: [0, 120, 60] }}
   gl={{ antialias: true, powerPreference: 'high-performance' }}
@@ -307,11 +330,11 @@ export function App() {
 
 The camera has three modes.
 
-| Mode | When | How |
-|---|---|---|
-| Scripted | Fly-in | `FlyIn` moves the camera along a curve in `useFrame`. CameraControls is not mounted yet. |
-| Controlled | Overview and focus | drei `CameraControls` with limits on distance and angles |
-| Transition | Overview to island and back | `controls.setLookAt(...position, ...target, true)` animates smoothly |
+| Mode       | When                        | How                                                                                      |
+| ---------- | --------------------------- | ---------------------------------------------------------------------------------------- |
+| Scripted   | Fly-in                      | `FlyIn` moves the camera along a curve in `useFrame`. CameraControls is not mounted yet. |
+| Controlled | Overview and focus          | drei `CameraControls` with limits on distance and angles                                 |
+| Transition | Overview to island and back | `controls.setLookAt(...position, ...target, true)` animates smoothly                     |
 
 ```tsx
 // src/camera/CameraRig.tsx (sketch)
@@ -328,7 +351,7 @@ export function CameraRig() {
     void c.setLookAt(...pose.position, ...pose.target, true);
   }, [focused]);
 
-  if (phase !== 'world') return null;   // fly-in owns the camera until then
+  if (phase !== 'world') return null; // fly-in owns the camera until then
 
   return (
     <CameraControls
@@ -360,9 +383,9 @@ On desktop the panel covers the right side, so the focused island should appear 
 
 ## Testing
 
-| Layer | Tool | What to test |
-|---|---|---|
-| Data | Vitest | Ids are unique. Every `objectId` exists in the object registry. Every chapter has at least one achievement. Every island in `cv.ts` has a layout in `world.ts`. |
-| Store and routing | Vitest | `focus` adds to `visited`. `parseHash` handles bad input. |
-| UI | Vitest and Testing Library | Panel renders all achievements. Classic CV renders all chapters. |
-| Browser | Playwright | Page loads, Enter works, `#/cv` shows text, `#/radio` opens a panel. Run against the preview build. |
+| Layer             | Tool                       | What to test                                                                                                                                                    |
+| ----------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Data              | Vitest                     | Ids are unique. Every `objectId` exists in the object registry. Every chapter has at least one achievement. Every island in `cv.ts` has a layout in `world.ts`. |
+| Store and routing | Vitest                     | `focus` adds to `visited`. `parseHash` handles bad input.                                                                                                       |
+| UI                | Vitest and Testing Library | Panel renders all achievements. Classic CV renders all chapters.                                                                                                |
+| Browser           | Playwright                 | Page loads, Enter works, `#/cv` shows text, `#/radio` opens a panel. Run against the preview build.                                                             |

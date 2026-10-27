@@ -10,6 +10,7 @@
 ## Tasks
 
 ### 1. Upgrade Node.js
+
 - [ ] Install the current Node.js LTS (24 or newer) from nodejs.org, or with `nvm-windows`.
 - [ ] Check it in a new terminal.
 
@@ -21,6 +22,7 @@ npm -v
 Node 20.11, which is installed now, is too old for current Vite and no longer supported.
 
 ### 2. Scaffold the project in this folder
+
 - [ ] Move the existing CV into a reference folder, so it is not confused with the new `index.html`.
 - [ ] Create the Vite project in the current folder. When Vite says the folder is not empty, choose to ignore existing files and continue.
 
@@ -62,6 +64,7 @@ export default defineConfig({
 - [ ] Create `src/test/setup.ts` with `import '@testing-library/jest-dom/vitest';`.
 
 ### 5. Scripts, linting and formatting
+
 - [ ] Add `eslint-config-prettier` as the last entry in `eslint.config.js`.
 - [ ] Add a `.prettierrc` with your preferred style, for example `{ "singleQuote": true, "printWidth": 100 }`.
 - [ ] Add scripts to `package.json`:
@@ -79,25 +82,38 @@ export default defineConfig({
 ```
 
 ### 6. Git and GitHub
+
 - [ ] `git init`, then check `.gitignore` contains `node_modules`, `dist`, `.env*`, `*.blend1`, `test-results`, `playwright-report`.
 - [ ] First commit.
 - [ ] Create a GitHub repository and push. A public repository is a good portfolio piece.
 
 ### 7. Global styles
+
 - [ ] Give the page full height and the sky colour as background, so there is no white flash while loading.
 
 ```css
 /* src/styles/global.css */
-html, body, #root { height: 100%; margin: 0; }
-body { background: #BFE7F7; overflow: hidden; font-family: Nunito, system-ui, sans-serif; }
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+body {
+  background: #bfe7f7;
+  overflow: hidden;
+  font-family: Nunito, system-ui, sans-serif;
+}
 ```
 
 The classic CV page will switch `overflow` back to `auto`.
 
 ### 8. Folder skeleton
+
 - [ ] Create the folders from [Architecture](architecture.md#folder-structure). Empty folders can wait until they get their first file.
 
 ### 9. Move the CV into data
+
 - [ ] Create `src/data/types.ts` from the [data model](architecture.md#data-model).
 - [ ] Create `src/data/cv.ts` with the profile and all seven chapters, copied from the reference CV.
 - [ ] Split long CV bullets into separate achievements. For example the Salyut bullet becomes four: projects led, products built, precision assemblies, Python macros.
@@ -121,12 +137,14 @@ describe('cv data', () => {
     for (const c of chapters) expect(ISLANDS.some((i) => i.id === c.id)).toBe(true);
   });
   it('gives every job at least one achievement', () => {
-    for (const c of chapters.filter((c) => c.kind === 'job')) expect(c.achievements.length).toBeGreaterThan(0);
+    for (const c of chapters.filter((c) => c.kind === 'job'))
+      expect(c.achievements.length).toBeGreaterThan(0);
   });
 });
 ```
 
 ### 10. First 3D scene
+
 - [ ] Replace `App.tsx` with a Canvas, a rotating toon cube and OrbitControls.
 
 ```tsx
@@ -160,6 +178,7 @@ export default function App() {
 ```
 
 ### 11. Debug mode
+
 - [ ] Create `src/debug/Debug.tsx` that renders `<Perf position="top-left" />` from r3f-perf.
 - [ ] Show leva and Perf only when the address contains `?debug`. Hide leva otherwise with `<Leva hidden={!debug} />`.
 
@@ -167,10 +186,17 @@ export default function App() {
 const debug = new URLSearchParams(location.search).has('debug');
 const Debug = lazy(() => import('@/debug/Debug'));
 // inside Canvas:
-{debug && <Suspense fallback={null}><Debug /></Suspense>}
+{
+  debug && (
+    <Suspense fallback={null}>
+      <Debug />
+    </Suspense>
+  );
+}
 ```
 
 ### 12. Automatic deploy
+
 - [ ] Sign in to Vercel with GitHub and import the repository. Vercel detects Vite automatically.
 - [ ] Check that a push to `main` deploys, and that another branch gets its own preview address.
 - [ ] Open the deployed address on your phone.

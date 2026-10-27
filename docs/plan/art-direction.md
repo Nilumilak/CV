@@ -8,15 +8,15 @@ Inspired by Hayao Miyazaki films, never copied from them.
 
 ## Reference board
 
-| Reference | What to take from it |
-|---|---|
+| Reference                                   | What to take from it                                                                                                                          |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1. Floating islands map with "You are here" | Island scale and spacing, the tag-style labels with icon, name and value, the speech bubble, dark silhouettes for locked or unvisited islands |
-| 2. Anime street with convenience store | Light: strong sun, blue shadows, crisp cumulus clouds, detail in small props |
-| 3. Pedestrian bridge and city | Sky gradient from deep blue to near white at the horizon, clean outlines on man-made objects |
-| 4. Cliff city with a train | The Market Town shape: houses stacked up a tall rock, a rail line running through |
-| 5. Howl's castle model | The Workshop mood: patched metal, pipes, chimneys, mixed materials bolted together |
-| 6. Colourful palace town and vintage cars | Bunting flags, rich reds and greens, little vehicles that bring the town alive |
-| 7. Lofi girl at her desk | The Home island interior seen through the window: lamp, plant, cat, warm light |
+| 2. Anime street with convenience store      | Light: strong sun, blue shadows, crisp cumulus clouds, detail in small props                                                                  |
+| 3. Pedestrian bridge and city               | Sky gradient from deep blue to near white at the horizon, clean outlines on man-made objects                                                  |
+| 4. Cliff city with a train                  | The Market Town shape: houses stacked up a tall rock, a rail line running through                                                             |
+| 5. Howl's castle model                      | The Workshop mood: patched metal, pipes, chimneys, mixed materials bolted together                                                            |
+| 6. Colourful palace town and vintage cars   | Bunting flags, rich reds and greens, little vehicles that bring the town alive                                                                |
+| 7. Lofi girl at her desk                    | The Home island interior seen through the window: lamp, plant, cat, warm light                                                                |
 
 ---
 
@@ -24,22 +24,22 @@ Inspired by Hayao Miyazaki films, never copied from them.
 
 Start with these values, tune them with leva in Phase 1, then freeze them in `materials/toon.ts` and CSS variables.
 
-| Token | Hex | Used for |
-|---|---|---|
-| `sky-top` | `#2E6FCF` | Sky at the zenith |
-| `sky-horizon` | `#BFE7F7` | Sky at the horizon, fog colour |
-| `cloud-light` | `#FFFDF6` | Sunlit cloud tops |
-| `cloud-shadow` | `#AFC3E6` | Cloud undersides, a cool lavender blue |
-| `grass-light` | `#9BCB5A` | Lit grass |
-| `grass-dark` | `#4E8B3A` | Grass in shadow, bushes |
-| `rock-light` | `#D8B98C` | Sunlit rock |
-| `rock-dark` | `#8A6A52` | Rock undersides |
-| `wood` | `#9C6B43` | Fences, bridges, crates |
-| `roof-red` | `#C9573E` | Roofs, flags, the tram |
-| `accent-gold` | `#F3C25B` | Lights, beacons, highlights, hover glow |
-| `outline` | `#3A2E2A` | Outlines, never pure black |
-| `ink` | `#2B2422` | UI text |
-| `paper` | `#F7F0E1` | UI panels |
+| Token          | Hex       | Used for                                |
+| -------------- | --------- | --------------------------------------- |
+| `sky-top`      | `#2E6FCF` | Sky at the zenith                       |
+| `sky-horizon`  | `#BFE7F7` | Sky at the horizon, fog colour          |
+| `cloud-light`  | `#FFFDF6` | Sunlit cloud tops                       |
+| `cloud-shadow` | `#AFC3E6` | Cloud undersides, a cool lavender blue  |
+| `grass-light`  | `#9BCB5A` | Lit grass                               |
+| `grass-dark`   | `#4E8B3A` | Grass in shadow, bushes                 |
+| `rock-light`   | `#D8B98C` | Sunlit rock                             |
+| `rock-dark`    | `#8A6A52` | Rock undersides                         |
+| `wood`         | `#9C6B43` | Fences, bridges, crates                 |
+| `roof-red`     | `#C9573E` | Roofs, flags, the tram                  |
+| `accent-gold`  | `#F3C25B` | Lights, beacons, highlights, hover glow |
+| `outline`      | `#3A2E2A` | Outlines, never pure black              |
+| `ink`          | `#2B2422` | UI text                                 |
+| `paper`        | `#F7F0E1` | UI panels                               |
 
 Rule of thumb: shadows are cool and bluish, light is warm and yellowish. Never use pure black or pure grey.
 
@@ -110,10 +110,10 @@ Raise the first step for softer shadows, lower it for more dramatic ones.
 
 ## Typography
 
-| Use | Font | Why |
-|---|---|---|
+| Use                     | Font               | Why                                           |
+| ----------------------- | ------------------ | --------------------------------------------- |
 | Titles, labels, buttons | Fredoka or Baloo 2 | Rounded and friendly, readable at small sizes |
-| Body text in panels | Nunito | Soft, highly readable |
+| Body text in panels     | Nunito             | Soft, highly readable                         |
 
 Self-host the fonts with `@fontsource` packages to avoid a flash of the wrong font.
 
@@ -126,13 +126,13 @@ Self-host the fonts with `@fontsource` packages to avoid a flash of the wrong fo
 
 ## Motion language
 
-| Motion | Duration | Easing |
-|---|---|---|
-| Camera to island | 1.2 to 1.6 s | Smooth damping from CameraControls |
-| Panel slide in | 0.35 s | Ease out |
-| Hover scale | 0.15 s | Damped, scale 1.06 to 1.08 |
-| Island bob | 4 to 6 s per cycle | Sine, very small amplitude |
-| Object click reaction | 0.6 to 1.5 s | Springy, a little overshoot |
+| Motion                | Duration           | Easing                             |
+| --------------------- | ------------------ | ---------------------------------- |
+| Camera to island      | 1.2 to 1.6 s       | Smooth damping from CameraControls |
+| Panel slide in        | 0.35 s             | Ease out                           |
+| Hover scale           | 0.15 s             | Damped, scale 1.06 to 1.08         |
+| Island bob            | 4 to 6 s per cycle | Sine, very small amplitude         |
+| Object click reaction | 0.6 to 1.5 s       | Springy, a little overshoot        |
 
 Everything that moves should look slightly springy and soft, never mechanical. The Workshop gears are the only exception.
 
@@ -146,9 +146,9 @@ Everything that moves should look slightly springy and soft, never mechanical. T
 
 ## Do and don't
 
-| Do | Don't |
-|---|---|
+| Do                                                | Don't                                                                       |
+| ------------------------------------------------- | --------------------------------------------------------------------------- |
 | Original characters and props in a similar spirit | Totoro, kodama, soot sprites, Calcifer or any recognisable Ghibli character |
-| Your own or licensed music in a similar mood | Joe Hisaishi tracks or covers of them |
-| Warm, saturated colours with blue shadows | Black shadows, grey fog, desaturated realism |
-| Few, large, readable shapes | Lots of tiny detail that turns to noise at overview distance |
+| Your own or licensed music in a similar mood      | Joe Hisaishi tracks or covers of them                                       |
+| Warm, saturated colours with blue shadows         | Black shadows, grey fog, desaturated realism                                |
+| Few, large, readable shapes                       | Lots of tiny detail that turns to noise at overview distance                |

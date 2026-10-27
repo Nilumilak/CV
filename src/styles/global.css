@@ -1,0 +1,33 @@
+:root {
+  --sky-top: #2e6fcf;
+  --sky-horizon: #bfe7f7;
+  --paper: #f7f0e1;
+  --ink: #2b2422;
+  --accent-gold: #f3c25b;
+  --outline: #3a2e2a;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--sky-horizon);
+  color: var(--ink);
+  overflow: hidden;
+  font-family:
+    Nunito,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
+}
