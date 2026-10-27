@@ -3,12 +3,12 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Leva } from 'leva';
 import type { Mesh } from 'three';
-import { colors, palette } from '@/materials/toon';
+import { palette } from '@/materials/toon';
 import { debugCamera, isDebug } from '@/debug/isDebug';
+import { useWorldControls } from '@/debug/useWorldControls';
 import { CloudLayers } from '@/world/CloudLayers';
 import { Lighting } from '@/world/Lighting';
 import { SkyDome } from '@/world/SkyDome';
-import { FOG } from '@/world/sky';
 
 const Debug = lazy(() => import('@/debug/Debug'));
 
@@ -26,6 +26,7 @@ function Cube() {
 }
 
 export default function WorldCanvas() {
+  const c = useWorldControls();
   return (
     <>
       <Leva hidden={!isDebug} collapsed />
@@ -36,9 +37,9 @@ export default function WorldCanvas() {
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         aria-hidden
       >
-        <fog attach="fog" args={[colors.skyHorizon, FOG.near, FOG.far]} />
-        <SkyDome />
-        <Lighting />
+        <fog attach="fog" args={[c.horizon, c.fogNear, c.fogFar]} />
+        <SkyDome top={c.top} horizon={c.horizon} bottom={c.bottom} exponent={c.exponent} />
+        <Lighting sunIntensity={c.sunIntensity} skyIntensity={c.skyIntensity} />
         <Suspense fallback={null}>
           <CloudLayers />
         </Suspense>
