@@ -20,17 +20,17 @@ Read the first three once. Then work through the phases in order.
 
 ## Phases
 
-| #   | Phase                                                                              | Estimate     | You can open in the browser                                    | Status      |
-| --- | ---------------------------------------------------------------------------------- | ------------ | -------------------------------------------------------------- | ----------- |
-| 0   | [Setup](docs/plan/phase-0-setup.md)                                                | 1 day        | A rotating toon cube, auto-deployed                            | Not started |
-| 1   | [Sky world](docs/plan/phase-1-sky-world.md)                                        | 2 to 3 days  | A painted sky with layered clouds                              | Not started |
-| 2   | [Islands and navigation](docs/plan/phase-2-islands-navigation.md)                  | 4 to 5 days  | The complete CV on placeholder islands, classic CV, deep links | Not started |
-| 3   | [Welcome and fly-in](docs/plan/phase-3-welcome-flyin.md)                           | 2 days       | Welcome screen, cloud dive, sound                              | Not started |
-| 4   | [Island art](docs/plan/phase-4-island-art.md)                                      | 1 to 3 weeks | Every island with its own look                                 | Not started |
-| 5   | [Interactive objects](docs/plan/phase-5-interactive-objects.md)                    | 1 to 2 weeks | One animated object per achievement                            | Not started |
-| 6   | [Polish](docs/plan/phase-6-polish.md)                                              | 3 to 5 days  | Post effects, ambient life, sound design                       | Not started |
-| 7   | [Performance, mobile, accessibility](docs/plan/phase-7-performance-mobile-a11y.md) | 3 to 5 days  | Smooth on phones, full keyboard support, good previews         | Not started |
-| 8   | [Launch](docs/plan/phase-8-launch.md)                                              | 1 to 2 days  | Custom domain, QA passed, announced                            | Not started |
+| #   | Phase                                                                              | Estimate     | You can open in the browser                                    | Status                          |
+| --- | ---------------------------------------------------------------------------------- | ------------ | -------------------------------------------------------------- | ------------------------------- |
+| 0   | [Setup](docs/plan/phase-0-setup.md)                                                | 1 day        | A rotating toon cube, auto-deployed                            | In progress, waiting for Vercel |
+| 1   | [Sky world](docs/plan/phase-1-sky-world.md)                                        | 2 to 3 days  | A painted sky with layered clouds                              | Not started                     |
+| 2   | [Islands and navigation](docs/plan/phase-2-islands-navigation.md)                  | 4 to 5 days  | The complete CV on placeholder islands, classic CV, deep links | Not started                     |
+| 3   | [Welcome and fly-in](docs/plan/phase-3-welcome-flyin.md)                           | 2 days       | Welcome screen, cloud dive, sound                              | Not started                     |
+| 4   | [Island art](docs/plan/phase-4-island-art.md)                                      | 1 to 3 weeks | Every island with its own look                                 | Not started                     |
+| 5   | [Interactive objects](docs/plan/phase-5-interactive-objects.md)                    | 1 to 2 weeks | One animated object per achievement                            | Not started                     |
+| 6   | [Polish](docs/plan/phase-6-polish.md)                                              | 3 to 5 days  | Post effects, ambient life, sound design                       | Not started                     |
+| 7   | [Performance, mobile, accessibility](docs/plan/phase-7-performance-mobile-a11y.md) | 3 to 5 days  | Smooth on phones, full keyboard support, good previews         | Not started                     |
+| 8   | [Launch](docs/plan/phase-8-launch.md)                                              | 1 to 2 days  | Custom domain, QA passed, announced                            | Not started                     |
 
 **Total:** roughly 25 to 45 working days.
 Phases 0 to 3 take about two weeks and already give a complete, shareable CV with placeholder art.
