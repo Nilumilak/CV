@@ -5,6 +5,7 @@ import { Leva } from 'leva';
 import type { Mesh } from 'three';
 import { colors, palette } from '@/materials/toon';
 import { debugCamera, isDebug } from '@/debug/isDebug';
+import { Lighting } from '@/world/Lighting';
 import { SkyDome } from '@/world/SkyDome';
 import { FOG } from '@/world/sky';
 
@@ -36,8 +37,7 @@ export default function WorldCanvas() {
       >
         <fog attach="fog" args={[colors.skyHorizon, FOG.near, FOG.far]} />
         <SkyDome />
-        <hemisphereLight args={[colors.skyHorizon, colors.rockDark, 0.8]} />
-        <directionalLight position={[5, 8, 3]} intensity={2.2} color={colors.sun} />
+        <Lighting />
         <Cube />
         <OrbitControls target={debugCamera.target ?? [0, 0, 0]} maxDistance={300} />
         {isDebug && (

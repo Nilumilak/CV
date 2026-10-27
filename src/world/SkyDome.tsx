@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { colors } from '@/materials/toon';
@@ -65,12 +65,13 @@ export function SkyDome({
   exponent = 3.2,
 }: SkyDomeProps) {
   const ref = useRef<THREE.Mesh>(null!);
+  const materialRef = useRef<THREE.ShaderMaterial>(null!);
 
   const uniforms = useMemo(
     () => ({
-      uTop: { value: new THREE.Color() },
-      uHorizon: { value: new THREE.Color() },
-      uBottom: { value: new THREE.Color() },
+      uTop: { value: new THREE.Color(colors.skyTop) },
+      uHorizon: { value: new THREE.Color(colors.skyHorizon) },
+      uBottom: { value: new THREE.Color(colors.skyBottom) },
       uSunColor: { value: new THREE.Color(colors.sun) },
       uSunDir: { value: SUN_DIRECTION.clone() },
       uExponent: { value: 3.2 },
@@ -80,10 +81,13 @@ export function SkyDome({
     [],
   );
 
-  uniforms.uTop.value.set(top);
-  uniforms.uHorizon.value.set(horizon);
-  uniforms.uBottom.value.set(bottom);
-  uniforms.uExponent.value = exponent;
+  useEffect(() => {
+    const u = materialRef.current.uniforms;
+    u.uTop.value.set(top);
+    u.uHorizon.value.set(horizon);
+    u.uBottom.value.set(bottom);
+    u.uExponent.value = exponent;
+  }, [top, horizon, bottom, exponent]);
 
   useFrame(({ camera }) => {
     ref.current.position.copy(camera.position);
@@ -93,6 +97,7 @@ export function SkyDome({
     <mesh ref={ref} scale={900} renderOrder={-1} frustumCulled={false}>
       <sphereGeometry args={[1, 48, 24]} />
       <shaderMaterial
+        ref={materialRef}
         args={[{ uniforms, vertexShader, fragmentShader }]}
         side={THREE.BackSide}
         depthWrite={false}
