@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Renat Kalimulin - Senior Frontend Developer</title>
+  <style>
+    :root {
+      --ink: #1c1917;
+      --muted: #57534e;
+      --line: #d6d3d1;
+      --accent: #1e3a5f;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      background: #e7e5e4; color: var(--ink);
+      font-family: "Segoe UI", Calibri, "Helvetica Neue", Arial, sans-serif;
+      font-size: 10.5pt; line-height: 1.4;
+    }
+    .page { width: 210mm; margin: 16px auto; background: white; padding: 12mm 14mm 14mm; }
+    header {
+      display: flex; justify-content: space-between; gap: 14px; align-items: center;
+      border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 12px;
+    }
+    .identity { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .photo {
+      width: 20mm; height: 24mm; object-fit: cover; object-position: center 18%;
+      border-radius: 2px; flex: 0 0 auto;
+    }
+    h1 { margin: 0; font-size: 24pt; line-height: 1; letter-spacing: -0.03em; font-weight: 650; }
+    .role { margin: 4px 0 0; color: var(--accent); font-size: 12pt; font-weight: 650; line-height: 1.25; }
+    .contacts { margin: 0; padding: 0; list-style: none; text-align: right; color: var(--muted); font-size: 9.5pt; line-height: 1.5; white-space: nowrap; flex: 0 0 auto; }
+    .contacts a { color: var(--accent); text-decoration: none; }
+    h2 {
+      margin: 13px 0 6px; font-size: 9.5pt; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); border-bottom: 1px solid var(--line); padding-bottom: 2px;
+    }
+    p { margin: 0 0 6px; }
+    .job { margin: 0 0 10px; }
+    .job-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; break-after: avoid; }
+    .meta, h2 { break-after: avoid; }
+    .meta a { color: inherit; }
+    li { break-inside: avoid; }
+    .job h3 { margin: 0; font-size: 11pt; font-weight: 650; }
+    .company { color: var(--accent); font-weight: 650; }
+    .dates { margin: 0; color: var(--muted); font-size: 9.5pt; white-space: nowrap; }
+    .meta { margin: 1px 0 3px; color: var(--muted); font-size: 9.5pt; }
+    ul { margin: 0; padding-left: 1.15em; }
+    li { margin: 0 0 2px; }
+    .skills { display: grid; grid-template-columns: 108px 1fr; gap: 2px 12px; margin: 0; }
+    .skills dt { margin: 0; font-weight: 650; }
+    .skills dd { margin: 0; }
+    .edu { margin: 0 0 5px; break-inside: avoid; }
+    .edu h3 { margin: 0; font-size: 10.5pt; font-weight: 650; }
+    .toolbar { width: 210mm; margin: 16px auto 0; display: flex; justify-content: flex-end; }
+    button { font: inherit; background: var(--accent); color: white; border: 0; border-radius: 6px; padding: 8px 14px; cursor: pointer; }
+    @media print {
+      html, body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .toolbar { display: none; }
+      /* Page margins live on .page (cloned onto every printed page), so @page can be 0
+         and Chrome has no room to draw its date / title / file-path header and footer. */
+      .page {
+        margin: 0; width: auto; padding: 11mm 13mm;
+        -webkit-box-decoration-break: clone; box-decoration-break: clone;
+      }
+      .job ul { orphans: 2; widows: 2; }
+    }
+    @page { size: A4; margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <button type="button" onclick="window.print()">Print or save as PDF</button>
+  </div>
+
+  <main class="page">
+    <header>
+      <div class="identity">
+        <img class="photo" src="Калимулин Ренат.jpg" alt="Renat Kalimulin" />
+        <div>
+          <h1>Renat Kalimulin</h1>
+          <p class="role">Senior Frontend Developer<br>React / TypeScript · Fintech</p>
+        </div>
+      </div>
+      <ul class="contacts">
+        <li>Remote · Sole proprietor, Armenia</li>
+        <li><a href="tel:+79108708467">+7 (910) 870-8467</a> · <a href="mailto:pianoparrot93@gmail.com">pianoparrot93@gmail.com</a></li>
+        <li><a href="https://www.linkedin.com/in/renat-kalimulin/">linkedin.com/in/renat-kalimulin</a></li>
+        <li><a href="https://github.com/Nilumilak">github.com/Nilumilak</a></li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Summary</h2>
+      <p>
+        Senior frontend developer with 5+ years shipping production web applications in HTML, CSS, TypeScript, and React
+        across fintech lending, betting, and internal platforms. Owns end-to-end user flows and the frontend platform
+        around them: Feature-Sliced Design, a shared UI kit for web and React Native, typed REST API contracts (OpenAPI),
+        and CI/CD release pipelines. At a lending fintech, ran two products, PDL and BNPL, and the release pipeline
+        while the team had no frontend lead. At Radio Gigabit, designed and built the internal test platform end to end,
+        including the rebuilt UI. Rebuilt an authorization service in Preact and cut bundle size 40%.
+        Tests UI with Vitest, Jest, and Testing Library, and delivers FastAPI and PostgreSQL when the product needs it.
+      </p>
+    </section>
+
+    <section>
+      <h2>Professional Experience</h2>
+
+      <article class="job">
+        <div class="job-head">
+          <h3>Senior Frontend Developer · <span class="company">MONETECH SERVICIOS</span></h3>
+          <p class="dates">Sep 2025 - Oct 2026</p>
+        </div>
+        <p class="meta">Lending fintech · remote · 2 products: PDL (payday loans) and BNPL</p>
+        <ul>
+          <li>Owned the live PDL lending PWA after the main team moved to BNPL: production PWA, marketing site, new features, and the handoff from BNPL into PDL. Shipped 4 production flows (payment provider, split payments, loan agreements, cookie consent) and stabilized MetaMap KYC, analytics, and session integrations.</li>
+          <li>Migrated the PDL landing from WordPress to Next.js, including promo, legal, and consent pages, and reviewed the partner landing for architecture, privacy, and release quality.</li>
+          <li>Set up the BNPL web application and a full onboarding demo before the backend existed, then shipped 7 user flows: auth, KYC, personal data, loan setup, OTP, payment confirmation, and down payment.</li>
+          <li>Built 6 personal-account areas: profile, orders, transactions, notifications, payment methods, and Spanish localization (i18n).</li>
+          <li>Made Feature-Sliced Design the frontend standard on new BNPL apps, with public layer APIs, ESLint boundary checks in CI, and a written onboarding guide. Designed the CI/CD release path and ran releases while the team had no frontend lead.</li>
+          <li>Created 2 shared packages: frontend-core for typed REST API contracts (OpenAPI) and frontend-ui, a UI kit shared by web and React Native, including the architecture, first components, tokens, and icons. Worked with backend, product, and design, proposed UI changes that shipped, and ran first-round candidate interviews.</li>
+        </ul>
+      </article>
+
+      <article class="job">
+        <div class="job-head">
+          <h3>Frontend Software Engineer · <span class="company">Olimpbet KZ</span></h3>
+          <p class="dates">May 2024 - Sep 2025</p>
+        </div>
+        <p class="meta">Betting product · frontend team of 6 · 3 applications</p>
+        <ul>
+          <li>Developed and maintained 3 applications in a frontend team of 6: the mobile app, the desktop web app, and a standalone authorization service.</li>
+          <li>Rebuilt the authorization service from React and styled-components to Preact and SCSS, cutting bundle size 40% and improving first-load performance.</li>
+          <li>Improved performance on data-heavy pages with virtual scrolling so large datasets stayed responsive.</li>
+          <li>Integrated cross-team features through iframe communication between services, keeping the security and performance boundary intact.</li>
+        </ul>
+      </article>
+
+      <article class="job">
+        <div class="job-head">
+          <h3>Senior Full Stack Engineer · <span class="company">Radio Gigabit</span></h3>
+          <p class="dates">Nov 2022 - Present</p>
+        </div>
+        <p class="meta">Wireless test equipment · part-time · internal test platform, 2 products</p>
+        <ul>
+          <li>Added an LLM test generator to the framework: a chat UI and a FastAPI service that turns a prompt, device type, and existing test source into a test module.</li>
+          <li>Designed the architecture of the internal test platform and built 2 products end to end: the test framework (UI and API) and a board database for hardware records, measurements, and test history.</li>
+          <li>Rebuilt the framework UI in React and TypeScript: custom component kit, light and dark themes, and screens for tests, devices, reports, scheduling, and configuration. Set the frontend structure with Feature-Sliced Design, ESLint layer boundaries, and typed clients generated from 4 OpenAPI contracts.</li>
+          <li>Connected that UI to 5 services owned by other teams (DHCP, SSH tunnels, equipment management, Grafana, Keycloak) through one backend that handles auth and stand reservations. Added a live terminal for manual steps during a test run.</li>
+          <li>Built both APIs in FastAPI with PostgreSQL, async SQLAlchemy, and Alembic, and shipped them with Docker. Covered the platform with Vitest and Testing Library on the frontend and pytest on the backend.</li>
+        </ul>
+      </article>
+
+      <article class="job">
+        <div class="job-head">
+          <h3>Frontend Software Engineer · <span class="company">Eco Activists</span></h3>
+          <p class="dates">Dec 2020 - Dec 2022</p>
+        </div>
+        <p class="meta">Environmental platform · <a href="https://trash-free.ru">trash-free.ru</a></p>
+        <ul>
+          <li>Led a small frontend team through planning, code review, and delivery of the public website for environmental initiatives.</li>
+          <li>Built the frontend in React, JavaScript, and SCSS, and the APIs for core product features in Django REST Framework. Mentored junior developers on the team through code review and shared engineering practice.</li>
+        </ul>
+      </article>
+
+      <article class="job">
+        <div class="job-head">
+          <h3>Design Engineer · <span class="company">JSC NPP Salyut</span></h3>
+          <p class="dates">Jun 2015 - Apr 2020</p>
+        </div>
+        <p class="meta">1st category (senior grade) · precision electronics · Nizhny Novgorod</p>
+        <ul>
+          <li>Led 5+ government-funded projects with 5 developers and 15 machine workers and assemblers, and took part in 30+ projects for frequency synthesizers, power supplies, and frequency stabilizers, including assemblies of 100+ high-precision elements. Wrote Python macros that sped up document work and reduced errors.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section>
+      <h2>Open source</h2>
+      <article class="job">
+        <div class="job-head">
+          <h3>Contributor · <span class="company">Kafbat, Kafka UI</span></h3>
+          <p class="dates">Feb 2024 - Present</p>
+        </div>
+        <p class="meta"><a href="https://github.com/kafbat/kafka-ui">github.com/kafbat/kafka-ui</a></p>
+        <ul>
+          <li>Built the authorization page for user access control and shipped it with maintainers through GitHub pull requests and code review. The work is in the project release notes.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section>
+      <h2>Technical Skills</h2>
+      <dl class="skills">
+        <dt>Frontend</dt>
+        <dd>HTML, CSS, SCSS, CSS Modules, Tailwind CSS, JavaScript, TypeScript, React, Next.js, Preact, React Native, React Router, TanStack Query, TanStack Router, Redux Toolkit, Zustand, React Hook Form, styled-components, MUI, Ant Design, i18n, PWA, WebSockets</dd>
+        <dt>Architecture</dt>
+        <dd>Feature-Sliced Design, design systems, shared UI kits, SSR / SSG, performance optimization, typed API contracts (OpenAPI), ESLint layer boundaries</dd>
+        <dt>Quality</dt>
+        <dd>Vitest, Jest, Testing Library, Storybook, pytest, ESLint, Prettier, Husky, CI/CD release pipelines</dd>
+        <dt>Backend</dt>
+        <dd>Python, REST, FastAPI, PostgreSQL, SQLAlchemy, Alembic, Django, Django REST Framework</dd>
+        <dt>Tools</dt>
+        <dd>Git, GitHub, GitHub Actions, GitLab CI, Vite, Webpack, pnpm, Docker, Docker Compose, OpenAPI / Swagger, Keycloak, OAuth / JWT, Sentry, Figma, Jira</dd>
+        <dt>Languages</dt>
+        <dd>Russian (native), English (C1)</dd>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <article class="edu">
+        <div class="job-head">
+          <h3>Full-stack Python Developer Course · Netology</h3>
+          <p class="dates">Mar 2021 - Nov 2022</p>
+        </div>
+        <p class="meta">Online · <a href="https://netology.ru/">netology.ru</a></p>
+      </article>
+      <article class="edu">
+        <div class="job-head">
+          <h3>Specialist (Master’s equivalent), Automation of Technological Processes in Production</h3>
+          <p class="dates">Sep 2014 - Jun 2016</p>
+        </div>
+        <p class="meta">Nizhny Novgorod State Technical University, named after R. E. Alekseev</p>
+      </article>
+      <article class="edu">
+        <div class="job-head">
+          <h3>Bachelor’s degree, Automation and Management</h3>
+          <p class="dates">Sep 2010 - Jul 2014</p>
+        </div>
+        <p class="meta">Nizhny Novgorod State Technical University, named after R. E. Alekseev</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
