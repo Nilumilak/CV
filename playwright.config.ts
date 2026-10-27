@@ -1,10 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
+import { E2E_PORT } from './tests/e2e/global-setup';
+
+// `npm run e2e` builds first, then global-setup serves dist/ in-process.
 
 export default defineConfig({
   testDir: './tests/e2e',
+  globalSetup: './tests/e2e/global-setup.ts',
   reporter: process.env.CI ? 'github' : 'list',
   use: {
-    baseURL: 'http://127.0.0.1:4321',
+    baseURL: `http://127.0.0.1:${E2E_PORT}`,
     // Software WebGL so tests also run on CI machines without a GPU.
     launchOptions: { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] },
   },
@@ -12,11 +16,4 @@ export default defineConfig({
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
     { name: 'phone', use: { ...devices['Pixel 7'] } },
   ],
-  webServer: {
-    // Bind to IPv4 explicitly: on Windows, "localhost" can resolve to ::1 only and the readiness check hangs.
-    command: 'npm run build && npm run preview -- --host 127.0.0.1 --port 4321 --strictPort',
-    url: 'http://127.0.0.1:4321',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
 });
