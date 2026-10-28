@@ -47,7 +47,7 @@ const SPOTS = {
   fountain: [0, 0],
   houses: view(-1.9, -3.3),
   bank: view(1.6, -3.3),
-  crane: view(-3.9, -0.8),
+  crane: view(-4.8, 0.5),
   balloon: view(3.8, -1.0),
   signpost: view(-2.6, 2.8),
   shack: view(2.6, 2.8),
@@ -108,7 +108,7 @@ export function MarketIsland() {
             <GeneratedModel url={craneUrl} height={4} />
           </Wobble>
         </Interactable>
-        <BlockStack id="mone-packages" position={[0.9, 0, 0.6]} />
+        <BlockStack id="mone-packages" position={[1.5, 0, 0.0]} />
       </group>
 
       <group position={at('balloon')}>
