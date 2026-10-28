@@ -6,22 +6,22 @@
 
 Versions checked in October 2026. Always install the latest versions, but keep the major versions of three, R3F, drei and postprocessing compatible with each other.
 
-| Concern          | Choice                                                | Notes                                                                                                      |
-| ---------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| Runtime          | Node.js current LTS, 24 or newer                      | Node 20.11 is installed now. Current Vite needs 20.19 or newer, and Node 20 is end of life. Upgrade first. |
-| Build            | Vite 8, React 19, TypeScript                          | React Three Fiber 9 needs React 19.                                                                        |
-| 3D core          | `three` 0.18x, `@react-three/fiber` 9                 |                                                                                                            |
-| 3D helpers       | `@react-three/drei` 10                                | CameraControls, Clouds, Html, Float, useGLTF, useProgress, Outlines, PerformanceMonitor, Instances         |
-| Post effects     | `@react-three/postprocessing` 3 with `postprocessing` | Bloom, vignette, colour grading, depth of field                                                            |
-| Frame animation  | `maath`                                               | `easing.damp` helpers inside `useFrame`                                                                    |
-| DOM animation    | `motion` (formerly framer-motion)                     | Panels, buttons, welcome screen                                                                            |
-| State            | `zustand` with `persist`                              | One store for the world, persisted visited islands and found objects                                       |
-| Audio            | `howler`                                              | Uses Web Audio. iOS ignores the volume of plain audio elements, so fades need Web Audio.                   |
-| Shader extension | `three-custom-shader-material` (optional)             | Wind on grass and trees while keeping toon lighting                                                        |
-| Models           | Blender, GLB, `gltfjsx --transform`                   | Draco geometry, WebP textures, typed React components                                                      |
-| Debug            | `leva`, `r3f-perf`                                    | Loaded only when the address has `?debug`                                                                  |
-| Tests            | Vitest, Testing Library, Playwright                   | Unit tests for data and store, one browser smoke test                                                      |
-| Hosting          | Vercel, or GitHub Pages                               | Static build, hash routing works on both                                                                   |
+| Concern          | Choice                                                | Notes                                                                                                                |
+| ---------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Runtime          | Node.js current LTS, 24 or newer                      | Node 20.11 is installed now. Current Vite needs 20.19 or newer, and Node 20 is end of life. Upgrade first.           |
+| Build            | Vite 8, React 19, TypeScript                          | React Three Fiber 9 needs React 19.                                                                                  |
+| 3D core          | `three` 0.18x, `@react-three/fiber` 9                 |                                                                                                                      |
+| 3D helpers       | `@react-three/drei` 10                                | CameraControls, Clouds, Html, Float, useGLTF, useProgress, Outlines, PerformanceMonitor, Instances                   |
+| Post effects     | `@react-three/postprocessing` 3 with `postprocessing` | Bloom, vignette, colour grading, depth of field                                                                      |
+| Frame animation  | `maath`                                               | `easing.damp` helpers inside `useFrame`                                                                              |
+| DOM animation    | `motion` (formerly framer-motion)                     | Panels, buttons, welcome screen                                                                                      |
+| State            | `zustand` with `persist`                              | One store for the world, persisted visited islands and found objects                                                 |
+| Audio            | Web Audio API (synthesized)                           | Wind, chord pad and whoosh generated in code: no files or licences. howler can return in Phase 6 for recorded music. |
+| Shader extension | `three-custom-shader-material` (optional)             | Wind on grass and trees while keeping toon lighting                                                                  |
+| Models           | Blender, GLB, `gltfjsx --transform`                   | Draco geometry, WebP textures, typed React components                                                                |
+| Debug            | `leva`, `r3f-perf`                                    | Loaded only when the address has `?debug`                                                                            |
+| Tests            | Vitest, Testing Library, Playwright                   | Unit tests for data and store, one browser smoke test                                                                |
+| Hosting          | Vercel, or GitHub Pages                               | Static build, hash routing works on both                                                                             |
 
 GSAP is not needed. CameraControls handles camera transitions, and the fly-in is a curve driven by `useFrame`. Add GSAP later only if a long multi-step timeline appears.
 
@@ -64,7 +64,7 @@ src/
   materials/
     toon.ts              gradient map and shared palette materials
   audio/
-    sound.ts             howler wrapper
+    sound.ts             synthesized ambience and whoosh (Web Audio)
   ui/
     Overlay.tsx  Welcome.tsx  TopBar.tsx  IslandPanel.tsx  IslandMenu.tsx
     ClassicCV.tsx  WebGLFallback.tsx
