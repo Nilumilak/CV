@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { sound } from '@/audio/sound';
 import { AnimatePresence } from 'motion/react';
 import { chapterOf, neighbours } from '@/data/navigation';
 import type { IslandId } from '@/data/types';
@@ -8,13 +9,17 @@ import { useHashSync } from '@/routing/useHashSync';
 import { useWorld } from '@/store/useWorld';
 import { IslandPanel } from './IslandPanel';
 import { TopBar } from './TopBar';
+import { CloudVeil, SkipIntro, Welcome } from './Welcome';
 
 /** Everything drawn over the canvas: labels, top bar, panel, keyboard handling. */
 export function Overlay() {
   const focused = useWorld((s) => s.focused);
+  const phase = useWorld((s) => s.phase);
+  const inWorld = phase === 'world';
   useKeyboardNavigation();
   useHashSync();
   useReturnFocusToLabel(focused);
+  useSoundSync();
 
   const announcement = focused
     ? `Now viewing ${chapterOf(focused)?.company ?? 'Home'}`
@@ -22,9 +27,20 @@ export function Overlay() {
 
   return (
     <>
-      <IslandLabels />
-      <TopBar />
-      <AnimatePresence>{focused && <IslandPanel key="panel" id={focused} />}</AnimatePresence>
+      <CloudVeil />
+      <AnimatePresence>
+        {(phase === 'loading' || phase === 'welcome') && <Welcome key="welcome" />}
+      </AnimatePresence>
+      {phase === 'flyIn' && <SkipIntro />}
+      {inWorld && (
+        <>
+          <IslandLabels />
+          <TopBar />
+        </>
+      )}
+      <AnimatePresence>
+        {inWorld && focused && <IslandPanel key="panel" id={focused} />}
+      </AnimatePresence>
       <p className="visually-hidden" aria-live="polite">
         {announcement}
       </p>
@@ -75,4 +91,12 @@ function useReturnFocusToLabel(focused: IslandId | null) {
     );
     return () => cancelAnimationFrame(raf);
   }, [focused]);
+}
+
+/** Turns the synthesized ambience on and off with the store's sound flag. */
+function useSoundSync() {
+  const on = useWorld((s) => s.sound);
+  useEffect(() => {
+    sound.setEnabled(on);
+  }, [on]);
 }

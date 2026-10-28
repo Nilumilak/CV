@@ -86,3 +86,30 @@ export function layoutOf(id: IslandId): IslandLayout {
   if (!layout) throw new Error(`No layout for island "${id}"`);
   return layout;
 }
+
+/**
+ * The fly-in path, from high above the clouds down to the overview pose.
+ * The welcome screen shows the view from the first point.
+ * The camera passes through the cloud band in CloudLayers (FLY_IN_CLOUD_BAND) on the way.
+ */
+export const FLY_IN_POINTS: Vec3[] = [
+  [0, 105, 200],
+  [-6, 80, 160],
+  [-4, 52, 118],
+  [6, 34, 88],
+  [4, 24, 66],
+  OVERVIEW.position,
+];
+
+/** Height and depth of the sea of clouds under the welcome view. */
+export const FLY_IN_CLOUD_BAND = { y: 50, z: 120 } as const;
+
+/**
+ * One dense cloud sitting right on the dive path. It hides the islands until the camera
+ * bursts out of it, and the white veil peaks while the camera is inside.
+ */
+export const FLY_IN_CLOUD: { position: Vec3; size: Vec3; radius: number } = {
+  position: [0, 46, 104],
+  size: [60, 30, 44],
+  radius: 26,
+};

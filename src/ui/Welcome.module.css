@@ -1,0 +1,158 @@
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+  /* A soft light glow behind the text keeps it readable over any sky. */
+  background: radial-gradient(
+    ellipse 60% 45% at 50% 48%,
+    rgb(255 253 246 / 72%),
+    rgb(255 253 246 / 0%) 70%
+  );
+  text-align: center;
+}
+
+.content {
+  max-width: 560px;
+}
+
+.kicker {
+  margin: 0 0 10px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(43 36 34 / 70%);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(40px, 8vw, 76px);
+  line-height: 1.02;
+  color: var(--ink);
+  text-shadow: 0 2px 0 rgb(255 255 255 / 60%);
+}
+
+.word {
+  display: inline-block;
+}
+
+.subtitle {
+  margin: 14px 0 0;
+  font-size: 18px;
+  color: rgb(43 36 34 / 78%);
+}
+
+.actions {
+  min-height: 108px;
+  margin-top: 32px;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 16px;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.enter {
+  padding: 14px 26px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow:
+    0 4px 0 rgb(0 0 0 / 30%),
+    0 10px 26px rgb(30 40 70 / 25%);
+  transition: transform 0.1s;
+}
+
+.enter:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgb(0 0 0 / 30%);
+}
+
+.quiet {
+  background: rgb(247 240 225 / 92%);
+  color: var(--ink);
+}
+
+.cvLink {
+  color: rgb(43 36 34 / 75%);
+  font-size: 15px;
+  text-decoration-color: rgb(43 36 34 / 35%);
+  text-underline-offset: 3px;
+}
+
+.loading {
+  width: 220px;
+  height: 4px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: rgb(43 36 34 / 12%);
+  overflow: hidden;
+}
+
+.loading span {
+  display: block;
+  width: 40%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent-gold);
+  animation: drift 1.4s ease-in-out infinite;
+}
+
+@keyframes drift {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+.skip {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 40;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(43 36 34 / 70%);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  background: #fffdf6;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading span {
+    animation: none;
+    width: 100%;
+    opacity: 0.6;
+  }
+}

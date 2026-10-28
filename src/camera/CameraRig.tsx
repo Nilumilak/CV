@@ -64,16 +64,22 @@ function panelOffset(
 
 /**
  * Smooth camera flights between the overview and each island, with limits so
- * visitors cannot get lost. Phase 3's fly-in will own the camera before this mounts.
+ * visitors cannot get lost. Mounts only once the world is ready: until then
+ * FlyIn owns the camera.
  */
 export function CameraRig() {
+  const ready = useWorld((s) => s.phase === 'world');
+  return ready ? <ActiveCameraRig /> : null;
+}
+
+function ActiveCameraRig() {
   const ref = useRef<CameraControlsImpl>(null);
   const focused = useWorld((s) => s.focused);
   const { size, camera } = useThree();
   const fov = (camera as THREE.PerspectiveCamera).fov;
   const first = useRef(true);
 
-  // Controls: rotate with left button or one finger, zoom with wheel or pinch. No panning.
+  // On mount: control settings, and take over the camera exactly where it is now.
   useEffect(() => {
     const c = ref.current;
     if (!c) return;
@@ -82,30 +88,35 @@ export function CameraRig() {
     c.mouseButtons.middle = ACTION.NONE;
     c.touches.two = ACTION.TOUCH_DOLLY;
     c.touches.three = ACTION.NONE;
-  }, []);
+
+    if (debugCamera.position) {
+      const target = debugCamera.target ?? OVERVIEW.target;
+      void c.setLookAt(...debugCamera.position, ...target, false);
+    } else {
+      const p = camera.position;
+      void c.setLookAt(p.x, p.y, p.z, ...OVERVIEW.target, false);
+    }
+  }, [camera]);
 
   // Fly to the focused island, or back to the overview.
   useEffect(() => {
     const c = ref.current;
     if (!c) return;
+    const isFirst = first.current;
+    first.current = false;
+    // Keep a debug camera pose until the visitor picks an island.
+    if (isFirst && debugCamera.position && !focused) return;
+
     const k = backoffFor(size.width / size.height);
     const pose = scalePose(focused ? layoutOf(focused).camera : OVERVIEW, k);
-    const animate = !first.current;
-
-    if (first.current && debugCamera.position) {
-      const target = debugCamera.target ?? OVERVIEW.target;
-      void c.setLookAt(...debugCamera.position, ...target, false);
-    } else {
-      void c.setLookAt(...pose.position, ...pose.target, animate);
-    }
-    first.current = false;
+    void c.setLookAt(...pose.position, ...pose.target, true);
 
     const limits = focused ? DISTANCE.focus : DISTANCE.overview;
     c.minDistance = limits.min * k;
     c.maxDistance = limits.max * k;
 
     const offset = focused ? panelOffset(pose, fov, size.width, size.height) : [0, 0, 0];
-    void c.setFocalOffset(offset[0], offset[1], offset[2], animate);
+    void c.setFocalOffset(offset[0], offset[1], offset[2], true);
   }, [focused, fov, size.width, size.height]);
 
   return (

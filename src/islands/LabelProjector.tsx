@@ -6,6 +6,9 @@ import { labelElements } from './labelAnchors';
 
 const projected = new THREE.Vector3();
 
+/** Pixels at the top of the screen reserved for the top bar. */
+const TOP_BAR_CLEARANCE = 84;
+
 /**
  * Projects each island's label anchor to screen space and moves the DOM label there.
  * Writes styles directly every frame, so React never re-renders for camera motion.
@@ -30,7 +33,8 @@ export function LabelProjector() {
       // Behind the camera, or far outside the view: hide.
       const visible = projected.z < 1 && Math.abs(projected.x) < 1.3 && Math.abs(projected.y) < 1.3;
       const x = (projected.x * 0.5 + 0.5) * size.width;
-      const y = (-projected.y * 0.5 + 0.5) * size.height;
+      // Keep labels out of the top bar strip.
+      const y = Math.max((-projected.y * 0.5 + 0.5) * size.height, TOP_BAR_CLEARANCE);
       el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%)`;
       el.style.visibility = visible ? 'visible' : 'hidden';
       // Nearer labels draw on top.

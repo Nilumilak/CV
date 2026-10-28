@@ -12,6 +12,7 @@ const SAG = 2.5;
  * Dashed rope linking the career islands in timeline order.
  * A placeholder for rope bridges or a tram cable in Phase 4.
  * The open-source Lighthouse sits off the route on purpose.
+ * Opaque on purpose: transparent lines draw after the clouds and would show through them.
  */
 export function Route() {
   const points = useMemo(() => {
@@ -31,15 +32,6 @@ export function Route() {
   }, []);
 
   return (
-    <Line
-      points={points}
-      color={colors.wood}
-      lineWidth={2}
-      dashed
-      dashSize={0.8}
-      gapSize={0.5}
-      transparent
-      opacity={0.8}
-    />
+    <Line points={points} color={colors.wood} lineWidth={2} dashed dashSize={0.8} gapSize={0.5} />
   );
 }

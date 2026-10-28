@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { Cloud, Clouds } from '@react-three/drei';
 import * as THREE from 'three';
 import type { Vec3 } from '@/data/types';
+import { FLY_IN_CLOUD, FLY_IN_CLOUD_BAND } from '@/data/world';
 import { colors } from '@/materials/toon';
 import { createCloudTextureUrl } from './cloudTexture';
 
@@ -94,6 +95,26 @@ const MID_CLOUDS: CumulusProps[] = [
   { seed: 17, position: [100, 4, -24], size: [56, 20, 28] },
 ];
 
+/** A sea of clouds under the welcome view, which the camera dives through. */
+const FLY_IN_BAND: CumulusProps[] = [
+  // The dense cloud on the dive path: hides the islands until the camera bursts out.
+  { seed: 31, position: FLY_IN_CLOUD.position, size: FLY_IN_CLOUD.size, segments: 22, drift: 0 },
+  {
+    seed: 32,
+    position: [-75, FLY_IN_CLOUD_BAND.y - 4, FLY_IN_CLOUD_BAND.z + 20],
+    size: [90, 14, 50],
+    segments: 10,
+    drift: 0.1,
+  },
+  {
+    seed: 33,
+    position: [75, FLY_IN_CLOUD_BAND.y - 2, FLY_IN_CLOUD_BAND.z - 10],
+    size: [90, 14, 50],
+    segments: 10,
+    drift: 0.1,
+  },
+];
+
 /** Big clouds near the horizon for depth. Fog softens them into the sky. */
 const HORIZON_CLOUDS: CumulusProps[] = [
   { seed: 21, position: [-160, 24, -150], size: [140, 52, 60], segments: 11, drift: 0.15 },
@@ -105,14 +126,14 @@ const HORIZON_CLOUDS: CumulusProps[] = [
 
 /**
  * All clouds share one <Clouds> parent, so they render as a single instanced draw call.
- * Overdraw is the main cost: every puff is a large transparent quad. Keep the total under ~220.
+ * Overdraw is the main cost: every puff is a large transparent quad. Keep visible puffs under ~220; the fly-in band is behind the overview camera.
  * Layers: 1. floor far below the islands, 2. mid clouds, 3. horizon clouds.
  * Fly-in wisps are added in Phase 3.
  */
 export function CloudLayers() {
   const texture = useMemo(() => createCloudTextureUrl(), []);
   return (
-    <Clouds texture={texture} material={THREE.MeshBasicMaterial} limit={260} frustumCulled={false}>
+    <Clouds texture={texture} material={THREE.MeshBasicMaterial} limit={300} frustumCulled={false}>
       {/* 1. Cloud floor: hides the void under the floating islands. */}
       <Cloud
         seed={1}
@@ -145,6 +166,11 @@ export function CloudLayers() {
 
       {/* 3. Horizon clouds */}
       {HORIZON_CLOUDS.map((c) => (
+        <Cumulus key={c.seed} {...c} />
+      ))}
+
+      {/* 4. The band the fly-in dives through. Behind the overview camera, so only the intro sees it. */}
+      {FLY_IN_BAND.map((c) => (
         <Cumulus key={c.seed} {...c} />
       ))}
     </Clouds>

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import type { IslandId } from '@/data/types';
+import { introAt, skipIntro } from '@/debug/isDebug';
 
 export type Phase = 'loading' | 'welcome' | 'flyIn' | 'world';
 export type Quality = 'high' | 'low';
@@ -51,8 +52,7 @@ const addOnce = <T>(list: T[], item: T) => (list.includes(item) ? list : [...lis
 export const useWorld = create<WorldState>()(
   persist(
     (set) => ({
-      // Phase 3 adds the welcome screen and fly-in. Until then the world starts ready.
-      phase: 'world',
+      phase: skipIntro ? 'world' : introAt !== undefined ? 'flyIn' : 'loading',
       focused: null,
       activeObject: null,
       hintObject: null,

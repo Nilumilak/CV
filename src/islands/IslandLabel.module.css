@@ -3,6 +3,8 @@
   inset: 0;
   overflow: hidden;
   pointer-events: none;
+  /* Own stacking layer: labels sort among themselves, always below the top bar and panel. */
+  z-index: 10;
 }
 
 .layer > * {

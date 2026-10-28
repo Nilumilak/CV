@@ -2,10 +2,12 @@ import { Suspense, lazy } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Leva } from 'leva';
 import { CameraRig } from '@/camera/CameraRig';
-import { OVERVIEW } from '@/data/world';
-import { debugCamera, isDebug } from '@/debug/isDebug';
+import { FLY_IN_POINTS, OVERVIEW } from '@/data/world';
+import { debugCamera, isDebug, skipIntro } from '@/debug/isDebug';
 import { useWorldControls } from '@/debug/useWorldControls';
 import { Islands } from '@/islands/Islands';
+import { FlyIn } from '@/scenes/FlyIn';
+import { LoadingReporter } from '@/scenes/LoadingReporter';
 import { useWorld } from '@/store/useWorld';
 import { CloudLayers } from '@/world/CloudLayers';
 import { Lighting } from '@/world/Lighting';
@@ -26,7 +28,7 @@ export default function WorldCanvas() {
           fov: 45,
           near: 0.1,
           far: 1200,
-          position: debugCamera.position ?? OVERVIEW.position,
+          position: debugCamera.position ?? (skipIntro ? OVERVIEW.position : FLY_IN_POINTS[0]),
         }}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         aria-hidden
@@ -41,7 +43,9 @@ export default function WorldCanvas() {
         </Suspense>
         <Islands />
         <Route />
+        <FlyIn />
         <CameraRig />
+        <LoadingReporter />
         {isDebug && (
           <Suspense fallback={null}>
             <Debug />
