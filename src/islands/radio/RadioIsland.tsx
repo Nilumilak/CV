@@ -105,7 +105,7 @@ export function RadioIsland() {
         <Interactable {...interactive('radio-platform')}>
           <GeneratedModel url={bunkerUrl} length={3.2} />
         </Interactable>
-        <DoorGlow id="radio-platform" position={[0, 0.5, 1.05]} width={0.6} height={0.85} />
+        <DoorGlow id="radio-platform" position={[0, 0.5, 1.05]} />
       </group>
 
       <group position={at('dish')}>

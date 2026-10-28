@@ -96,7 +96,7 @@ A small round tin robot with one antenna and a friendly screen face, hovering a 
 A rounded concrete bunker half dug into a grassy rock mound, with a yellow round-topped door and a small lamp above it.
 
 - **Idle:** the lamp above the door glows softly.
-- **Click:** the doorway and the lamp above it glow warmly, as if the lab inside just switched on, then fade back (decision 2).
+- **Click:** a warm light in front of the door swells, as if the lab inside just switched on, then fades back (decision 2). Light only, no glowing shape.
 
 ### Big screen · Rebuilt the framework UI
 

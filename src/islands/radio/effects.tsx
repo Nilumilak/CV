@@ -136,42 +136,25 @@ export function SignalBurst({
 }
 
 /**
- * Warm light in a doorway: always a soft glow, and on activation it swells as if the lab
- * inside just switched on, then fades back.
+ * Warm light in front of a doorway: always a soft glow, and on activation it swells as
+ * if the lab inside just switched on, then fades back. Light only, no shape, so it takes
+ * the form of whatever door it shines on.
  */
-export function DoorGlow({
-  id,
-  position,
-  width = 0.7,
-  height = 1.1,
-}: {
-  id: string;
-  position: Vec3;
-  width?: number;
-  height?: number;
-}) {
+export function DoorGlow({ id, position }: { id: string; position: Vec3 }) {
   const light = useRef<THREE.PointLight>(null!);
-  const pane = useRef<THREE.Mesh>(null!);
   const progress = useReaction(id, 2.4);
   useFrame(({ clock }) => {
     const f = swellOf(progress(clock.elapsedTime));
-    light.current.intensity = 0.5 + 2.5 * f;
-    (pane.current.material as THREE.MeshBasicMaterial).opacity = 0.12 + 0.55 * f;
+    light.current.intensity = 0.5 + 4 * f;
   });
   return (
-    <group position={position}>
-      <mesh ref={pane} position={[0, 0, 0.02]} raycast={() => null}>
-        <planeGeometry args={[width, height]} />
-        <meshBasicMaterial color="#ffcf7a" transparent opacity={0.12} depthWrite={false} />
-      </mesh>
-      <pointLight
-        ref={light}
-        position={[0, 0, 0.5]}
-        color={colors.accentGold}
-        distance={4}
-        decay={2}
-      />
-    </group>
+    <pointLight
+      ref={light}
+      position={[position[0], position[1], position[2] + 0.5]}
+      color={colors.accentGold}
+      distance={4}
+      decay={2}
+    />
   );
 }
 
