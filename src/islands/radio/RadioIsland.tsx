@@ -35,21 +35,32 @@ const interactive = (id: IslandObjectId) => {
 
 /**
  * Where everything stands, in island units (+Z faces the overview camera, +X is the
- * visitor's right). The focus camera looks from the front right, about 54° from +X,
- * so objects are spread across that view: tower and screen on the left, bunker at the
- * back in the middle, dish and containers on the right, robot in front.
+ * visitor's right). Matches the layout in docs/plan/islands/radio.md.
+ *
+ * Two rows across the focus camera's view (it looks from the front right, about 54°
+ * from +X, and about 19° down):
+ * - back row, tall things: tower left, bunker middle, dish right;
+ * - front row, about 5 m closer: screen left, robot middle, containers right.
+ * Each front object has its own column, and the gap between the rows makes it show
+ * below the back row on screen, so nothing hides anything. Rocks sit at the side edges.
+ * The helper turns "across the view, towards the camera" into island x and z.
  */
+const view = (across: number, towards: number): [number, number] => [
+  +(0.59 * across + 0.8 * towards).toFixed(2),
+  +(-0.8 * across + 0.59 * towards).toFixed(2),
+];
+
 const SPOTS = {
-  tower: [-3.5, 0.6],
-  bunker: [-1.9, -1.1],
-  dish: [0.7, -2.95],
-  screen: [-0.1, 2.4],
-  robot: [1.2, 2.1],
-  containers: [2.0, 0],
-  rocks1: [-3.6, -2.4],
-  rocks2: [3.6, 1.8],
-  rocks3: [-2.2, 3.6],
-} as const satisfies Record<string, [number, number]>;
+  tower: view(-2.5, -3),
+  bunker: view(0, -3),
+  dish: view(2.5, -3),
+  screen: view(-2.2, 2.3),
+  robot: view(0, 2.3),
+  containers: view(2.2, 2.3),
+  rocks1: view(-4, 0),
+  rocks2: view(4, 0),
+  rocks3: view(-0.9, 3.8),
+} satisfies Record<string, [number, number]>;
 
 /** Turn that makes a model's front (+Z) face the focus camera. */
 const FACE_CAMERA = 54;
@@ -108,7 +119,7 @@ export function RadioIsland() {
       <group position={at('screen')} rotation-y={deg(FACE_CAMERA)}>
         <Interactable {...interactive('radio-ui')}>
           <GeneratedModel url={screenUrl} height={2.2} />
-          <ScreenPicture id="radio-ui" position={[0, 1.42, 0.12]} width={1.3} height={0.82} />
+          <ScreenPicture id="radio-ui" position={[0, 1.36, -0.03]} width={1.52} height={1.1} />
         </Interactable>
       </group>
 

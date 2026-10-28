@@ -46,36 +46,37 @@ Radio sits at the back of the world, high up (`[0, 4, -22]`). From the overview 
 
 ## 4. Layout (seen from above)
 
-The island top is about 11 metres across. The camera looks from the front right, like on Home. Following the Home layout rule, objects are spread across that view, not lined up along it.
+The island top is about 11 metres across. The focus camera looks from the front right (about 54° from +X) and about 19° down.
+
+**Layout rule (revised 2026-10-28, after the first layout hid things).** Two rows across the camera's view, about 5 m apart:
+
+- **Back row, the tall things:** tower on the left, bunker in the middle, dish on the right.
+- **Front row:** screen on the left, robot in the middle, containers on the right.
+
+Each front object has its own column. Because the camera looks down, an object 5 m closer appears about 1.8 m lower on screen, so the front row never hides the back row. The robot is small, so it can stand in front of the bunker without covering the door. Rocks sit at the side edges, where they cover nothing.
+
+Seen from the camera:
 
 ```
-                         back (away from the camera)
-                 .-----------------------------------.
-               /   [ TOWER ]                           \
-              /     beacon                              \
-             |   [BUNKER LAB]                [  DISH  ]  |
-             |    yellow door                            |
-     left    |                                           |   right
-             |                 open yard                 |
-             |  [SCREEN]                                 |
-              \      [robot]              [CONTAINERS]  /
-               \                                       /
-                 '-----------------------------------'
-                       front (towards the camera)
-                                  ↘ camera
+        [ TOWER ]          [ BUNKER LAB ]          [ DISH ]
+          beacon            yellow door
+                                                              back row
+   ──────────────────────── about 5 m ────────────────────────
+  rocks   [ SCREEN ]           [robot]          [CONTAINERS]   rocks
+                                                              front row
 ```
 
-| Object          | Position (x, z) | Size            | Notes                                                    |
-| --------------- | --------------- | --------------- | -------------------------------------------------------- |
-| Tower           | −3.0, −1.8      | 9 tall          | Back left; tall enough to show behind everything         |
-| Bunker lab      | −2.4, −0.2      | 2.2 tall        | Built into a rock mound, door facing the camera          |
-| Satellite dish  | 2.4, −1.6       | 2.2 tall        | Back right, pointing at the sky                          |
-| Big screen      | −2.2, 2.2       | 2.4 wide        | Front left, on two legs, turned to the camera            |
-| Helper robot    | −0.6, 2.6       | 0.9 tall        | Next to the screen, as if it is working on it            |
-| Containers      | 3.2, 1.4        | 2 tall (2 high) | Front right                                              |
-| Rocks and grass | around the rim  | mixed           | Fill the gaps; reused later by other islands (section 8) |
+Positions are written in code as "across the view, towards the camera" and turned into island x and z by a small helper in `RadioIsland.tsx`.
 
-Positions are a first guess. As on Home, they are tuned after the first screenshot.
+| Object         | Across, towards   | Island x, z  | Size            |
+| -------------- | ----------------- | ------------ | --------------- |
+| Tower          | −2.5, −3          | −3.88, 0.23  | 9 tall          |
+| Bunker lab     | 0, −3             | −2.40, −1.77 | 3.2 long        |
+| Satellite dish | 2.5, −3           | −0.93, −3.77 | 2.2 tall        |
+| Big screen     | −2.2, 2.3         | 0.54, 3.12   | 2.2 tall        |
+| Helper robot   | 0, 2.3            | 1.84, 1.36   | 0.9 long        |
+| Containers     | 2.2, 2.3          | 3.14, −0.40  | 2 tall (2 high) |
+| Rocks          | ±4, 0 · −0.9, 3.8 | side edges   | 1.1 to 1.6 long |
 
 ---
 
