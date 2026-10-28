@@ -2,7 +2,7 @@
 
 [Back to Phase 4](../phase-4-island-art.md) · [AI model prompts](../phase-4-ai-prompts.md)
 
-**Status:** draft for review. Nothing here is built yet. Comments and changes welcome before we generate models.
+**Status:** design agreed on 2026-10-28 (decisions in section 8). Models not generated yet.
 
 ---
 
@@ -94,7 +94,7 @@ Sizes are in metres. Some are a little oversized on purpose, storybook style, so
 
 A tiny countryside cottage: cream plaster walls, honey-coloured timber beams, a steep terracotta tile roof, a slightly crooked brick chimney, one large **round window** glowing warm from inside, a small green wooden door with a stone step, and a flower box under a side window. About 3.5 × 3 m footprint, 5 m to the top of the chimney.
 
-- **Alive:** the round window glows warmly. Thin smoke curls from the chimney (made in code, not part of the model).
+- **Alive:** the round window glows warmly. Through it you see a painted lofi desk: a lamp, a plant, books and a laptop, like reference 7. It is a flat painted picture behind the glass, made from one concept image. Thin smoke curls from the chimney (made in code, not part of the model).
 - **Click:** nothing. Clicking the island focuses it; the cottage is the backdrop.
 
 ### Big tree (scenery)
@@ -182,10 +182,12 @@ Concept images made so far (in `art-source/home/concepts/`, not in git):
 
 ---
 
-## 8. Questions for you
+## 8. Decisions
 
-1. **Where should the cat lie?** On the bench by the door (my suggestion, closest to the visitor), on the windowsill of the round window (most like the lofi reference, but small and high up), or on the roof next to the chimney (very storybook, visible from far away).
-2. **A desk visible through the round window?** A painted picture behind the window glass: the lofi desk with a lamp, plant and laptop. Costs one more concept image, about 3 credits. It is a lovely detail when you zoom in, but optional.
-3. **Is the globe on a stump fine,** or would you prefer it on the bench next to the cat, or inside the window?
-4. **Anything personal to add?** For example a piano (your email says pianoparrot), a guitar, a bicycle, a specific plant or a second animal. Small personal details make Home feel like yours.
-5. **Keep the "You are here" bubble** for first-time visitors?
+Agreed on 2026-10-28.
+
+1. **The cat lies on the bench by the door,** closest to the visitor.
+2. **Small details are welcome.** The round window shows a painted lofi desk inside. More small touches can come later.
+3. **The globe sits on a tree stump** next to the cottage corner.
+4. **No extra personal objects for now.** We can add some later.
+5. **The "You are here" bubble stays** for first-time visitors.
