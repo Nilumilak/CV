@@ -1,29 +1,16 @@
-import { Suspense, lazy, useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Suspense, lazy } from 'react';
+import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Leva } from 'leva';
-import type { Mesh } from 'three';
-import { palette } from '@/materials/toon';
+import { OVERVIEW } from '@/data/world';
 import { debugCamera, isDebug } from '@/debug/isDebug';
 import { useWorldControls } from '@/debug/useWorldControls';
+import { Islands } from '@/islands/Islands';
 import { CloudLayers } from '@/world/CloudLayers';
 import { Lighting } from '@/world/Lighting';
 import { SkyDome } from '@/world/SkyDome';
 
 const Debug = lazy(() => import('@/debug/Debug'));
-
-/** Temporary scale reference until islands arrive in Phase 2. */
-function Cube() {
-  const ref = useRef<Mesh>(null!);
-  useFrame((_, delta) => {
-    ref.current.rotation.y += delta * 0.5;
-  });
-  return (
-    <mesh ref={ref} scale={4} material={palette.grass}>
-      <boxGeometry />
-    </mesh>
-  );
-}
 
 export default function WorldCanvas() {
   const c = useWorldControls();
@@ -33,7 +20,12 @@ export default function WorldCanvas() {
       <Canvas
         flat
         dpr={[1, 2]}
-        camera={{ fov: 45, near: 0.1, far: 1200, position: debugCamera.position ?? [0, 12, 48] }}
+        camera={{
+          fov: 45,
+          near: 0.1,
+          far: 1200,
+          position: debugCamera.position ?? OVERVIEW.position,
+        }}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         aria-hidden
       >
@@ -43,8 +35,8 @@ export default function WorldCanvas() {
         <Suspense fallback={null}>
           <CloudLayers />
         </Suspense>
-        <Cube />
-        <OrbitControls target={debugCamera.target ?? [0, 0, 0]} maxDistance={300} />
+        <Islands />
+        <OrbitControls target={debugCamera.target ?? OVERVIEW.target} maxDistance={300} />
         {isDebug && (
           <Suspense fallback={null}>
             <Debug />

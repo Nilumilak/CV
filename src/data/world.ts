@@ -27,11 +27,11 @@ export const ISLANDS: IslandLayout[] = [
   },
   {
     id: 'workshop',
-    position: [-34, 3, -6],
+    position: [-30, 3, -8],
     scale: 1,
     seed: 2,
     labelOffset: [0, 7, 0],
-    camera: islandCamera([-34, 4, -6]),
+    camera: islandCamera([-30, 4, -8]),
     accent: '#B8733A',
   },
   {
@@ -63,11 +63,11 @@ export const ISLANDS: IslandLayout[] = [
   },
   {
     id: 'market',
-    position: [34, 5, -6],
+    position: [30, 5, -8],
     scale: 1.2,
     seed: 6,
     labelOffset: [0, 10, 0],
-    camera: islandCamera([34, 6, -6]),
+    camera: islandCamera([30, 6, -8]),
     accent: '#C9573E',
   },
   {
