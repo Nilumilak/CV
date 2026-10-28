@@ -60,18 +60,18 @@ Every visitor sees it first. It holds your summary, contacts, skills, education 
 
 | #   | File name            | Object                               | Budget           | Interactive    | Status                |
 | --- | -------------------- | ------------------------------------ | ---------------- | -------------- | --------------------- |
-| 1   | `island-base.glb`    | Floating rock island with grassy top | 15,000 triangles | No             | Planned               |
+| 1   | `island-base.glb`    | Floating rock island with grassy top | 15,000 triangles | No             | **Done**              |
 | 2   | `cottage.glb`        | Cottage with a round window          | 8,000            | No             | **Done** (concept v2) |
-| 3   | `big-tree.glb`       | Big broad tree                       | 8,000            | No             | Planned               |
+| 3   | `big-tree.glb`       | Big broad tree                       | 8,000            | No             | **Done**              |
 | 4   | `cat.glb`            | Orange tabby cat, lying down         | 3,000            | Yes: summary   | **Done** (concept v1) |
-| 5   | `lantern.glb`        | Garden lantern on a post             | 2,000            | Yes: skills    | Planned               |
-| 6   | `mailbox.glb`        | Wooden mailbox with a red flag       | 2,000            | Yes: contacts  | Planned               |
-| 7   | `bookshelf.glb`      | Small outdoor bookshelf              | 3,000            | Yes: education | Planned               |
-| 8   | `globe.glb`          | Antique globe on a stand             | 2,000            | Yes: languages | Planned               |
-| 9   | `bench.glb`          | Rustic garden bench for the cat      | 2,000            | No             | Planned               |
-| 10  | `stump.glb`          | Tree stump, table for the globe      | 1,500            | No             | Planned               |
-| 11  | `stepping-stone.glb` | One flat stepping stone, reused ×4   | 500              | No             | Planned               |
-| 12  | `flower-bush.glb`    | Flowering bush, reused ×3            | 2,500            | No             | Planned               |
+| 5   | `lantern.glb`        | Garden lantern on a post             | 2,000            | Yes: skills    | **Done**              |
+| 6   | `mailbox.glb`        | Wooden mailbox with a red flag       | 2,000            | Yes: contacts  | **Done**              |
+| 7   | `bookshelf.glb`      | Small outdoor bookshelf              | 3,000            | Yes: education | **Done**              |
+| 8   | `globe.glb`          | Antique globe on a stand             | 2,000            | Yes: languages | **Done**              |
+| 9   | `bench.glb`          | Rustic garden bench for the cat      | 2,000            | No             | **Done**              |
+| 10  | `stump.glb`          | Tree stump, table for the globe      | 1,500            | No             | **Done**              |
+| 11  | `stepping-stone.glb` | One flat stepping stone, reused ×4   | 500              | No             | **Done**              |
+| 12  | `flower-bush.glb`    | Flowering bush, reused ×3            | 2,500            | No             | **Done**              |
 | —   | `desk-window.webp`   | Painted desk behind the round window | image only       | No             | **Done**              |
 
 Everything a visitor sees up close is generated, so painted textures never sit next to flat code shapes. Repeated pieces (stones, bushes) are one model placed several times, so they cost one generation each.

@@ -2,7 +2,7 @@
 
 [Back to Phase 4](../phase-4-island-art.md) · [AI model prompts](../phase-4-ai-prompts.md)
 
-**Status:** design agreed on 2026-10-28 (decisions in section 8). Models not generated yet.
+**Status:** built on 2026-10-28. All 12 models generated and placed, with simple idle animations. Click animations come later (see section 10).
 
 ---
 
@@ -236,3 +236,22 @@ The generated base replaces the procedural rock. Two risks and how code handles 
 Balance before this batch: 1028 credits. Images first, then I show them to you, then 3D only for the approved ones. A rejected concept costs 3 credits to redo, not 30.
 
 Order of 3D generation: island base and big tree first (they decide the composition), then the interactive objects, then bench, stump, stone and bush.
+
+---
+
+## 10. Animation scope (decided 2026-10-28)
+
+Keep it simple and cosy for now. Elaborate click scenes (the cat stretching, books sliding out, the globe spinning to pins, the letter flying out of the mailbox) wait until much later, if we still want them.
+
+What is built now:
+
+| Object        | Idle motion                                                                   |
+| ------------- | ----------------------------------------------------------------------------- |
+| Whole island  | Bobs slowly (shared by all islands)                                           |
+| Big tree      | Sways very gently                                                             |
+| Flower bushes | Sway gently, each slightly out of step                                        |
+| Cat           | Breathes slowly                                                               |
+| Cottage       | Smoke puffs curl from the chimney; the painted desk glows in the round window |
+| Lantern       | Flickers warmly, lights the ground around it, a few fireflies drift nearby    |
+
+Each generated model is one solid piece, so parts like the globe ball or the mailbox flag cannot move on their own. Any later click animation moves the whole object, or adds effects made in code.
