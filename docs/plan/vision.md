@@ -83,15 +83,15 @@ loading ──> welcome ──> flyIn ──> overview <──> focus(island)
 The career islands are ordered by start date and arc behind the Home island from left (oldest) to right (newest).
 The Home island sits front and centre, nearest the overview camera. The Lighthouse floats off to one side.
 
-| Island      | Id           | CV source                                       | Dates        | Theme                                                      | Landmark                         |
-| ----------- | ------------ | ----------------------------------------------- | ------------ | ---------------------------------------------------------- | -------------------------------- |
-| Home        | `home`       | Summary, skills, education, languages, contacts |              | Cozy cottage with a big tree and a lofi desk in the window | Cottage and tree                 |
-| Workshop    | `workshop`   | JSC NPP Salyut, Design Engineer                 | 2015 to 2020 | Steampunk machine island in the mood of Howl's castle      | Brick factory with giant gears   |
-| Green Grove | `grove`      | Eco Activists, Frontend Software Engineer       | 2020 to 2022 | Mossy forest island with a waterfall                       | Huge old tree and recycling bins |
-| Radio Tower | `radio`      | Radio Gigabit, Senior Full Stack Engineer       | 2022 to now  | Rocky island with antennas, like the first reference       | Lattice tower and satellite dish |
-| Arena       | `arena`      | Olimpbet KZ, Frontend Software Engineer         | 2024 to 2025 | Small floating stadium with floodlights                    | Stadium and scoreboard           |
-| Market Town | `market`     | Monetech, Senior Frontend Developer             | 2025 to 2026 | Tall cliff town with stacked houses and a tram             | Domed bank and tram loop         |
-| Lighthouse  | `lighthouse` | Kafka UI, open source contributor               | 2024 to now  | Tiny rock with a lighthouse                                | Rotating lighthouse beam         |
+| Island      | Id           | CV source                                       | Dates        | Theme                                                   | Landmark                         |
+| ----------- | ------------ | ----------------------------------------------- | ------------ | ------------------------------------------------------- | -------------------------------- |
+| Home        | `home`       | Summary, skills, education, languages, contacts |              | Cozy cottage with a big tree and a glowing round window | Cottage and tree                 |
+| Workshop    | `workshop`   | JSC NPP Salyut, Design Engineer                 | 2015 to 2020 | Steampunk machine island in the mood of Howl's castle   | Brick factory with giant gears   |
+| Green Grove | `grove`      | Eco Activists, Frontend Software Engineer       | 2020 to 2022 | Mossy forest island with a waterfall                    | Huge old tree and recycling bins |
+| Radio Tower | `radio`      | Radio Gigabit, Senior Full Stack Engineer       | 2022 to now  | Rocky island with antennas, like the first reference    | Lattice tower and satellite dish |
+| Arena       | `arena`      | Olimpbet KZ, Frontend Software Engineer         | 2024 to 2025 | Small floating stadium with floodlights                 | Stadium and scoreboard           |
+| Market Town | `market`     | Monetech, Senior Frontend Developer             | 2025 to 2026 | Tall cliff town with stacked houses and a tram          | Domed bank and tram loop         |
+| Lighthouse  | `lighthouse` | Kafka UI, open source contributor               | 2024 to now  | Tiny rock with a lighthouse                             | Rotating lighthouse beam         |
 
 The full list of interactive objects, and which achievement each one reveals, lives in [Phase 5](phase-5-interactive-objects.md#object-catalogue).
 

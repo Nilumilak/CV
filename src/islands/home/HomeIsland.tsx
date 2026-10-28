@@ -14,7 +14,6 @@ import treeUrl from '@/assets/models/home/big-tree.glb?url';
 import { Breathe, ChimneySmoke, LanternGlow, Sway } from '../ambient';
 import { GeneratedModel } from '../GeneratedModel';
 import { useGroundHeights } from '../useGroundHeights';
-import { DeskWindow } from './DeskWindow';
 
 const deg = (d: number) => (d * Math.PI) / 180;
 
@@ -26,9 +25,9 @@ const deg = (d: number) => (d * Math.PI) / 180;
  */
 const SPOTS = {
   cottage: [0.2, -1.0],
-  tree: [-3.1, -2.8],
-  bookshelf: [-1.7, 0.3],
-  stump: [-1.6, 2.0],
+  tree: [-3, -1.],
+  bookshelf: [-1.4, 1],
+  stump: [-1.6, 2.6],
   bench: [2.6, -1.0],
   lantern: [2.3, 2.5],
   mailbox: [3.2, 1.6],
@@ -73,7 +72,6 @@ export function HomeIsland() {
       </Sway>
 
       <GeneratedModel url={cottageUrl} height={5} position={at('cottage')} rotation-y={deg(17)}>
-        <DeskWindow position={[0, 2.47, 1.18]} radius={0.55} />
         <ChimneySmoke position={[0.62, 4.75, -0.45]} scale={0.8} />
       </GeneratedModel>
 
@@ -81,7 +79,7 @@ export function HomeIsland() {
         url={bookshelfUrl}
         height={1.4}
         position={at('bookshelf')}
-        rotation-y={deg(17)}
+        rotation-y={deg(35)}
       />
 
       <group position={at('bench')} rotation-y={deg(-30)}>

@@ -29,7 +29,7 @@ const MODELS = [
 ];
 
 const TEXTURES = [
-  { from: 'home/concepts/desk-window-v1.png', to: 'textures/home/desk-window.webp', size: 512 },
+  // desk-window: removed 2026-10-28, the plain glowing window reads better (home.md).
 ];
 
 const src = (p) => `art-source/${p}`;

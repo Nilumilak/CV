@@ -96,7 +96,7 @@ Sizes are in metres. Some are a little oversized on purpose, storybook style, so
 
 A tiny countryside cottage: cream plaster walls, honey-coloured timber beams, a steep terracotta tile roof, a slightly crooked brick chimney, one large **round window** glowing warm from inside, a small green wooden door with a stone step, and a flower box under a side window. About 3.5 × 3 m footprint, 5 m to the top of the chimney.
 
-- **Alive:** the round window glows warmly. Through it you see a painted lofi desk: a lamp, a plant, books and a laptop, like reference 7. It is a flat painted picture behind the glass, made from one concept image. Thin smoke curls from the chimney (made in code, not part of the model).
+- **Alive:** the round window glows warmly. Thin smoke curls from the chimney (made in code, not part of the model). A painted lofi desk behind the glass was tried and removed (see decision 2).
 - **Click:** nothing. Clicking the island focuses it; the cottage is the backdrop.
 
 ### Big tree (scenery)
@@ -174,7 +174,7 @@ A chunk of warm sandy rock shaped like an upside-down cone, with a flat lush gra
 | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
 | Island base, cottage, big tree, cat, lantern, mailbox, bookshelf, globe   | Placement, scale and lighting                                                         |
 | Bench, stump, one stepping stone (placed ×4), one flower bush (placed ×3) | Chimney smoke, window glow, fireflies, falling leaves                                 |
-| The painted desk behind the round window (an image, not a model)          | All animations, clicks, outlines, speech bubbles, the letter, book spines, globe pins |
+| ~~The painted desk behind the round window~~ (removed)                    | All animations, clicks, outlines, speech bubbles, the letter, book spines, globe pins |
 
 Everything a visitor sees up close is generated. The style test showed that a flat code-made bench looks out of place next to the painted cat.
 
@@ -183,7 +183,7 @@ Concept images so far (in `art-source/home/concepts/`, not in git):
 - `cat-v1.png`: used for the cat model.
 - `cottage-v1.png`: rejected, chimney smoke painted in.
 - `cottage-v2.png`: used for the cottage model.
-- `desk-window-v1.png`: used behind the round window.
+- `desk-window-v1.png`: was shown behind the round window, removed 2026-10-28 (see decision 2).
 
 ---
 
@@ -192,7 +192,7 @@ Concept images so far (in `art-source/home/concepts/`, not in git):
 Agreed on 2026-10-28.
 
 1. **The cat lies on the bench by the door,** closest to the visitor.
-2. **Small details are welcome.** The round window shows a painted lofi desk inside. More small touches can come later.
+2. **Small details are welcome.** More small touches can come later. A painted lofi desk behind the round window was built and then removed (2026-10-28): the flat picture looked worse than the plain glowing window of the cottage model.
 3. **The globe sits on a tree stump** next to the cottage corner.
 4. **No extra personal objects for now.** We can add some later.
 5. **The "You are here" bubble stays** for first-time visitors.
@@ -207,7 +207,7 @@ Positions are in island units: the island's own frame before its 1.2 scale, with
 
 | Object          | Position (x, z)                              | Size                      | Turn   | Notes                                                       |
 | --------------- | -------------------------------------------- | ------------------------- | ------ | ----------------------------------------------------------- |
-| Cottage         | 0.2, −1.0                                    | 5 tall (done)             | 17°    | Desk painting behind the round window                       |
+| Cottage         | 0.2, −1.0                                    | 5 tall (done)             | 17°    | Round window glows warmly                                   |
 | Big tree        | −3.1, −2.8                                   | 5.6 tall                  | 90°    | Behind the roof, clear of it; narrow side faces the house   |
 | Bookshelf       | −1.7, 0.3                                    | 1.4 tall                  | 17°    | Against the wall left of the door, same turn as the house   |
 | Bench + cat     | 2.6, −1.0                                    | bench 1.6 long (cat done) | −30°   | Sunny side, beside the house right of the door              |
@@ -249,13 +249,13 @@ Keep it simple and cosy for now. Elaborate click scenes (the cat stretching, boo
 
 What is built now:
 
-| Object        | Idle motion                                                                   |
-| ------------- | ----------------------------------------------------------------------------- |
-| Whole island  | Bobs slowly (shared by all islands)                                           |
-| Big tree      | Sways very gently                                                             |
-| Flower bushes | Sway gently, each slightly out of step (when the bushes come back)            |
-| Cat           | Breathes slowly                                                               |
-| Cottage       | Smoke puffs curl from the chimney; the painted desk glows in the round window |
-| Lantern       | Flickers softly, a dim warm light on the grass, a few fireflies drift nearby  |
+| Object        | Idle motion                                                                  |
+| ------------- | ---------------------------------------------------------------------------- |
+| Whole island  | Bobs slowly (shared by all islands)                                          |
+| Big tree      | Sways very gently                                                            |
+| Flower bushes | Sway gently, each slightly out of step (when the bushes come back)           |
+| Cat           | Breathes slowly                                                              |
+| Cottage       | Smoke puffs curl from the chimney; the round window glows warmly             |
+| Lantern       | Flickers softly, a dim warm light on the grass, a few fireflies drift nearby |
 
 Each generated model is one solid piece, so parts like the globe ball or the mailbox flag cannot move on their own. Any later click animation moves the whole object, or adds effects made in code.

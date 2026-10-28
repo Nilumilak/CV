@@ -78,23 +78,23 @@ Warm terracotta roofs `#C9573E`, sunlit sandy rock `#D8B98C`, fresh grass green 
 
 Full design description, layout and open questions: [islands/home.md](islands/home.md).
 
-Every visitor sees it first. It holds your summary, contacts, skills, education and languages. A cosy cottage under a big tree, with a cat on the bench by the door and a lofi desk behind the round window.
+Every visitor sees it first. It holds your summary, contacts, skills, education and languages. A cosy cottage under a big tree, with a cat on the bench by the door and a warm glow in the round window.
 
-| #   | File name            | Object                               | Budget           | Interactive    | Status                  |
-| --- | -------------------- | ------------------------------------ | ---------------- | -------------- | ----------------------- |
-| 1   | `island-base.glb`    | Floating rock island with grassy top | 15,000 triangles | No             | **Done**                |
-| 2   | `cottage.glb`        | Cottage with a round window          | 8,000            | No             | **Done** (concept v2)   |
-| 3   | `big-tree.glb`       | Big broad tree                       | 8,000            | No             | **Done** (concept v3)   |
-| 4   | `cat.glb`            | Orange tabby cat, lying down         | 3,000            | Yes: summary   | **Done** (concept v1)   |
-| 5   | `lantern.glb`        | Garden lantern on a post             | 2,000            | Yes: skills    | **Done**                |
-| 6   | `mailbox.glb`        | Wooden mailbox with a red flag       | 2,000            | Yes: contacts  | **Done**                |
-| 7   | `bookshelf.glb`      | Small outdoor bookshelf              | 3,000            | Yes: education | **Done**                |
-| 8   | `globe.glb`          | Antique globe on a stand             | 2,000            | Yes: languages | **Done**                |
-| 9   | `bench.glb`          | Rustic garden bench for the cat      | 2,000            | No             | **Done**                |
-| 10  | `stump.glb`          | Tree stump, table for the globe      | 1,500            | No             | **Done**                |
-| 11  | `stepping-stone.glb` | One flat stepping stone, reused ×4   | 500              | No             | **Done**                |
-| 12  | `flower-bush.glb`    | Flowering bush, reused ×3            | 2,500            | No             | Later: needs multi-view |
-| —   | `desk-window.webp`   | Painted desk behind the round window | image only       | No             | **Done**                |
+| #   | File name            | Object                               | Budget           | Interactive    | Status                             |
+| --- | -------------------- | ------------------------------------ | ---------------- | -------------- | ---------------------------------- |
+| 1   | `island-base.glb`    | Floating rock island with grassy top | 15,000 triangles | No             | **Done**                           |
+| 2   | `cottage.glb`        | Cottage with a round window          | 8,000            | No             | **Done** (concept v2)              |
+| 3   | `big-tree.glb`       | Big broad tree                       | 8,000            | No             | **Done** (concept v3)              |
+| 4   | `cat.glb`            | Orange tabby cat, lying down         | 3,000            | Yes: summary   | **Done** (concept v1)              |
+| 5   | `lantern.glb`        | Garden lantern on a post             | 2,000            | Yes: skills    | **Done**                           |
+| 6   | `mailbox.glb`        | Wooden mailbox with a red flag       | 2,000            | Yes: contacts  | **Done**                           |
+| 7   | `bookshelf.glb`      | Small outdoor bookshelf              | 3,000            | Yes: education | **Done**                           |
+| 8   | `globe.glb`          | Antique globe on a stand             | 2,000            | Yes: languages | **Done**                           |
+| 9   | `bench.glb`          | Rustic garden bench for the cat      | 2,000            | No             | **Done**                           |
+| 10  | `stump.glb`          | Tree stump, table for the globe      | 1,500            | No             | **Done**                           |
+| 11  | `stepping-stone.glb` | One flat stepping stone, reused ×4   | 500              | No             | **Done**                           |
+| 12  | `flower-bush.glb`    | Flowering bush, reused ×3            | 2,500            | No             | Later: needs multi-view            |
+| —   | `desk-window.webp`   | Painted desk behind the round window | image only       | No             | Removed: plain window looks better |
 
 Everything a visitor sees up close is generated, so painted textures never sit next to flat code shapes. Repeated pieces (stones, bushes) are one model placed several times, so they cost one generation each.
 
