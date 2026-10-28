@@ -160,25 +160,53 @@ function noiseSweep(
 }
 
 const CUES: Record<SoundCue, (ac: AudioContext, t: number) => void> = {
-  // A small rising-then-falling trill, softened so it reads as a content cat, not a beep.
+  // A cat's chirp-trill: a voiced buzz shaped by two vowel-like resonances, with a fast
+  // flutter in loudness for the rolled "rr". The pitch lifts a little and settles,
+  // like a question ("mrrp?"), instead of a bouncy glide.
   mrrp: (ac, t) => {
-    const soft = ac.createBiquadFilter();
-    soft.type = 'lowpass';
-    soft.frequency.value = 1400;
-    soft.connect(ac.destination);
-    voice(
-      ac,
-      t,
-      'triangle',
-      [
-        [0, 330],
-        [0.12, 520],
-        [0.34, 380],
-      ],
-      0.16,
-      0.38,
-      soft,
-    );
+    const seconds = 0.42;
+    const buzz = ac.createOscillator();
+    buzz.type = 'sawtooth';
+    buzz.frequency.setValueAtTime(240, t);
+    buzz.frequency.exponentialRampToValueAtTime(310, t + 0.16);
+    buzz.frequency.exponentialRampToValueAtTime(275, t + seconds);
+
+    // The rolled "rr": loudness wobbles about 24 times a second.
+    const roll = ac.createGain();
+    roll.gain.value = 0.55;
+    const flutter = ac.createOscillator();
+    flutter.frequency.value = 24;
+    const depth = ac.createGain();
+    depth.gain.value = 0.45;
+    flutter.connect(depth).connect(roll.gain);
+    buzz.connect(roll);
+
+    // Envelope: soft start, a short hold, and the mouth closing at the end ("p").
+    const env = ac.createGain();
+    env.gain.setValueAtTime(0.0001, t);
+    env.gain.exponentialRampToValueAtTime(0.5, t + 0.05);
+    env.gain.setValueAtTime(0.5, t + seconds * 0.6);
+    env.gain.exponentialRampToValueAtTime(0.0001, t + seconds);
+    env.connect(ac.destination);
+
+    // Two resonances, roughly the vowel in "mur", so it sounds voiced, not electronic.
+    for (const [hz, q, level] of [
+      [700, 5, 1],
+      [1250, 7, 0.45],
+    ]) {
+      const formant = ac.createBiquadFilter();
+      formant.type = 'bandpass';
+      formant.frequency.value = hz;
+      formant.Q.value = q;
+      const mix = ac.createGain();
+      mix.gain.value = level;
+      roll.connect(formant).connect(mix).connect(env);
+    }
+
+    for (const osc of [buzz, flutter]) {
+      osc.start(t);
+      osc.stop(t + seconds + 0.05);
+    }
   },
   // Two bell tones a fifth apart (C6, G6).
   chime: (ac, t) => {

@@ -109,26 +109,30 @@ export function LanternGlow({
 }: {
   position: [number, number, number];
   radius?: number;
-  /** Interactive object id: when it's activated, the lantern flares up and fireflies burst out. */
+  /** Interactive object id: when it's activated, the lantern swells warmly and a few fireflies drift up. */
   flareFor?: string;
 }) {
   const light = useRef<THREE.PointLight>(null!);
   const glow = useRef<THREE.Mesh>(null!);
-  const burst = useRef<THREE.Points>(null!);
-  const flare = useReaction(flareFor, 1.4);
+  const drift = useRef<THREE.Points>(null!);
+  const swell = useReaction(flareFor, 2.4);
 
   useFrame(({ clock }) => {
     const t = clock.elapsedTime;
     // Two slow waves plus a quick shimmer: reads as a small flame, never strobes.
     const flicker =
       0.85 + Math.sin(t * 2.1) * 0.06 + Math.sin(t * 5.3 + 1) * 0.04 + Math.sin(t * 13.7) * 0.02;
-    // Flare: quick rise, slow fade.
-    const p = flare(t);
-    const f = p === null ? 0 : p < 0.15 ? p / 0.15 : (1 - p) / 0.85;
-    light.current.intensity = 0.9 * flicker * (1 + 2.5 * f);
-    glow.current.scale.setScalar(flicker * (1 + 0.5 * f));
-    burst.current.visible = p !== null;
-    if (p !== null) burst.current.scale.setScalar(0.6 + p * 1.2);
+    // Swell: one slow breath of light, in and out, no sudden jump.
+    const p = swell(t);
+    const f = p === null ? 0 : Math.sin(p * Math.PI) ** 2;
+    light.current.intensity = 0.9 * flicker * (1 + 0.9 * f);
+    glow.current.scale.setScalar(flicker * (1 + 0.2 * f));
+    // A few extra fireflies rise slowly from the lantern, fading in and out with the swell.
+    drift.current.visible = p !== null;
+    if (p !== null) {
+      drift.current.position.y = 0.2 + p * 0.7;
+      drift.current.scale.setScalar(Math.max(f, 0.01));
+    }
   });
 
   return (
@@ -150,14 +154,15 @@ export function LanternGlow({
         opacity={0.9}
       />
       <Sparkles
-        ref={burst}
+        ref={drift}
         raycast={noHit}
         visible={false}
-        count={20}
-        scale={[2, 1.8, 2]}
-        size={4}
-        speed={0.9}
+        count={8}
+        scale={[1.2, 1.2, 1.2]}
+        size={3}
+        speed={0.3}
         color="#ffe39a"
+        opacity={0.9}
       />
     </group>
   );
