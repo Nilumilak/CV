@@ -12,7 +12,8 @@
     "format:check": "prettier --check .",
     "test": "vitest",
     "e2e": "vite build && playwright test",
-    "pdf": "vite build && node scripts/make-pdf.mjs"
+    "pdf": "vite build && node scripts/make-pdf.mjs",
+    "art": "node scripts/optimize-art.mjs"
   },
   "dependencies": {
     "@fontsource/fredoka": "^5.3.0",
@@ -29,6 +30,7 @@
     "zustand": "^5.0.16"
   },
   "devDependencies": {
+    "@gltf-transform/cli": "^4.5.1",
     "@playwright/test": "^1.64.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
@@ -42,6 +44,7 @@
     "oxlint": "^1.89.0",
     "prettier": "^3.9.10",
     "r3f-perf": "^7.2.3",
+    "sharp": "^0.35.5",
     "typescript": "~7.0.2",
     "vite": "^8.3.5",
     "vitest": "^5.0.5"

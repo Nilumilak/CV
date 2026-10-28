@@ -156,9 +156,14 @@ function Tree(props: { position: [number, number, number]; scale: number }) {
 interface PlaceholderIslandProps {
   id: IslandId;
   seed: number;
+  /** Only the rock and grass, without the placeholder theme shapes. */
+  bare?: boolean;
 }
 
-export function PlaceholderIsland({ id, seed }: PlaceholderIslandProps) {
+/** Height of the grass surface: objects placed on the island stand at this y. */
+export const PLACEHOLDER_GROUND_Y = 0.45;
+
+export function PlaceholderIsland({ id, seed, bare = false }: PlaceholderIslandProps) {
   const rock = useRockGeometry(seed);
   return (
     <group>
@@ -166,9 +171,11 @@ export function PlaceholderIsland({ id, seed }: PlaceholderIslandProps) {
       <mesh position={[0, 0.2, 0]} material={palette.grass}>
         <cylinderGeometry args={[ROCK_RADIUS * 1.03, ROCK_RADIUS * 0.97, 0.5, 28]} />
       </mesh>
-      <group position={[0, 0.45, 0]}>
-        <ThemeHint id={id} />
-      </group>
+      {!bare && (
+        <group position={[0, PLACEHOLDER_GROUND_Y, 0]}>
+          <ThemeHint id={id} />
+        </group>
+      )}
     </group>
   );
 }

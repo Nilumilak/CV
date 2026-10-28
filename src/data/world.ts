@@ -21,7 +21,7 @@ export const ISLANDS: IslandLayout[] = [
     position: [0, 0, 16],
     scale: 1.2,
     seed: 1,
-    labelOffset: [0, 5.2, 0],
+    labelOffset: [0, 7.2, 0],
     camera: islandCamera([0, 1, 16]),
     accent: '#E08A3C',
   },

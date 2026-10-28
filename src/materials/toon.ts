@@ -44,3 +44,14 @@ export const palette = {
 } as const;
 
 export type PaletteKey = keyof typeof palette;
+
+/**
+ * Softer banding for AI models with painted textures: the texture already has painted
+ * shading, so shadows stay light and the steps only add a gentle sense of form.
+ */
+export const paintedGradientMap = createGradientMap([170, 220, 255]);
+
+/** Wraps a painted base-colour texture in toon lighting, keeping the brush strokes. */
+export function paintedToon(map: THREE.Texture | null, color = '#ffffff') {
+  return new THREE.MeshToonMaterial({ map, color, gradientMap: paintedGradientMap });
+}
