@@ -53,6 +53,9 @@ export function Breathe({
 /** Opts an object out of pointer hit tests. */
 const noHit = () => null;
 
+/** 0 → 1 with zero speed at both ends, so motion starts and stops gently. */
+const smoothstep = (x: number) => x * x * (3 - 2 * x);
+
 const PUFFS = 6;
 const smokeMaterial = new THREE.MeshBasicMaterial({
   color: '#f4f1ea',
@@ -109,12 +112,11 @@ export function LanternGlow({
 }: {
   position: [number, number, number];
   radius?: number;
-  /** Interactive object id: when it's activated, the lantern swells warmly and a few fireflies drift up. */
+  /** Interactive object id: when it's activated, the light brightens and then eases back. */
   flareFor?: string;
 }) {
   const light = useRef<THREE.PointLight>(null!);
   const glow = useRef<THREE.Mesh>(null!);
-  const drift = useRef<THREE.Points>(null!);
   const swell = useReaction(flareFor, 2.4);
 
   useFrame(({ clock }) => {
@@ -122,17 +124,12 @@ export function LanternGlow({
     // Two slow waves plus a quick shimmer: reads as a small flame, never strobes.
     const flicker =
       0.85 + Math.sin(t * 2.1) * 0.06 + Math.sin(t * 5.3 + 1) * 0.04 + Math.sin(t * 13.7) * 0.02;
-    // Swell: one slow breath of light, in and out, no sudden jump.
+    // Swell: brightens over the first third, then eases back over the rest.
     const p = swell(t);
-    const f = p === null ? 0 : Math.sin(p * Math.PI) ** 2;
-    light.current.intensity = 0.9 * flicker * (1 + 0.9 * f);
-    glow.current.scale.setScalar(flicker * (1 + 0.2 * f));
-    // A few extra fireflies rise slowly from the lantern, fading in and out with the swell.
-    drift.current.visible = p !== null;
-    if (p !== null) {
-      drift.current.position.y = 0.2 + p * 0.7;
-      drift.current.scale.setScalar(Math.max(f, 0.01));
-    }
+    const f = p === null ? 0 : p < 1 / 3 ? smoothstep(p * 3) : smoothstep((1 - p) * 1.5);
+    light.current.intensity = 0.9 * flicker * (1 + 2 * f);
+    light.current.distance = 3 + 1.5 * f; // the warm pool on the grass grows a little too
+    glow.current.scale.setScalar(flicker * (1 + 0.25 * f));
   });
 
   return (
@@ -150,17 +147,6 @@ export function LanternGlow({
         scale={[1.6, 1.4, 1.6]}
         size={3}
         speed={0.25}
-        color="#ffe39a"
-        opacity={0.9}
-      />
-      <Sparkles
-        ref={drift}
-        raycast={noHit}
-        visible={false}
-        count={8}
-        scale={[1.2, 1.2, 1.2]}
-        size={3}
-        speed={0.3}
         color="#ffe39a"
         opacity={0.9}
       />

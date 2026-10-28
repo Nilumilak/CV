@@ -268,7 +268,7 @@ Built before the next island, so we learn which parts future models need as sepa
 | --------- | --------- | ---------------------------------------------------------- | -------------------- |
 | Cat       | Summary   | Squash-and-stretch hop                                     | Rolled "mrrp" chirp  |
 | Mailbox   | Contacts  | Shakes, a paper letter with a red seal pops out and flips  | Two paper rustles    |
-| Lantern   | Skills    | One slow warm swell of light, a few fireflies drift up     | Two bell tones       |
+| Lantern   | Skills    | The light brightens, then eases back smoothly              | Two bell tones       |
 | Bookshelf | Education | Wobbles, as if a book was just pulled out                  | Two soft wood knocks |
 | Globe     | Languages | Spins twice on the stump (the whole globe, stand included) | Air whirring         |
 
