@@ -1,11 +1,13 @@
 // Turns raw AI-generated art (art-source/, not in git) into small web assets (src/assets/, in git).
 //   Models:   meshopt-compressed geometry, WebP textures (1024 px, or 512 for small props).
 //   Textures: resized WebP.
+// Flat models (paper-thin image-to-3D results) are refused; see model-shape.mjs.
 // Usage: npm run art
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, statSync } from 'node:fs';
 import { dirname } from 'node:path';
 import sharp from 'sharp';
+import { checkModelShape } from './model-shape.mjs';
 
 /** Only approved art is listed here. Source paths are relative to art-source/. */
 const MODELS = [
@@ -21,7 +23,7 @@ const MODELS = [
   { from: 'home/bench.glb', to: 'models/home/bench.glb', texture: 512 },
   { from: 'home/stump.glb', to: 'models/home/stump.glb', texture: 512 },
   { from: 'home/stepping-stone.glb', to: 'models/home/stepping-stone.glb', texture: 512 },
-  { from: 'home/flower-bush.glb', to: 'models/home/flower-bush.glb', texture: 512 },
+  // flower-bush: postponed, every try so far came out flat (docs/plan/islands/home.md).
 ];
 
 const TEXTURES = [
@@ -40,6 +42,12 @@ for (const m of MODELS) {
     console.warn(`skip ${m.from}: not found`);
     continue;
   }
+  const flat = await checkModelShape(src(m.from));
+  if (flat) {
+    console.error(`refused: ${flat}`);
+    process.exitCode = 1;
+    continue;
+  }
   mkdirSync(dirname(out(m.to)), { recursive: true });
   execFileSync(
     process.execPath,
@@ -53,7 +61,7 @@ for (const m of MODELS) {
       '--texture-compress',
       'webp',
       '--texture-size',
-      '1024',
+      String(m.texture),
       '--simplify',
       'false',
     ],

@@ -21,6 +21,28 @@ You generate the models, I integrate them. This file has everything you need for
 
 You don't have to match scale, rotation or position. I normalise all of that in code.
 
+### Volume rule
+
+Image-to-3D builds depth from what the concept image shows. A flat, front-on illustration with little shading becomes a paper-thin relief: it looks right from the front and breaks from every other angle. This happened to the first big tree (2 m wide, 3 cm deep) and the first flower bush (a flat disc). Foliage is the riskiest, because a painted leaf clump has no edges that hint at depth.
+
+Every concept image must:
+
+- Show the object from a **three-quarter view from slightly above**, never straight from the front or the side.
+- Show **volume through shading**: lit tops, darker undersides, parts in front overlapping parts behind.
+- Read as a **sculpted 3D model**, not a flat sticker or a cut-out with outlines.
+
+For foliage (trees, bushes, hedges), add the **volume line** below after the object prompt.
+
+```
+Rendered as a solid sculpted 3D model seen from a three-quarter view from slightly above. The
+foliage is a full rounded volume of chunky leaf clumps that wrap all the way around, with clumps
+behind clumps, sunlit tops and darker shaded undersides. Not a flat illustration, not a sticker.
+```
+
+**Round foliage needs multi-view.** A three-quarter concept fixed the tree, because the trunk and branches give away the depth. A bush has no such edges: its third try, from a clearly round concept, still came out 1% deep. For bushes, hedges and other round blobs, make front, side and back views (image-to-image with multi-view on, from the approved concept) and build the model with multi-image-to-3D. The side view forces real depth. It costs 3 credits more than one image.
+
+`npm run art` measures every model before compressing it and refuses one whose thinnest side is under 10% of its widest. A unit test runs the same check on every committed model, so a flat model can't reach the site even if it skips the script. If a model is refused, regenerate the concept with the rule above. Don't widen the threshold.
+
 ### Licence check
 
 Free plans on some generators publish models under CC BY, which requires a credit line. Paid plans usually give you full ownership. Check your plan's terms and tell me which licence applies, so I can add the right line to `CREDITS.md`.
@@ -58,21 +80,21 @@ Full design description, layout and open questions: [islands/home.md](islands/ho
 
 Every visitor sees it first. It holds your summary, contacts, skills, education and languages. A cosy cottage under a big tree, with a cat on the bench by the door and a lofi desk behind the round window.
 
-| #   | File name            | Object                               | Budget           | Interactive    | Status                |
-| --- | -------------------- | ------------------------------------ | ---------------- | -------------- | --------------------- |
-| 1   | `island-base.glb`    | Floating rock island with grassy top | 15,000 triangles | No             | **Done**              |
-| 2   | `cottage.glb`        | Cottage with a round window          | 8,000            | No             | **Done** (concept v2) |
-| 3   | `big-tree.glb`       | Big broad tree                       | 8,000            | No             | **Done**              |
-| 4   | `cat.glb`            | Orange tabby cat, lying down         | 3,000            | Yes: summary   | **Done** (concept v1) |
-| 5   | `lantern.glb`        | Garden lantern on a post             | 2,000            | Yes: skills    | **Done**              |
-| 6   | `mailbox.glb`        | Wooden mailbox with a red flag       | 2,000            | Yes: contacts  | **Done**              |
-| 7   | `bookshelf.glb`      | Small outdoor bookshelf              | 3,000            | Yes: education | **Done**              |
-| 8   | `globe.glb`          | Antique globe on a stand             | 2,000            | Yes: languages | **Done**              |
-| 9   | `bench.glb`          | Rustic garden bench for the cat      | 2,000            | No             | **Done**              |
-| 10  | `stump.glb`          | Tree stump, table for the globe      | 1,500            | No             | **Done**              |
-| 11  | `stepping-stone.glb` | One flat stepping stone, reused ×4   | 500              | No             | **Done**              |
-| 12  | `flower-bush.glb`    | Flowering bush, reused ×3            | 2,500            | No             | **Done**              |
-| —   | `desk-window.webp`   | Painted desk behind the round window | image only       | No             | **Done**              |
+| #   | File name            | Object                               | Budget           | Interactive    | Status                  |
+| --- | -------------------- | ------------------------------------ | ---------------- | -------------- | ----------------------- |
+| 1   | `island-base.glb`    | Floating rock island with grassy top | 15,000 triangles | No             | **Done**                |
+| 2   | `cottage.glb`        | Cottage with a round window          | 8,000            | No             | **Done** (concept v2)   |
+| 3   | `big-tree.glb`       | Big broad tree                       | 8,000            | No             | **Done** (concept v3)   |
+| 4   | `cat.glb`            | Orange tabby cat, lying down         | 3,000            | Yes: summary   | **Done** (concept v1)   |
+| 5   | `lantern.glb`        | Garden lantern on a post             | 2,000            | Yes: skills    | **Done**                |
+| 6   | `mailbox.glb`        | Wooden mailbox with a red flag       | 2,000            | Yes: contacts  | **Done**                |
+| 7   | `bookshelf.glb`      | Small outdoor bookshelf              | 3,000            | Yes: education | **Done**                |
+| 8   | `globe.glb`          | Antique globe on a stand             | 2,000            | Yes: languages | **Done**                |
+| 9   | `bench.glb`          | Rustic garden bench for the cat      | 2,000            | No             | **Done**                |
+| 10  | `stump.glb`          | Tree stump, table for the globe      | 1,500            | No             | **Done**                |
+| 11  | `stepping-stone.glb` | One flat stepping stone, reused ×4   | 500              | No             | **Done**                |
+| 12  | `flower-bush.glb`    | Flowering bush, reused ×3            | 2,500            | No             | Later: needs multi-view |
+| —   | `desk-window.webp`   | Painted desk behind the round window | image only       | No             | **Done**                |
 
 Everything a visitor sees up close is generated, so painted textures never sit next to flat code shapes. Repeated pieces (stones, bushes) are one model placed several times, so they cost one generation each.
 
@@ -285,6 +307,8 @@ Round leafy garden bush, soft clumps of fresh green leaves, small white and pink
 
 ## Checklist for a good result
 
+- [ ] The concept shows the object from a three-quarter view, with shading that shows its volume (see the volume rule).
+- [ ] `npm run art` accepts the model. It refuses flat ones.
 - [ ] The object stands alone, with no ground plane or pedestal under it.
 - [ ] Colours look warm and sunny, not grey or dark.
 - [ ] Shapes read clearly as small thumbnails. Fine detail doesn't matter.

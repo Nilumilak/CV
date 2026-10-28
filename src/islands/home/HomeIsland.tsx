@@ -3,7 +3,6 @@ import type * as THREE from 'three';
 import baseUrl from '@/assets/models/home/island-base.glb?url';
 import benchUrl from '@/assets/models/home/bench.glb?url';
 import bookshelfUrl from '@/assets/models/home/bookshelf.glb?url';
-import bushUrl from '@/assets/models/home/flower-bush.glb?url';
 import catUrl from '@/assets/models/home/cat.glb?url';
 import cottageUrl from '@/assets/models/home/cottage.glb?url';
 import globeUrl from '@/assets/models/home/globe.glb?url';
@@ -35,9 +34,7 @@ const SPOTS = {
   stone2: [1.1, 1.7],
   stone3: [1.5, 2.5],
   stone4: [2.0, 3.1],
-  bush1: [-3.7, 1.0],
-  bush2: [-2.2, 3.4],
-  bush3: [3.9, -0.4],
+  // Flower bushes are postponed until a solid model exists (home.md, placement table).
 } as const satisfies Record<string, [number, number]>;
 
 const STONES = [
@@ -45,12 +42,6 @@ const STONES = [
   { spot: 'stone2', size: 0.65, turn: 75 },
   { spot: 'stone3', size: 0.8, turn: 140 },
   { spot: 'stone4', size: 0.7, turn: 220 },
-] as const;
-
-const BUSHES = [
-  { spot: 'bush1', size: 1.3, turn: 0, phase: 0 },
-  { spot: 'bush2', size: 1.0, turn: 120, phase: 2.1 },
-  { spot: 'bush3', size: 1.15, turn: 240, phase: 4.2 },
 ] as const;
 
 /** Island-unit sizes that the cat and globe sit on. Tuned from screenshots. */
@@ -76,7 +67,7 @@ export function HomeIsland() {
       <GeneratedModel ref={base} url={baseUrl} length={11.5} anchor="top" />
 
       <Sway amount={0.012} speed={0.5}>
-        <GeneratedModel url={treeUrl} height={7} position={at('tree')} />
+        <GeneratedModel url={treeUrl} height={6} position={at('tree')} />
       </Sway>
 
       <GeneratedModel url={cottageUrl} height={5} position={at('cottage')} rotation-y={deg(17)}>
@@ -125,14 +116,6 @@ export function HomeIsland() {
           position={at(s.spot)}
           rotation-y={deg(s.turn)}
         />
-      ))}
-
-      {BUSHES.map((b) => (
-        <group key={b.spot} position={at(b.spot)} rotation-y={deg(b.turn)}>
-          <Sway amount={0.03} speed={0.9} phase={b.phase}>
-            <GeneratedModel url={bushUrl} length={b.size} />
-          </Sway>
-        </group>
       ))}
     </group>
   );

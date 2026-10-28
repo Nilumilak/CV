@@ -206,14 +206,16 @@ Positions are in island units: the island's own frame before its 1.2 scale, with
 | Object          | Position (x, z)                           | Size                      | Turn   | Notes                                                            |
 | --------------- | ----------------------------------------- | ------------------------- | ------ | ---------------------------------------------------------------- |
 | Cottage         | 0.2, −1.0                                 | 5 tall (done)             | 17°    | Desk painting behind the round window                            |
-| Big tree        | −2.7, −2.4                                | 7 tall                    | 0°     | Canopy overlaps the back left of the roof                        |
+| Big tree        | −2.7, −2.4                                | 6 tall                    | 0°     | Canopy overlaps the back left of the roof                        |
 | Bookshelf       | −1.7, 0.3                                 | 1.4 tall                  | 17°    | Against the wall left of the door, same turn as the house        |
 | Bench + cat     | 2.6, 1.2                                  | bench 1.6 long (cat done) | −23°   | Sunny side, right of the door                                    |
 | Stump + globe   | 2.6, −1.2                                 | stump 0.6 tall, globe 0.8 | 0°     | Globe sits on the stump top                                      |
 | Garden lantern  | −0.1, 2.3                                 | 1.6 tall                  | 0°     | Left of the path, halfway to the edge                            |
 | Mailbox         | 2.4, 3.4                                  | 1.2 tall                  | 35°    | Front right rim, where the path ends; flag on the visitor's side |
 | Stepping stones | 0.7, 0.9 → 1.1, 1.7 → 1.5, 2.5 → 2.0, 3.1 | 0.6 to 0.8 wide           | random | From the door to the mailbox                                     |
-| Flower bushes   | −3.7, 1.0 · −2.2, 3.4 · 3.9, −0.4         | 1.0 to 1.3 wide           | random | Around the rim, framing the front                                |
+| Flower bushes   | −3.7, 1.0 · −2.2, 3.4 · 3.9, −0.4         | 1.0 to 1.3 wide           | random | Around the rim, framing the front. **Postponed**, see below      |
+
+**Flower bushes are postponed (decided 2026-10-28).** Both generated bushes came out paper-thin: Meshy turns a round, edgeless blob of leaves into a flat painted card, even from a concept with clear volume. The next attempt should use multi-view: front, side and back views of the bush, then multi-image-to-3D, about 33 credits. The first big tree was flat too; it was regenerated from a three-quarter-view concept and is solid. See the volume rule in [phase-4-ai-prompts.md](../phase-4-ai-prompts.md).
 
 Interactive objects all stand on the front half and face the front right, so they are visible in the focus view with the panel open.
 
@@ -249,7 +251,7 @@ What is built now:
 | ------------- | ----------------------------------------------------------------------------- |
 | Whole island  | Bobs slowly (shared by all islands)                                           |
 | Big tree      | Sways very gently                                                             |
-| Flower bushes | Sway gently, each slightly out of step                                        |
+| Flower bushes | Sway gently, each slightly out of step (when the bushes come back)            |
 | Cat           | Breathes slowly                                                               |
 | Cottage       | Smoke puffs curl from the chimney; the painted desk glows in the round window |
 | Lantern       | Flickers warmly, lights the ground around it, a few fireflies drift nearby    |
