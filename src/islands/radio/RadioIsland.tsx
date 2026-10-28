@@ -66,6 +66,11 @@ const SPOTS = {
   rocks6: view(3.4, -3.3),
   rocks7: view(1.3, -4.3),
   rocks8: view(-1.4, -4.3),
+  // The rest of the grey strip on the right side, down to the front-right corner.
+  // Placeholders: other props may take these spots later.
+  rocks9: view(3.7, 0.9),
+  rocks10: view(3.6, 2.8),
+  rocks11: view(2.9, 3.6),
 } satisfies Record<string, [number, number]>;
 
 /** Turn that makes a model's front (+Z) face the focus camera. */
@@ -85,6 +90,9 @@ const ROCKS = [
   { spot: 'rocks6', size: 1.4, turn: 310 },
   { spot: 'rocks7', size: 1.7, turn: 45 },
   { spot: 'rocks8', size: 1.3, turn: 170 },
+  { spot: 'rocks9', size: 1.2, turn: 290 },
+  { spot: 'rocks10', size: 1.5, turn: 15 },
+  { spot: 'rocks11', size: 1.1, turn: 120 },
 ] as const;
 
 /**
