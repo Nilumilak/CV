@@ -45,14 +45,14 @@ const interactive = (id: IslandObjectId) => {
  */
 const SPOTS = {
   fountain: [0, 0],
-  houses: view(-1.9, -3.5),
+  houses: view(-1.9, -3.3),
   bank: view(1.6, -3.3),
-  crane: view(-3.9, -0.8),
-  balloon: view(3.8, -1.0),
+  crane: view(3.8, -1.0),
+  balloon: view(-3.9, -0.8),
   signpost: view(-2.6, 2.8),
   shack: view(2.6, 2.8),
   housesFront: view(-0.7, -2.3),
-  pole: view(3.0, -2.6),
+  pole: view(3.0, -2.0),
 } satisfies Record<string, [number, number]>;
 
 const TRAM_RADIUS = 1.4;
@@ -94,7 +94,7 @@ export function MarketIsland() {
         url={bankUrl}
         height={BANK_HEIGHT}
         position={at('bank')}
-        rotation-y={deg(FACE_CAMERA)}
+        rotation-y={deg(FACE_CAMERA - 22)}
       />
 
       {/* Bunting from the houses' front corner to the bank, and on to a pole on its right. */}
@@ -102,7 +102,8 @@ export function MarketIsland() {
       <Bunting from={above('housesFront', 3)} to={above('bank', BANK_HEIGHT * 0.62)} flags={6} />
       <Bunting from={above('bank', BANK_HEIGHT * 0.62)} to={above('pole', POLE_HEIGHT)} />
 
-      <group position={at('crane')} rotation-y={deg(FACE_CAMERA)}>
+      {/* Turned around so its arm reaches out over the right edge, not across the square. */}
+      <group position={at('crane')} rotation-y={deg(FACE_CAMERA + 180)}>
         <Interactable {...interactive('mone-packages')}>
           <Wobble id="mone-packages" angle={0.03} shakes={2}>
             <GeneratedModel url={craneUrl} height={4} />
