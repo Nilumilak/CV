@@ -1,0 +1,247 @@
+/* Plain, printable CV. Layout and print rules follow reference/Renat_Kalimulin_CV.html. */
+.root {
+  --cv-ink: #1c1917;
+  --cv-muted: #57534e;
+  --cv-line: #d6d3d1;
+  --cv-accent: #1e3a5f;
+
+  min-height: 100%;
+  padding: 16px 16px 40px;
+  background: #e7e5e4;
+  color: var(--cv-ink);
+  font-family: 'Segoe UI', Calibri, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.4;
+}
+
+.toolbar {
+  max-width: 210mm;
+  margin: 0 auto 12px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.toolbar a,
+.toolbar button {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--cv-accent);
+  color: #fff;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.toolbar .secondary {
+  background: #fff;
+  color: var(--cv-accent);
+}
+
+.notice {
+  max-width: 210mm;
+  margin: 0 auto 12px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: #fff7e0;
+  color: #5b4a1a;
+}
+
+.page {
+  max-width: 210mm;
+  margin: 0 auto;
+  padding: 12mm 14mm 14mm;
+  background: #fff;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+  border-bottom: 2px solid var(--cv-accent);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.photo {
+  width: 20mm;
+  height: 24mm;
+  object-fit: cover;
+  object-position: center 18%;
+  border-radius: 2px;
+}
+
+.name {
+  margin: 0;
+  font-size: 24pt;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-weight: 650;
+}
+
+.role {
+  margin: 4px 0 0;
+  color: var(--cv-accent);
+  font-size: 12pt;
+  font-weight: 650;
+}
+
+.contacts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: right;
+  color: var(--cv-muted);
+  font-size: 9.5pt;
+  line-height: 1.5;
+}
+
+.contacts a {
+  color: var(--cv-accent);
+  text-decoration: none;
+}
+
+.section {
+  margin: 13px 0 6px;
+  font-size: 9.5pt;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cv-accent);
+  border-bottom: 1px solid var(--cv-line);
+  padding-bottom: 2px;
+  break-after: avoid;
+}
+
+.page p {
+  margin: 0 0 6px;
+}
+
+.job {
+  margin: 0 0 10px;
+}
+
+.jobHead {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 12px;
+  align-items: baseline;
+  break-after: avoid;
+}
+
+.jobTitle {
+  margin: 0;
+  font-size: 11pt;
+  font-weight: 650;
+}
+
+.company {
+  color: var(--cv-accent);
+}
+
+.dates {
+  margin: 0;
+  color: var(--cv-muted);
+  font-size: 9.5pt;
+  white-space: nowrap;
+}
+
+.meta {
+  margin: 1px 0 3px;
+  color: var(--cv-muted);
+  font-size: 9.5pt;
+}
+
+.meta a {
+  color: inherit;
+}
+
+.list {
+  margin: 0;
+  padding-left: 1.15em;
+}
+
+.list li {
+  margin: 0 0 2px;
+  break-inside: avoid;
+}
+
+.skills {
+  display: grid;
+  grid-template-columns: 108px 1fr;
+  gap: 2px 12px;
+  margin: 0;
+}
+
+.skills dt {
+  font-weight: 650;
+}
+
+.skills dd {
+  margin: 0;
+}
+
+.edu {
+  margin: 0 0 5px;
+  break-inside: avoid;
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 20px 16px;
+  }
+
+  .contacts {
+    text-align: left;
+  }
+
+  .skills {
+    grid-template-columns: 1fr;
+  }
+
+  .skills dd {
+    margin-bottom: 6px;
+  }
+}
+
+@media print {
+  .root {
+    padding: 0;
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .toolbar,
+  .notice {
+    display: none;
+  }
+
+  /* Page margins live on .page (cloned onto every printed page), so @page can be 0
+     and Chrome has no room for its date / title / file-path header and footer. */
+  .page {
+    max-width: none;
+    margin: 0;
+    padding: 11mm 13mm;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  .list {
+    orphans: 2;
+    widows: 2;
+  }
+}

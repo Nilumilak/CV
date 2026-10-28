@@ -50,3 +50,14 @@ body {
   white-space: nowrap;
   border: 0;
 }
+
+/* Classic CV view: normal page scrolling, plain background. */
+[data-view='cv'] body {
+  overflow: auto;
+  background: #e7e5e4;
+}
+
+@page {
+  size: A4;
+  margin: 0;
+}

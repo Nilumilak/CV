@@ -61,6 +61,8 @@ export interface Profile {
   role: string;
   tagline: string;
   location: string;
+  /** Optional portrait for the classic CV, e.g. '/photo.jpg' in public/. */
+  photo?: string;
   summary: string;
   contacts: {
     email: string;
