@@ -49,6 +49,7 @@ Phases 0 to 3 take about two weeks and already give a complete, shareable CV wit
 
 ## Working rhythm
 
-- One branch per phase. Merge when the phase's acceptance criteria pass.
+- Work directly on `main` in small commits (since 2026-10-28; phases 0 to 4 used one branch each).
 - Tick the checkboxes inside each phase file as you go, and update the Status column above.
-- Deploy after every merge and look at the result on a phone at least once per phase.
+- Deploy regularly and look at the result on a phone at least once per phase.
+- Browser tests (Playwright) are paused until everything is built: the existing ones stay, new work is checked by hand. Unit tests, types and lint still run on every change.

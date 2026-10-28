@@ -259,3 +259,24 @@ What is built now:
 | Lantern       | Flickers softly, a dim warm light on the grass, a few fireflies drift nearby |
 
 Each generated model is one solid piece, so parts like the globe ball or the mailbox flag cannot move on their own. Any later click animation moves the whole object, or adds effects made in code.
+
+### Click reactions (built 2026-10-28)
+
+Built before the next island, so we learn which parts future models need as separate files. Each reaction moves the whole object or adds a code-made effect, and lasts about a second.
+
+| Object    | Opens     | Reaction                                                   | Sound                |
+| --------- | --------- | ---------------------------------------------------------- | -------------------- |
+| Cat       | Summary   | Squash-and-stretch hop                                     | Soft "mrrp" trill    |
+| Mailbox   | Contacts  | Shakes, a paper letter with a red seal pops out and flips  | Two paper rustles    |
+| Lantern   | Skills    | Flares up brighter, a burst of fireflies                   | Two bell tones       |
+| Bookshelf | Education | Wobbles, as if a book was just pulled out                  | Two soft wood knocks |
+| Globe     | Languages | Spins twice on the stump (the whole globe, stand included) | Air whirring         |
+
+For all five:
+
+- **Hover:** the object glows gold and lifts slightly, the cursor becomes a pointer, and a small hint names the section. Only on the focused island; in the overview a click focuses the island.
+- **Click:** plays the reaction and sound, scrolls the panel to the section and flashes it gold.
+- **Panel link:** each Home section has a "Show me" button that plays the same reaction (the keyboard path), and hovering or focusing a section makes its object glow.
+- **Reduced motion:** reactions don't play; sounds, the scroll and the flash still do.
+
+Code: `src/data/homeObjects.ts` links objects to sections; `src/objects/` holds the shared `Interactable` wrapper, the `Hop`, `Wobble` and `Spin` reactions and the hover hint. The Radio Tower and later islands reuse them.

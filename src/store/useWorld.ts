@@ -9,9 +9,11 @@ export type Quality = 'high' | 'low';
 export interface WorldState {
   phase: Phase;
   focused: IslandId | null;
-  /** Last clicked interactive object (Phase 5). */
+  /** Last activated interactive object (Phase 5). */
   activeObject: string | null;
-  /** Object glowing because its achievement is hovered in the panel (Phase 5). */
+  /** Counts activations, so activating the same object twice still plays its reaction twice. */
+  activeCount: number;
+  /** Object glowing because its section or achievement is hovered in the panel (Phase 5). */
   hintObject: string | null;
   sound: boolean;
   quality: Quality;
@@ -55,6 +57,7 @@ export const useWorld = create<WorldState>()(
       phase: skipIntro ? 'world' : introAt !== undefined ? 'flyIn' : 'loading',
       focused: null,
       activeObject: null,
+      activeCount: 0,
       hintObject: null,
       sound: false,
       quality: 'high',
@@ -78,7 +81,12 @@ export const useWorld = create<WorldState>()(
         set((s) =>
           s.focused === null ? s : { focused: null, activeObject: null, hintObject: null },
         ),
-      activateObject: (id) => set((s) => ({ activeObject: id, found: addOnce(s.found, id) })),
+      activateObject: (id) =>
+        set((s) => ({
+          activeObject: id,
+          activeCount: s.activeCount + 1,
+          found: addOnce(s.found, id),
+        })),
       setHint: (hintObject) => set({ hintObject }),
       toggleSound: () => set((s) => ({ sound: !s.sound })),
       setQuality: (quality) => set({ quality }),

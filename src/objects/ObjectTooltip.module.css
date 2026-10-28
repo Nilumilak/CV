@@ -1,0 +1,22 @@
+/* Small dark tag above the pointer, matching the island labels. */
+.tooltip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 15;
+  margin: -44px 0 0 12px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  background: rgb(43 36 34 / 88%);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 14px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s ease-out;
+}
+
+.tooltip[data-visible='true'] {
+  opacity: 1;
+}

@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import { motion } from 'motion/react';
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import { profile } from '@/data/cv';
+import { objectForSection, type HomeSection } from '@/data/homeObjects';
 import { chapterOf, datesOf, neighbours } from '@/data/navigation';
 import type { Chapter, IslandId } from '@/data/types';
 import { layoutOf } from '@/data/world';
@@ -23,6 +24,8 @@ export function IslandPanel({ id }: { id: IslandId }) {
   const chapter = chapterOf(id);
   const { prev, next } = neighbours(id);
   const titleId = `panel-title-${id}`;
+  const bodyRef = useRef<HTMLDivElement>(null);
+  useScrollToActiveObject(bodyRef);
 
   // Move keyboard and screen reader focus to the title when the panel opens or changes island.
   useEffect(() => {
@@ -83,7 +86,7 @@ export function IslandPanel({ id }: { id: IslandId }) {
         )}
       </header>
 
-      <div className={styles.body}>
+      <div ref={bodyRef} className={styles.body}>
         {chapter ? <ChapterBody chapter={chapter} /> : <HomeBody />}
       </div>
 
@@ -108,6 +111,33 @@ export function IslandPanel({ id }: { id: IslandId }) {
         </button>
       </footer>
     </motion.section>
+  );
+}
+
+/**
+ * When an object on the island is activated, scroll its section into view and flash it,
+ * so a click on the island always leads to the matching content.
+ */
+function useScrollToActiveObject(body: React.RefObject<HTMLDivElement | null>) {
+  const reduceMotion = useReducedMotion();
+  useEffect(
+    () =>
+      useWorld.subscribe((s, prev) => {
+        if (s.activeCount === prev.activeCount || !s.activeObject || !body.current) return;
+        const section = body.current.querySelector<HTMLElement>(
+          `[data-object="${s.activeObject}"]`,
+        );
+        if (!section) return;
+        body.current.scrollTo({
+          top: section.offsetTop - 12,
+          behavior: reduceMotion ? 'auto' : 'smooth',
+        });
+        // Restart the flash even if it is still playing from the last activation.
+        section.removeAttribute('data-flash');
+        void section.offsetWidth;
+        section.setAttribute('data-flash', '');
+      }),
+    [body, reduceMotion],
   );
 }
 
@@ -192,65 +222,116 @@ function HomeBody() {
 
   return (
     <>
-      <p className={styles.summary}>{profile.summary}</p>
+      <HomeSectionBlock section="summary" title="About me">
+        <p className={styles.summary}>{profile.summary}</p>
+      </HomeSectionBlock>
 
-      <h3 className={styles.sectionTitle}>Contacts</h3>
-      <ul className={styles.contactList}>
-        <li>
-          <a className={styles.link} href={`mailto:${contacts.email}`}>
-            {contacts.email}
-          </a>
-          <button type="button" className={styles.copy} onClick={copyEmail}>
-            {copied ? 'Copied' : 'Copy'}
-          </button>
-          <span className="visually-hidden" aria-live="polite">
-            {copied ? 'Email address copied' : ''}
-          </span>
-        </li>
-        <li>
-          <a className={styles.link} href={contacts.linkedin} target="_blank" rel="noreferrer">
-            LinkedIn ↗
-          </a>
-        </li>
-        <li>
-          <a className={styles.link} href={contacts.github} target="_blank" rel="noreferrer">
-            GitHub ↗
-          </a>
-        </li>
-      </ul>
-
-      <h3 className={styles.sectionTitle}>Skills</h3>
-      {profile.skills.map((g) => (
-        <div key={g.group} className={styles.skillGroup}>
-          <h4>{g.group}</h4>
-          <ul className={styles.chips}>
-            {g.items.map((s) => (
-              <li key={s}>{s}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
-
-      <h3 className={styles.sectionTitle}>Education</h3>
-      <ul className={styles.plainList}>
-        {profile.education.map((e) => (
-          <li key={e.title}>
-            <strong>{e.title}</strong>
-            <small>
-              {e.school} · {e.start.slice(0, 4)} – {e.end.slice(0, 4)}
-            </small>
+      <HomeSectionBlock section="contacts" title="Contacts">
+        <ul className={styles.contactList}>
+          <li>
+            <a className={styles.link} href={`mailto:${contacts.email}`}>
+              {contacts.email}
+            </a>
+            <button type="button" className={styles.copy} onClick={copyEmail}>
+              {copied ? 'Copied' : 'Copy'}
+            </button>
+            <span className="visually-hidden" aria-live="polite">
+              {copied ? 'Email address copied' : ''}
+            </span>
           </li>
-        ))}
-      </ul>
-
-      <h3 className={styles.sectionTitle}>Languages</h3>
-      <ul className={styles.plainList}>
-        {profile.languages.map((l) => (
-          <li key={l.name}>
-            {l.name} · {l.level}
+          <li>
+            <a className={styles.link} href={contacts.linkedin} target="_blank" rel="noreferrer">
+              LinkedIn ↗
+            </a>
           </li>
+          <li>
+            <a className={styles.link} href={contacts.github} target="_blank" rel="noreferrer">
+              GitHub ↗
+            </a>
+          </li>
+        </ul>
+      </HomeSectionBlock>
+
+      <HomeSectionBlock section="skills" title="Skills">
+        {profile.skills.map((g) => (
+          <div key={g.group} className={styles.skillGroup}>
+            <h4>{g.group}</h4>
+            <ul className={styles.chips}>
+              {g.items.map((s) => (
+                <li key={s}>{s}</li>
+              ))}
+            </ul>
+          </div>
         ))}
-      </ul>
+      </HomeSectionBlock>
+
+      <HomeSectionBlock section="education" title="Education">
+        <ul className={styles.plainList}>
+          {profile.education.map((e) => (
+            <li key={e.title}>
+              <strong>{e.title}</strong>
+              <small>
+                {e.school} · {e.start.slice(0, 4)} – {e.end.slice(0, 4)}
+              </small>
+            </li>
+          ))}
+        </ul>
+      </HomeSectionBlock>
+
+      <HomeSectionBlock section="languages" title="Languages">
+        <ul className={styles.plainList}>
+          {profile.languages.map((l) => (
+            <li key={l.name}>
+              {l.name} · {l.level}
+            </li>
+          ))}
+        </ul>
+      </HomeSectionBlock>
     </>
+  );
+}
+
+/**
+ * One Home section, linked to its object on the island: hovering or focusing the section
+ * makes the object glow, and "Show me" plays the object's reaction (the keyboard path
+ * to the same thing a click on the island does).
+ */
+function HomeSectionBlock({
+  section,
+  title,
+  children,
+}: {
+  section: HomeSection;
+  title: string;
+  children: ReactNode;
+}) {
+  const object = objectForSection(section);
+  const activate = useWorld((s) => s.activateObject);
+  const setHint = useWorld((s) => s.setHint);
+  const hint = () => setHint(object.id);
+  const unhint = () => setHint(null);
+
+  return (
+    <section
+      className={styles.homeSection}
+      data-object={object.id}
+      onMouseEnter={hint}
+      onMouseLeave={unhint}
+      onFocus={hint}
+      onBlur={unhint}
+    >
+      <div className={styles.sectionHead}>
+        <h3 className={styles.sectionTitle}>{title}</h3>
+        <button
+          type="button"
+          className={styles.showMe}
+          onClick={() => activate(object.id)}
+          aria-label={`Show me ${object.name}`}
+        >
+          Show me
+        </button>
+      </div>
+      {children}
+    </section>
   );
 }

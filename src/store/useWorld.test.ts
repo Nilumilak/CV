@@ -36,6 +36,15 @@ describe('world store', () => {
     expect(useWorld.getState().found).toEqual(['olimp-box']);
   });
 
+  it('counts every activation, even of the same object', () => {
+    const s = useWorld.getState();
+    const before = s.activeCount;
+    s.activateObject('home-cat');
+    s.activateObject('home-cat');
+    expect(useWorld.getState().activeCount).toBe(before + 2);
+    expect(useWorld.getState().found).toEqual(['home-cat']);
+  });
+
   it('enter starts the fly-in with the chosen sound setting', () => {
     useWorld.getState().enter(true);
     expect(useWorld.getState()).toMatchObject({ phase: 'flyIn', sound: true });

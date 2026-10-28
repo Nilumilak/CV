@@ -5,6 +5,7 @@ import { chapterOf, neighbours } from '@/data/navigation';
 import type { IslandId } from '@/data/types';
 import { IslandLabels } from '@/islands/IslandLabel';
 import { labelElements } from '@/islands/labelAnchors';
+import { ObjectTooltip } from '@/objects/ObjectTooltip';
 import { useHashSync } from '@/routing/useHashSync';
 import { useWorld } from '@/store/useWorld';
 import { IslandPanel } from './IslandPanel';
@@ -35,6 +36,7 @@ export function Overlay() {
       {inWorld && (
         <>
           <IslandLabels />
+          <ObjectTooltip />
           <TopBar />
         </>
       )}

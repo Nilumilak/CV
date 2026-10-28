@@ -11,11 +11,20 @@ import mailboxUrl from '@/assets/models/home/mailbox.glb?url';
 import stoneUrl from '@/assets/models/home/stepping-stone.glb?url';
 import stumpUrl from '@/assets/models/home/stump.glb?url';
 import treeUrl from '@/assets/models/home/big-tree.glb?url';
-import { Breathe, ChimneySmoke, LanternGlow, Sway } from '../ambient';
+import { homeObject, type HomeObjectId } from '@/data/homeObjects';
+import { Interactable } from '@/objects/Interactable';
+import { Hop, Spin, Wobble } from '@/objects/reactions';
+import { Breathe, ChimneySmoke, LanternGlow, PoppingLetter, Sway } from '../ambient';
 import { GeneratedModel } from '../GeneratedModel';
 import { useGroundHeights } from '../useGroundHeights';
 
 const deg = (d: number) => (d * Math.PI) / 180;
+
+/** Props for an object's Interactable, from the shared list in data/homeObjects.ts. */
+const interactive = (id: HomeObjectId) => {
+  const { label, cue } = homeObject(id);
+  return { id, label, cue, island: 'home' as const };
+};
 
 /**
  * Where everything stands, in island units (+Z faces the overview camera, +X is the
@@ -52,6 +61,7 @@ const STUMP_HEIGHT = 0.6;
 /**
  * Home island (design: docs/plan/islands/home.md). Every model is AI-generated;
  * code places them on the real grass surface and adds cosy idle motion.
+ * Five objects open a panel section when clicked, each with a small reaction.
  */
 export function HomeIsland() {
   const frame = useRef<THREE.Group>(null);
@@ -75,43 +85,53 @@ export function HomeIsland() {
         <ChimneySmoke position={[0.62, 4.75, -0.45]} scale={0.8} />
       </GeneratedModel>
 
-      <GeneratedModel
-        url={bookshelfUrl}
-        height={1.4}
-        position={at('bookshelf')}
-        rotation-y={deg(35)}
-      />
+      <group position={at('bookshelf')} rotation-y={deg(35)}>
+        <Interactable {...interactive('home-bookshelf')}>
+          <Wobble id="home-bookshelf" angle={0.05}>
+            <GeneratedModel url={bookshelfUrl} height={1.4} />
+          </Wobble>
+        </Interactable>
+      </group>
 
       <group position={at('bench')} rotation-y={deg(-30)}>
         <GeneratedModel url={benchUrl} length={1.6} />
         <group position={[0.15, BENCH_SEAT_HEIGHT, 0]} rotation-y={deg(30)}>
-          <Breathe>
-            <GeneratedModel url={catUrl} length={0.9} />
-          </Breathe>
+          <Interactable {...interactive('home-cat')}>
+            <Hop id="home-cat">
+              <Breathe>
+                <GeneratedModel url={catUrl} length={0.9} />
+              </Breathe>
+            </Hop>
+          </Interactable>
         </group>
       </group>
 
       <group position={at('stump')}>
         <GeneratedModel url={stumpUrl} height={STUMP_HEIGHT} />
-        <GeneratedModel
-          url={globeUrl}
-          height={0.8}
-          position={[0, STUMP_HEIGHT - 0.03, 0]}
-          rotation-y={deg(30)}
-        />
+        <group position={[0, STUMP_HEIGHT - 0.03, 0]}>
+          <Interactable {...interactive('home-globe')}>
+            <Spin id="home-globe">
+              <GeneratedModel url={globeUrl} height={0.8} rotation-y={deg(30)} />
+            </Spin>
+          </Interactable>
+        </group>
       </group>
 
       <group position={at('lantern')}>
-        <GeneratedModel url={lanternUrl} height={2.1} />
-        <LanternGlow position={[0, 1.55, 0]} />
+        <Interactable {...interactive('home-lantern')}>
+          <GeneratedModel url={lanternUrl} height={2.1} />
+          <LanternGlow position={[0, 1.55, 0]} flareFor="home-lantern" />
+        </Interactable>
       </group>
 
-      <GeneratedModel
-        url={mailboxUrl}
-        height={1.2}
-        position={at('mailbox')}
-        rotation-y={deg(-120)}
-      />
+      <group position={at('mailbox')} rotation-y={deg(-120)}>
+        <Interactable {...interactive('home-mailbox')}>
+          <Wobble id="home-mailbox" angle={0.06} shakes={5}>
+            <GeneratedModel url={mailboxUrl} height={1.2} />
+          </Wobble>
+        </Interactable>
+        <PoppingLetter id="home-mailbox" position={[0, 1.0, 0]} />
+      </group>
 
       {STONES.map((s) => (
         <GeneratedModel

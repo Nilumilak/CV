@@ -7,7 +7,8 @@ import { useMemo, useRef, type ReactNode } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
-import { colors } from '@/materials/toon';
+import { colors, gradientMap } from '@/materials/toon';
+import { useReaction } from '@/objects/useReaction';
 
 /** Gentle sway around the group origin, for trees and bushes. Put the origin at the base. */
 export function Sway({
@@ -48,6 +49,9 @@ export function Breathe({
   });
   return <group ref={ref}>{children}</group>;
 }
+
+/** Opts an object out of pointer hit tests. */
+const noHit = () => null;
 
 const PUFFS = 6;
 const smokeMaterial = new THREE.MeshBasicMaterial({
@@ -101,20 +105,30 @@ export function ChimneySmoke({
 export function LanternGlow({
   position,
   radius = 0.12,
+  flareFor = '',
 }: {
   position: [number, number, number];
   radius?: number;
+  /** Interactive object id: when it's activated, the lantern flares up and fireflies burst out. */
+  flareFor?: string;
 }) {
   const light = useRef<THREE.PointLight>(null!);
   const glow = useRef<THREE.Mesh>(null!);
+  const burst = useRef<THREE.Points>(null!);
+  const flare = useReaction(flareFor, 1.4);
 
   useFrame(({ clock }) => {
     const t = clock.elapsedTime;
     // Two slow waves plus a quick shimmer: reads as a small flame, never strobes.
     const flicker =
       0.85 + Math.sin(t * 2.1) * 0.06 + Math.sin(t * 5.3 + 1) * 0.04 + Math.sin(t * 13.7) * 0.02;
-    light.current.intensity = 0.9 * flicker;
-    glow.current.scale.setScalar(flicker);
+    // Flare: quick rise, slow fade.
+    const p = flare(t);
+    const f = p === null ? 0 : p < 0.15 ? p / 0.15 : (1 - p) / 0.85;
+    light.current.intensity = 0.9 * flicker * (1 + 2.5 * f);
+    glow.current.scale.setScalar(flicker * (1 + 0.5 * f));
+    burst.current.visible = p !== null;
+    if (p !== null) burst.current.scale.setScalar(0.6 + p * 1.2);
   });
 
   return (
@@ -125,7 +139,9 @@ export function LanternGlow({
         <meshBasicMaterial color="#ffd27a" />
       </mesh>
       <pointLight ref={light} color={colors.accentGold} distance={3} decay={2} />
+      {/* Fireflies are decoration: never let them catch the pointer (points have a wide hit area). */}
       <Sparkles
+        raycast={noHit}
         count={7}
         scale={[1.6, 1.4, 1.6]}
         size={3}
@@ -133,6 +149,56 @@ export function LanternGlow({
         color="#ffe39a"
         opacity={0.9}
       />
+      <Sparkles
+        ref={burst}
+        raycast={noHit}
+        visible={false}
+        count={20}
+        scale={[2, 1.8, 2]}
+        size={4}
+        speed={0.9}
+        color="#ffe39a"
+      />
+    </group>
+  );
+}
+
+/** A paper letter that pops out of a mailbox slot, flips once and shrinks away. */
+export function PoppingLetter({
+  id,
+  position,
+}: {
+  id: string;
+  position: [number, number, number];
+}) {
+  const ref = useRef<THREE.Group>(null!);
+  const progress = useReaction(id, 1.3);
+
+  useFrame(({ clock }) => {
+    const t = progress(clock.elapsedTime);
+    const g = ref.current;
+    g.visible = t !== null;
+    if (t === null) return;
+    g.position.set(
+      position[0] + t * 0.25,
+      position[1] + Math.sin(t * Math.PI * 0.6) * 0.9,
+      position[2],
+    );
+    g.rotation.set(0.3, t * Math.PI * 2, Math.sin(t * 6) * 0.2);
+    g.scale.setScalar(Math.min(1, t * 6, (1 - t) * 4));
+  });
+
+  return (
+    <group ref={ref} visible={false}>
+      <mesh>
+        <boxGeometry args={[0.36, 0.24, 0.02]} />
+        <meshToonMaterial color="#fbf3e0" gradientMap={gradientMap} />
+      </mesh>
+      {/* Wax seal */}
+      <mesh position={[0, 0, 0.012]}>
+        <circleGeometry args={[0.045, 12]} />
+        <meshBasicMaterial color={colors.roofRed} />
+      </mesh>
     </group>
   );
 }

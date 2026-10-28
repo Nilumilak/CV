@@ -109,6 +109,145 @@ function rampTo(param: AudioParam, value: number, seconds: number) {
   param.linearRampToValueAtTime(value, now + seconds);
 }
 
+/** Short, soft reaction sounds for interactive objects. All under a second. */
+export type SoundCue = 'mrrp' | 'chime' | 'paper' | 'knock' | 'whirr';
+
+/** One oscillator with a gliding pitch and a quick attack, exponential fade. */
+function voice(
+  ac: AudioContext,
+  t: number,
+  type: OscillatorType,
+  pitch: [seconds: number, hz: number][],
+  peak: number,
+  seconds: number,
+  out: AudioNode = ac.destination,
+) {
+  const osc = ac.createOscillator();
+  osc.type = type;
+  osc.frequency.setValueAtTime(pitch[0][1], t);
+  for (const [at, hz] of pitch.slice(1)) osc.frequency.exponentialRampToValueAtTime(hz, t + at);
+  const gain = ac.createGain();
+  gain.gain.setValueAtTime(0.0001, t);
+  gain.gain.exponentialRampToValueAtTime(peak, t + 0.015);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + seconds);
+  osc.connect(gain).connect(out);
+  osc.start(t);
+  osc.stop(t + seconds + 0.05);
+}
+
+/** Band-passed noise with a sweeping centre, for paper and air sounds. */
+function noiseSweep(
+  ac: AudioContext,
+  t: number,
+  sweep: [seconds: number, hz: number][],
+  peak: number,
+  seconds: number,
+) {
+  const src = ac.createBufferSource();
+  src.buffer = whiteNoise(ac, seconds);
+  const filter = ac.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.Q.value = 0.9;
+  filter.frequency.setValueAtTime(sweep[0][1], t);
+  for (const [at, hz] of sweep.slice(1)) filter.frequency.exponentialRampToValueAtTime(hz, t + at);
+  const gain = ac.createGain();
+  gain.gain.setValueAtTime(0.0001, t);
+  gain.gain.exponentialRampToValueAtTime(peak, t + seconds * 0.3);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + seconds);
+  src.connect(filter).connect(gain).connect(ac.destination);
+  src.start(t);
+  src.stop(t + seconds);
+}
+
+const CUES: Record<SoundCue, (ac: AudioContext, t: number) => void> = {
+  // A small rising-then-falling trill, softened so it reads as a content cat, not a beep.
+  mrrp: (ac, t) => {
+    const soft = ac.createBiquadFilter();
+    soft.type = 'lowpass';
+    soft.frequency.value = 1400;
+    soft.connect(ac.destination);
+    voice(
+      ac,
+      t,
+      'triangle',
+      [
+        [0, 330],
+        [0.12, 520],
+        [0.34, 380],
+      ],
+      0.16,
+      0.38,
+      soft,
+    );
+  },
+  // Two bell tones a fifth apart (C6, G6).
+  chime: (ac, t) => {
+    voice(ac, t, 'sine', [[0, 1046.5]], 0.07, 1.1);
+    voice(ac, t + 0.09, 'sine', [[0, 1568]], 0.05, 1.0);
+  },
+  // Two quick rustles, like a letter sliding out.
+  paper: (ac, t) => {
+    noiseSweep(
+      ac,
+      t,
+      [
+        [0, 1800],
+        [0.18, 3200],
+      ],
+      0.1,
+      0.2,
+    );
+    noiseSweep(
+      ac,
+      t + 0.16,
+      [
+        [0, 2600],
+        [0.22, 4200],
+      ],
+      0.08,
+      0.26,
+    );
+  },
+  // Two soft knocks on wood.
+  knock: (ac, t) => {
+    voice(
+      ac,
+      t,
+      'sine',
+      [
+        [0, 190],
+        [0.12, 95],
+      ],
+      0.22,
+      0.16,
+    );
+    voice(
+      ac,
+      t + 0.13,
+      'sine',
+      [
+        [0, 170],
+        [0.12, 90],
+      ],
+      0.16,
+      0.16,
+    );
+  },
+  // Air rushing up and down, like a globe spun by hand.
+  whirr: (ac, t) =>
+    noiseSweep(
+      ac,
+      t,
+      [
+        [0, 500],
+        [0.35, 1400],
+        [0.9, 420],
+      ],
+      0.07,
+      0.9,
+    ),
+};
+
 export const sound = {
   /** Turn ambient sound on or off with a short fade. */
   setEnabled(on: boolean) {
@@ -149,5 +288,12 @@ export const sound = {
     src.connect(filter).connect(gain).connect(ac.destination);
     src.start(t);
     src.stop(t + seconds);
+  },
+
+  /** A short reaction sound for an interactive object. Plays only when sound is on. */
+  cue(name: SoundCue) {
+    const ac = context();
+    if (!ac || !enabled) return;
+    CUES[name](ac, ac.currentTime);
   },
 };
