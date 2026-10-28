@@ -26,16 +26,16 @@ const deg = (d: number) => (d * Math.PI) / 180;
  */
 const SPOTS = {
   cottage: [0.2, -1.0],
-  tree: [-2.7, -2.4],
+  tree: [-3.1, -2.8],
   bookshelf: [-1.7, 0.3],
   stump: [-1.6, 2.0],
   bench: [2.6, -1.0],
   lantern: [2.3, 2.5],
-  mailbox: [3.7, 1.3],
-  stone1: [1.25, 0.75],
-  stone2: [1.9, 0.95],
-  stone3: [2.55, 1.1],
-  stone4: [3.15, 1.2],
+  mailbox: [3.2, 1.6],
+  stone1: [1.2, 0.75],
+  stone2: [1.7, 1.0],
+  stone3: [2.2, 1.25],
+  stone4: [2.7, 1.45],
   // Flower bushes are postponed until a solid model exists (home.md, placement table).
 } as const satisfies Record<string, [number, number]>;
 
@@ -69,7 +69,7 @@ export function HomeIsland() {
       <GeneratedModel ref={base} url={baseUrl} length={11.5} anchor="top" />
 
       <Sway amount={0.012} speed={0.5}>
-        <GeneratedModel url={treeUrl} height={6} position={at('tree')} />
+        <GeneratedModel url={treeUrl} height={5.6} position={at('tree')} rotation-y={deg(90)} />
       </Sway>
 
       <GeneratedModel url={cottageUrl} height={5} position={at('cottage')} rotation-y={deg(17)}>
@@ -108,7 +108,12 @@ export function HomeIsland() {
         <LanternGlow position={[0, 1.32, 0]} />
       </group>
 
-      <GeneratedModel url={mailboxUrl} height={1.2} position={at('mailbox')} rotation-y={deg(35)} />
+      <GeneratedModel
+        url={mailboxUrl}
+        height={1.2}
+        position={at('mailbox')}
+        rotation-y={deg(-120)}
+      />
 
       {STONES.map((s) => (
         <GeneratedModel

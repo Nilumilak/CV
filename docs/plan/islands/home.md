@@ -205,17 +205,17 @@ Agreed on 2026-10-28.
 
 Positions are in island units: the island's own frame before its 1.2 scale, with the grass surface at height 0. **+Z faces the overview camera, +X is the visitor's right.** "Turn" is the rotation around the vertical axis in degrees; positive turns the front towards the visitor's right, where the focus camera sits.
 
-| Object          | Position (x, z)                                | Size                      | Turn   | Notes                                                       |
-| --------------- | ---------------------------------------------- | ------------------------- | ------ | ----------------------------------------------------------- |
-| Cottage         | 0.2, −1.0                                      | 5 tall (done)             | 17°    | Desk painting behind the round window                       |
-| Big tree        | −2.7, −2.4                                     | 6 tall                    | 0°     | Canopy overlaps the back left of the roof                   |
-| Bookshelf       | −1.7, 0.3                                      | 1.4 tall                  | 17°    | Against the wall left of the door, same turn as the house   |
-| Bench + cat     | 2.6, −1.0                                      | bench 1.6 long (cat done) | −30°   | Sunny side, beside the house right of the door              |
-| Stump + globe   | −1.6, 2.0                                      | stump 0.6 tall, globe 0.8 | 30°    | Study corner, front left of the bookshelf                   |
-| Garden lantern  | 2.3, 2.5                                       | 1.6 tall                  | 0°     | In front of the path, left of the mailbox                   |
-| Mailbox         | 3.7, 1.3                                       | 1.2 tall                  | 35°    | Right rim, where the path ends                              |
-| Stepping stones | 1.25, 0.75 → 1.9, 0.95 → 2.55, 1.1 → 3.15, 1.2 | 0.6 to 0.8 wide           | random | From the door to the mailbox                                |
-| Flower bushes   | −3.7, 1.0 · −2.2, 3.4 · 3.9, −0.4              | 1.0 to 1.3 wide           | random | Around the rim, framing the front. **Postponed**, see below |
+| Object          | Position (x, z)                              | Size                      | Turn   | Notes                                                       |
+| --------------- | -------------------------------------------- | ------------------------- | ------ | ----------------------------------------------------------- |
+| Cottage         | 0.2, −1.0                                    | 5 tall (done)             | 17°    | Desk painting behind the round window                       |
+| Big tree        | −3.1, −2.8                                   | 5.6 tall                  | 90°    | Behind the roof, clear of it; narrow side faces the house   |
+| Bookshelf       | −1.7, 0.3                                    | 1.4 tall                  | 17°    | Against the wall left of the door, same turn as the house   |
+| Bench + cat     | 2.6, −1.0                                    | bench 1.6 long (cat done) | −30°   | Sunny side, beside the house right of the door              |
+| Stump + globe   | −1.6, 2.0                                    | stump 0.6 tall, globe 0.8 | 30°    | Study corner, front left of the bookshelf                   |
+| Garden lantern  | 2.3, 2.5                                     | 1.6 tall                  | 0°     | In front of the path, left of the mailbox                   |
+| Mailbox         | 3.2, 1.6                                     | 1.2 tall                  | −120°  | Where the path ends; red flag faces the camera              |
+| Stepping stones | 1.2, 0.75 → 1.7, 1.0 → 2.2, 1.25 → 2.7, 1.45 | 0.6 to 0.8 wide           | random | From the door to the mailbox                                |
+| Flower bushes   | −3.7, 1.0 · −2.2, 3.4 · 3.9, −0.4            | 1.0 to 1.3 wide           | random | Around the rim, framing the front. **Postponed**, see below |
 
 **Flower bushes are postponed (decided 2026-10-28).** Both generated bushes came out paper-thin: Meshy turns a round, edgeless blob of leaves into a flat painted card, even from a concept with clear volume. The next attempt should use multi-view: front, side and back views of the bush, then multi-image-to-3D, about 33 credits. The first big tree was flat too; it was regenerated from a three-quarter-view concept and is solid. Its leaves came out olive, so `npm run art` grades them toward the palette greens (the `foliage` grade in `scripts/art-grade.mjs`); the trunk keeps its brown. See the volume rule in [phase-4-ai-prompts.md](../phase-4-ai-prompts.md).
 
