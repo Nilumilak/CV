@@ -305,6 +305,102 @@ Round leafy garden bush, soft clumps of fresh green leaves, small white and pink
 
 ---
 
+## Radio Tower island
+
+Full design description and decisions: [islands/radio.md](islands/radio.md).
+
+A small friendly field station on a rock: a radio tower with a beacon, a bunker lab, a satellite dish, an outdoor screen, a little robot and two shipping containers. Workflow as for Home: concept image (style block + image prompt), review, then image-to-3D. Every prompt asks for a three-quarter view from slightly above, per the volume rule.
+
+| #   | File name          | Object                          | Budget           | Interactive          | Status |
+| --- | ------------------ | ------------------------------- | ---------------- | -------------------- | ------ |
+| 1   | `island-base.glb`  | Rocky island, grass patches     | 15,000 triangles | No                   | To do  |
+| 2   | `tower.glb`        | Radio tower (lattice mast)      | 6,000            | No (landmark)        | To do  |
+| 3   | `bunker.glb`       | Bunker in a rock mound          | 6,000            | Yes: test platform   | To do  |
+| 4   | `dish.glb`         | Satellite dish on a post        | 3,000            | Yes: 5 services      | To do  |
+| 5   | `screen.glb`       | Outdoor screen on two legs      | 3,000            | Yes: framework UI    | To do  |
+| 6   | `robot.glb`        | Little hovering tin robot       | 3,000            | Yes: LLM generator   | To do  |
+| 7   | `containers.glb`   | Two stacked shipping containers | 3,000            | Yes: backend & tests | To do  |
+| 8   | `rock-cluster.glb` | Three mossy rocks (shared kit)  | 2,000            | No                   | To do  |
+
+### 1. Island base
+
+```
+A small floating sky island seen from a three-quarter view from slightly above: a rugged chunk of
+weathered grey-sand rock shaped like an upside-down cone, layered strata and a few sharp ledges,
+small stones and a couple of hanging roots underneath. The top is mostly flat and open, covered in
+short grass with a few patches of bare rock showing through, so buildings can stand on it. Wider
+than it is tall.
+```
+
+### 2. Radio tower
+
+```
+A tall classic radio transmission tower seen from a three-quarter view from slightly above: a
+slender tapering steel lattice mast with clear X cross-bracing, painted in red and white bands,
+on a small square concrete footing. Two small dish antennas and a few short rod antennas near the
+top, a little railed platform about two thirds of the way up, a round yellow beacon lamp on the very
+tip. Stylized with beams a bit thicker than real ones so the shape is bold and readable, but it is
+clearly a real radio mast, not a toy.
+```
+
+### 3. Bunker lab
+
+```
+A small rounded concrete bunker lab half dug into a grassy rock mound, seen from a three-quarter
+view from slightly above. Smooth weathered concrete front with soft rounded edges, a yellow
+round-topped metal door in the middle, a small caged lamp above the door, a couple of air vents
+and a few cables running along the wall into the ground. Grass and small stones on top of the
+mound. Cosy and friendly, like a hobbit hole for engineers.
+```
+
+### 4. Satellite dish
+
+```
+A white satellite dish on a short sturdy round metal post, seen from a three-quarter view from
+slightly above. The dish is a deep bowl tilted up towards the sky, with a small feed horn held in
+front of it on three thin struts, a little control box on the post. Slightly weathered paint, a few
+bolts, chunky readable shapes.
+```
+
+### 5. Outdoor screen
+
+```
+A large flat outdoor display screen standing on two sturdy wooden legs with cross braces, like a
+small outdoor cinema billboard, seen from a three-quarter view from slightly above. A thick
+dark-grey frame with rounded corners around a plain, evenly lit, empty light-grey screen face,
+a small sloped roof over the top edge, a cable running down one leg to the ground.
+```
+
+The screen face must stay plain and empty: the UI picture is drawn on it in code.
+
+### 6. Helper robot
+
+```
+A small cute round tin robot hovering above the ground, seen from a three-quarter view from
+slightly above. A rounded body like a little barrel, painted cream and signal yellow with a few
+rivets, a small screen face showing two friendly dot eyes, one thin antenna with a round tip on
+top, two short stubby arms, no legs, a faint jet glow under the body. Friendly and curious.
+```
+
+### 7. Shipping containers
+
+```
+Two small corrugated shipping containers stacked on top of each other, seen from a three-quarter
+view from slightly above. The bottom one is signal yellow, the top one is sky blue, slightly offset
+from each other. Ridged metal walls, door handles and locking bars on the end doors, a soft painted
+wave shape on the side of the blue one. Slightly weathered paint, chunky readable shapes.
+```
+
+### 8. Rock cluster (shared kit)
+
+```
+A small cluster of three rounded mossy rocks of different sizes sitting together, seen from a
+three-quarter view from slightly above. Warm grey-sand stone with soft painted strata, patches of
+green moss on the tops, a couple of tiny pebbles around them.
+```
+
+---
+
 ## Checklist for a good result
 
 - [ ] The concept shows the object from a three-quarter view, with shading that shows its volume (see the volume rule).

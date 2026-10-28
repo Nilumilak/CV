@@ -2,7 +2,7 @@
 
 [Back to Phase 4](../phase-4-island-art.md) · [AI model prompts](../phase-4-ai-prompts.md) · Previous: [Home](home.md)
 
-**Status:** design draft for review (2026-10-28). Nothing generated yet.
+**Status:** design decided (2026-10-28, section 9). Next: concept images.
 
 ---
 
@@ -95,7 +95,7 @@ A small round tin robot with one antenna and a friendly screen face, hovering a 
 A rounded concrete bunker half dug into a grassy rock mound, with a yellow round-topped door and a small lamp above it.
 
 - **Idle:** the lamp above the door glows softly.
-- **Click:** the door swings open, warm light spills out, and it closes again. The door is a separate model so it can turn on its hinge (see question 2).
+- **Click:** the doorway and the lamp above it glow warmly, as if the lab inside just switched on, then fade back (decision 2).
 
 ### Big screen · Rebuilt the framework UI
 
@@ -137,10 +137,10 @@ Two small shipping containers stacked, one yellow and one blue, with a whale-lik
 
 ## 7. What is AI-generated and what is code
 
-| AI-generated (Meshy)                                                           | Code                                                                    |
-| ------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| Island base, tower, bunker, bunker door, dish, screen frame, robot, containers | Beacon glow and light, signal rings, screen picture, scroll, check mark |
-| Shared kit: a rock cluster (reused by later islands)                           | All motion, hover, sounds, panel link                                   |
+| AI-generated (Meshy)                                                              | Code                                                                                  |
+| --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Island base, tower, bunker (door included), dish, screen frame, robot, containers | Beacon glow and light, signal rings, doorway glow, screen picture, scroll, check mark |
+| Shared kit: a rock cluster (reused by later islands)                              | All motion, hover, sounds, panel link                                                 |
 
 Every concept follows the volume rule: a three-quarter view with shading that shows depth. `npm run art` refuses flat models.
 
@@ -151,34 +151,30 @@ Every concept follows the volume rule: a three-quarter view with shading that sh
 | #   | File               | Object                          | Budget      | Notes                                           |
 | --- | ------------------ | ------------------------------- | ----------- | ----------------------------------------------- |
 | 1   | `island-base.glb`  | Rocky island, grass patches     | 15,000 tris | Greyer, rougher rock than Home                  |
-| 2   | `tower.glb`        | Antenna tower                   | 6,000       | Riskiest model, see question 1                  |
-| 3   | `bunker.glb`       | Bunker in a rock mound, no door | 6,000       | Doorway left as a dark opening                  |
-| 4   | `bunker-door.glb`  | Yellow round-topped door        | 1,000       | Separate, so it can swing (question 2)          |
-| 5   | `dish.glb`         | Satellite dish on a post        | 3,000       |                                                 |
-| 6   | `screen.glb`       | Outdoor screen on two legs      | 3,000       | Screen face plain; the picture is code          |
-| 7   | `robot.glb`        | Little hovering tin robot       | 3,000       |                                                 |
-| 8   | `containers.glb`   | Two stacked shipping containers | 3,000       |                                                 |
-| 9   | `rock-cluster.glb` | Three mossy rocks (shared kit)  | 2,000       | Reused on later islands, so it is paid for once |
+| 2   | `tower.glb`        | Radio tower (lattice mast)      | 6,000       | Riskiest model, see decision 1                  |
+| 3   | `bunker.glb`       | Bunker in a rock mound          | 6,000       | Yellow door included, closed                    |
+| 4   | `dish.glb`         | Satellite dish on a post        | 3,000       |                                                 |
+| 5   | `screen.glb`       | Outdoor screen on two legs      | 3,000       | Screen face plain; the picture is code          |
+| 6   | `robot.glb`        | Little hovering tin robot       | 3,000       |                                                 |
+| 7   | `containers.glb`   | Two stacked shipping containers | 3,000       |                                                 |
+| 8   | `rock-cluster.glb` | Three mossy rocks (shared kit)  | 2,000       | Reused on later islands, so it is paid for once |
 
 | Step                           | Items | Credits  |
 | ------------------------------ | ----- | -------- |
-| Concept images (nano-banana)   | 9     | 27       |
+| Concept images (nano-banana)   | 8     | 24       |
 | Review the concepts with you   |       | 0        |
-| Textured 3D models (Meshy 7.1) | 9     | 270      |
-| Spare for one or two retries   |       | ~33      |
-| **Total**                      |       | **~330** |
+| Textured 3D models (Meshy 7.1) | 8     | 240      |
+| Spare for one or two retries   |       | ~36      |
+| **Total**                      |       | **~300** |
 
-Balance now: 626 credits, so about 296 would be left. Without the separate door (question 2), it is 30 less.
+Balance now: 626 credits, so about 326 would be left.
 
 ---
 
-## 9. Questions for you
+## 9. Decisions (2026-10-28)
 
-1. **The tower.** A thin lattice tower is the hardest shape for AI 3D: thin beams tend to come out blobby, melted or flat. Options:
-   - **a.** A chunkier, storybook tower: thick painted beams, a little wooden platform halfway up, the beacon on top. Easier for the AI, still reads as a radio tower. (My recommendation.)
-   - **b.** A clean lattice tower built in code from simple beams. Reliable and cheap, but it would look smoother than the painted models around it.
-   - **c.** Try the real thin lattice and see. Might cost a retry or two.
-2. **The bunker door.** Should the door really swing open (a separate door model, +30 credits), or should the click just make the door lamp and the doorway glow (one model)?
-3. **Greenery.** Ferns or bushes would make it cosier, but round foliage needs multi-view (about 33 credits each). Rocks and grass only for now, or one fern model too?
-4. **The robot.** Small round tin robot with one antenna and a screen face. Does that fit, or would you like a different helper (for example a little owl with headphones)?
-5. **The screen picture.** A simple drawing of the real test platform UI (sidebar, test list, cards) in light and dark. OK, or something else on it?
+1. **The tower must still look like a radio tower.** A classic tapering lattice mast with X cross-bracing, red and white bands, antennas near the top and the beacon on the tip. The beams are drawn thicker than real ones so the AI can build them, but the silhouette stays a real radio mast. If the first try comes out melted, the fallback is a lattice built in code.
+2. **The bunker door glows, it doesn't open.** One model with the door included. The click makes the doorway and the lamp above it glow warmly, then fade.
+3. **Rocks and grass only.** No ferns or bushes for now.
+4. **The robot is a small round tin robot** with one antenna and a screen face.
+5. **The screen picture:** a simplified drawing of the test platform UI, light and dark. The user may send a screenshot (with anything confidential removed) or a short description of the layout and colours. It is drawn in code, so it doesn't block the models.
