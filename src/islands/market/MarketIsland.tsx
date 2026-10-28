@@ -35,25 +35,30 @@ const interactive = (id: IslandObjectId) => {
 };
 
 /**
- * Where everything stands, as "across the view, towards the camera" (see ../layout.ts).
- * Matches docs/plan/islands/market.md: back row crane, bank (houses behind), balloon;
- * front row signpost, fountain with the tram loop, shack and glass building.
+ * Where everything stands (design: docs/plan/islands/market.md, section 4).
+ * A ring around the town square: the fountain with the tram loop sits in the middle of
+ * the base's cobbled square, at the island's centre. Everything else stands about 4 m
+ * out, spaced so no footprints touch: houses and bank side by side at the back, crane
+ * and balloon at the sides, signpost and shack at the front. Ring spots are written as
+ * "across the view, towards the camera" (see ../layout.ts), so the back is away from
+ * the focus camera.
  */
 const SPOTS = {
-  houses: view(0, -4.4),
-  bank: view(0, -3.2),
-  crane: view(-2.9, -2.6),
-  balloon: view(2.9, -2.6),
-  signpost: view(-2.7, 2.2),
-  fountain: view(0, 1.4),
-  shack: view(2.7, 2.2),
-  poleLeft: view(-1.7, -2.3),
-  poleRight: view(1.7, -2.3),
+  fountain: [0, 0],
+  houses: view(-1.9, -3.5),
+  bank: view(1.6, -3.3),
+  crane: view(-3.9, -0.8),
+  balloon: view(3.8, -1.0),
+  signpost: view(-2.6, 2.8),
+  shack: view(2.6, 2.8),
+  housesFront: view(-0.7, -2.3),
+  pole: view(3.0, -2.6),
 } satisfies Record<string, [number, number]>;
 
 const TRAM_RADIUS = 1.4;
-const POLE_HEIGHT = 2.8;
-const BANK_HEIGHT = 4;
+const POLE_HEIGHT = 2.6;
+const HOUSES_HEIGHT = 4.2;
+const BANK_HEIGHT = 3.6;
 
 /**
  * Market Town island (design: docs/plan/islands/market.md). Every model is AI-generated;
@@ -78,10 +83,10 @@ export function MarketIsland() {
     <group ref={frame}>
       <GeneratedModel ref={base} url={baseUrl} length={11} anchor="top" />
 
-      {/* Back row: landmark and backdrop (not interactive). */}
+      {/* Back of the ring: houses and the bank landmark, side by side (not interactive). */}
       <GeneratedModel
         url={housesUrl}
-        height={5}
+        height={HOUSES_HEIGHT}
         position={at('houses')}
         rotation-y={deg(FACE_CAMERA)}
       />
@@ -92,11 +97,10 @@ export function MarketIsland() {
         rotation-y={deg(FACE_CAMERA)}
       />
 
-      {/* Bunting from two poles up to the bank's roof, beside the bank, not in front of it. */}
-      <Pole position={at('poleLeft')} height={POLE_HEIGHT} />
-      <Pole position={at('poleRight')} height={POLE_HEIGHT} />
-      <Bunting from={above('poleLeft', POLE_HEIGHT)} to={above('bank', BANK_HEIGHT * 0.62)} />
-      <Bunting from={above('bank', BANK_HEIGHT * 0.62)} to={above('poleRight', POLE_HEIGHT)} />
+      {/* Bunting from the houses' front corner to the bank, and on to a pole on its right. */}
+      <Pole position={at('pole')} height={POLE_HEIGHT} />
+      <Bunting from={above('housesFront', 3)} to={above('bank', BANK_HEIGHT * 0.62)} flags={6} />
+      <Bunting from={above('bank', BANK_HEIGHT * 0.62)} to={above('pole', POLE_HEIGHT)} />
 
       <group position={at('crane')} rotation-y={deg(FACE_CAMERA)}>
         <Interactable {...interactive('mone-packages')}>

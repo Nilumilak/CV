@@ -47,24 +47,29 @@ Market sits on the right of the world (`[30, 5, -8]`). From the overview it must
 
 ## 4. Layout
 
-Same rule as Radio: two rows across the focus camera's view, about 5 m apart, each front object in its own column.
+**A ring around the town square (revised 2026-10-29).** The first layout used Radio's two rows, but it put the fountain off the base's cobbled square and the houses straight behind the bank, where their footprints overlapped. Market's base has a natural centre, so the layout is a ring instead:
+
+- **Middle:** the fountain with the tram loop, in the centre of the cobbled square (island centre).
+- **Around the edge, about 4 m out,** spaced so no footprints touch: houses and bank side by side at the back, crane and balloon at the sides, signpost and shack at the front.
 
 ```
-  [CRANE]       [ DOMED BANK + stacked houses ]       [BALLOON]     ← back row
-                       bunting overhead
- [SIGNPOST]          [ FOUNTAIN ]               [SHACK + GLASS]     ← front row
-                    tram loop around it
+                 [HOUSES]  ~bunting~  [BANK]   ~bunting~  |pole|
+       [CRANE]                                          [BALLOON]
+                          ( FOUNTAIN )
+                         tram loop around
+          [SIGNPOST]                         [SHACK + GLASS]
+                     front (towards the camera)
 ```
 
-| Object                 | Across, towards | Size     | Notes                                               |
-| ---------------------- | --------------- | -------- | --------------------------------------------------- |
-| Domed bank             | 0, −3.2         | 4 tall   | Landmark, not interactive; the houses sit behind it |
-| Stacked houses         | 0, −4.2         | 5 wide   | Backdrop at the back edge                           |
-| Crane                  | −2.8, −2.8      | 4 tall   | Back left                                           |
-| Balloon                | 2.8, −2.8       | 3.5 tall | Back right, floating a little above its pad         |
-| Signpost               | −2.6, 2.2       | 1.8 tall | Front left                                          |
-| Fountain and tram loop | 0, 1.4          | 1.6 wide | Front middle; the tram circles it (loop about 3 m)  |
-| Shack and glass        | 2.6, 2.2        | 2.2 tall | Front right                                         |
+| Object                 | Across, towards | Size     | Notes                                       |
+| ---------------------- | --------------- | -------- | ------------------------------------------- |
+| Fountain and tram loop | island centre   | 1.6 wide | Tram loop 1.4 m from the fountain's centre  |
+| Stacked houses         | −1.9, −3.5      | 4.2 tall | Back left                                   |
+| Domed bank             | 1.6, −3.3       | 3.6 tall | Back right of the houses; landmark          |
+| Crane                  | −3.9, −0.8      | 4 tall   | Left side                                   |
+| Balloon                | 3.8, −1.0       | 3.2 tall | Right side, floating a little above its pad |
+| Signpost               | −2.6, 2.8       | 2 tall   | Front left                                  |
+| Shack and glass        | 2.6, 2.8        | 2.2 long | Front right                                 |
 
 ---
 
