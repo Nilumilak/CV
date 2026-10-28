@@ -26,7 +26,7 @@ const REFERENCE_ASPECT = 1.2;
 const MAX_BACKOFF = 2.2;
 
 /** How much further away the camera sits on tall, narrow screens such as phones in portrait. */
-export function backoffFor(aspect: number): number {
+function backoffFor(aspect: number): number {
   if (aspect >= REFERENCE_ASPECT) return 1;
   return Math.min(Math.pow(REFERENCE_ASPECT / aspect, 0.85), MAX_BACKOFF);
 }

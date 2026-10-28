@@ -4,6 +4,7 @@ import { chapterOf, neighbours } from '@/data/navigation';
 import type { IslandId } from '@/data/types';
 import { IslandLabels } from '@/islands/IslandLabel';
 import { labelElements } from '@/islands/labelAnchors';
+import { useHashSync } from '@/routing/useHashSync';
 import { useWorld } from '@/store/useWorld';
 import { IslandPanel } from './IslandPanel';
 import { TopBar } from './TopBar';
@@ -12,6 +13,7 @@ import { TopBar } from './TopBar';
 export function Overlay() {
   const focused = useWorld((s) => s.focused);
   useKeyboardNavigation();
+  useHashSync();
   useReturnFocusToLabel(focused);
 
   const announcement = focused
