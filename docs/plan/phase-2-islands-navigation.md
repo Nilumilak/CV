@@ -13,15 +13,15 @@ This is the most important phase. After it, the site is a real CV you can send t
 
 ### 1. Island layout
 
-- [ ] Fill in `src/data/world.ts` for all seven islands.
-- [ ] Arrange career islands on a gentle arc from left (oldest) to right (newest), with varied heights so the overview has depth.
-- [ ] Put Home front and centre, nearest the overview camera. Put the Lighthouse off to one side.
-- [ ] Give each island a camera pose that frames it from a three-quarter angle, slightly above.
+- [x] Fill in `src/data/world.ts` for all seven islands.
+- [x] Arrange career islands on a gentle arc from left (oldest) to right (newest), with varied heights so the overview has depth.
+- [x] Put Home front and centre, nearest the overview camera. Put the Lighthouse off to one side.
+- [x] Give each island a camera pose that frames it from a three-quarter angle, slightly above.
 
 ### 2. Placeholder island shape
 
-- [ ] Create `src/islands/PlaceholderIsland.tsx`: an upside-down rocky cone with a flat grassy top.
-- [ ] Displace vertices with a function of their position, not a random number per vertex. Cone geometry repeats vertices along its seam, and per-vertex randomness tears it open.
+- [x] Create `src/islands/PlaceholderIsland.tsx`: an upside-down rocky cone with a flat grassy top.
+- [x] Displace vertices with a function of their position, not a random number per vertex. Cone geometry repeats vertices along its seam, and per-vertex randomness tears it open.
 
 ```tsx
 // src/islands/PlaceholderIsland.tsx (sketch)
@@ -62,11 +62,11 @@ export function PlaceholderIsland({ seed, highlighted }: { seed: number; highlig
 }
 ```
 
-- [ ] Add a couple of cones as trees and a box as a building, so each placeholder hints at its theme.
+- [x] Add a couple of cones as trees and a box as a building, so each placeholder hints at its theme.
 
 ### 3. Island wrapper
 
-- [ ] Create `src/islands/Island.tsx`. It positions the island, makes it bob, handles hover and click, and renders the label.
+- [x] Create `src/islands/Island.tsx`. It positions the island, makes it bob, handles hover and click, and renders the label.
 
 ```tsx
 // src/islands/Island.tsx (sketch)
@@ -101,12 +101,12 @@ export function Island({ layout, children }: { layout: IslandLayout; children?: 
 }
 ```
 
-- [ ] Keep the label outside `Float`, so it does not wobble.
-- [ ] Clicking empty sky should go back to the overview. Use `onPointerMissed` on the Canvas and call `back()` when an island is focused.
+- [x] Keep the label outside `Float`, so it does not wobble.
+- [x] Clicking empty sky should go back to the overview. Use `onPointerMissed` on the Canvas and call `back()` when an island is focused.
 
 ### 4. Labels
 
-- [ ] Create `src/islands/IslandLabel.tsx` with drei `Html`. Make the label a real `<button>`. This gives keyboard focus and screen reader access for free.
+- [x] ~~Create the label with drei `Html`~~ Labels are DOM `<button>`s in a layer over the canvas, moved every frame by `LabelProjector`. drei `Html` creates a React root per label and logged unmount warnings under React 19 StrictMode.
 
 ```tsx
 <Html position={layout.labelOffset} center distanceFactor={14} zIndexRange={[20, 0]}>
@@ -129,32 +129,32 @@ export function Island({ layout, children }: { layout: IslandLayout; children?: 
 </Html>
 ```
 
-- [ ] Style it like reference 1: light icon square, dark rounded bar, small caps text.
-- [ ] Hide labels of other islands while one is focused, so they do not clutter the view.
-- [ ] Add the "Now" badge for chapters whose `end` is `null`.
+- [x] Style it like reference 1: light icon square, dark rounded bar, small caps text.
+- [x] Hide labels of other islands while one is focused, so they do not clutter the view.
+- [x] Add the "Now" badge for chapters whose `end` is `null`.
 
 ### 5. Route between islands
 
-- [ ] Create `src/world/Route.tsx`: a smooth curve through the career islands in timeline order.
-- [ ] For now draw it as a dashed drei `Line`. Phase 4 replaces it with rope bridges or a tram line.
+- [x] Create `src/world/Route.tsx`: a smooth curve through the career islands in timeline order.
+- [x] For now draw it as a dashed drei `Line`. Phase 4 replaces it with rope bridges or a tram line.
 
 ### 6. Store
 
-- [ ] Implement `src/store/useWorld.ts` from [Architecture](architecture.md#state).
-- [ ] For this phase, start with `phase: 'world'` so you skip the welcome screen that does not exist yet.
-- [ ] Unit test `focus`, `back` and `visited`.
+- [x] Implement `src/store/useWorld.ts` from [Architecture](architecture.md#state).
+- [x] For this phase, start with `phase: 'world'` so you skip the welcome screen that does not exist yet.
+- [x] Unit test `focus`, `back` and `visited`.
 
 ### 7. Camera rig
 
-- [ ] Replace OrbitControls with `src/camera/CameraRig.tsx` from [Architecture](architecture.md#camera-system).
-- [ ] Limit distance and angles so the visitor cannot look under the cloud floor or zoom out into nothing.
-- [ ] On desktop shift the focused island left with `setFocalOffset`, so the panel does not cover it. Reset the offset on Back.
-- [ ] In focus mode, limit zoom to a small range around the island.
-- [ ] Tune `smoothTime` until the flight feels calm, about 1.2 to 1.6 seconds.
+- [x] Replace OrbitControls with `src/camera/CameraRig.tsx` from [Architecture](architecture.md#camera-system).
+- [x] Limit distance and angles so the visitor cannot look under the cloud floor or zoom out into nothing.
+- [x] On desktop shift the focused island left with `setFocalOffset`, so the panel does not cover it. Reset the offset on Back.
+- [x] In focus mode, limit zoom to a small range around the island.
+- [x] Tune `smoothTime` until the flight feels calm, about 1.2 to 1.6 seconds.
 
 ### 8. Island panel
 
-- [ ] Create `src/ui/IslandPanel.tsx`. It reads the focused chapter from `cv.ts` and renders:
+- [x] Create `src/ui/IslandPanel.tsx`. It reads the focused chapter from `cv.ts` and renders:
   - role, company, dates, employment type and location
   - one-line summary
   - every achievement: short title in bold, full text below
@@ -162,59 +162,59 @@ export function Island({ layout, children }: { layout: IslandLayout; children?: 
   - links
   - Previous and Next island buttons in timeline order
   - a Back button
-- [ ] Slide it in from the right with `motion`. On screens narrower than 768 pixels, make it a bottom sheet that covers about half the screen and can be dragged taller.
-- [ ] Make it an accessible dialog: `role="dialog"`, `aria-labelledby` pointing at the title, focus moves to the title on open, Esc closes it.
-- [ ] Do not trap focus completely. Visitors should still reach the top bar.
+- [x] Slide it in from the right with `motion`. On screens narrower than 768 pixels, make it a bottom sheet that covers about half the screen and can be dragged taller.
+- [x] Make it an accessible dialog: `role="dialog"`, `aria-labelledby` pointing at the title, focus moves to the title on open, Esc closes it.
+- [x] Do not trap focus completely. Visitors should still reach the top bar.
 
 ### 9. Home island panel
 
-- [ ] The Home panel is different: summary, skills grouped as in the CV, education, languages and contacts.
-- [ ] Add a "Copy email" button that copies the address and shows a short "Copied" message.
+- [x] The Home panel is different: summary, skills grouped as in the CV, education, languages and contacts.
+- [x] Add a "Copy email" button that copies the address and shows a short "Copied" message.
 
 ### 10. Top bar and island menu
 
-- [ ] Create `src/ui/TopBar.tsx` with the name, an "Islands" menu button, "Classic CV", "Download PDF" and a sound toggle placeholder.
-- [ ] The Islands menu lists all chapters in timeline order. Choosing one focuses it. This is the fastest route for recruiters and for keyboard users.
+- [x] Create `src/ui/TopBar.tsx` with the name, an "Islands" menu button, "Classic CV" and "Download PDF". The sound toggle comes with sound in Phase 3.
+- [x] The Islands menu lists all chapters in timeline order. Choosing one focuses it. This is the fastest route for recruiters and for keyboard users.
 
 ### 11. Keyboard navigation
 
-- [ ] Tab moves through the top bar and the island labels.
-- [ ] Enter or Space on a label focuses that island.
-- [ ] Left and Right arrows move to the previous or next island while one is focused.
-- [ ] Esc goes back to the overview.
-- [ ] Every focusable element has a visible focus ring in the `accent-gold` colour.
+- [x] Tab moves through the top bar and the island labels.
+- [x] Enter or Space on a label focuses that island.
+- [x] Left and Right arrows move to the previous or next island while one is focused.
+- [x] Esc goes back to the overview.
+- [x] Every focusable element has a visible focus ring in the `accent-gold` colour.
 
 ### 12. Routing
 
-- [ ] Implement `src/routing/hash.ts` and `useHashSync` from [Architecture](architecture.md#routing).
-- [ ] Check that opening `#/radio` directly focuses Radio Tower, and that browser Back returns to the overview.
+- [x] Implement `src/routing/hash.ts` and `useHashSync` from [Architecture](architecture.md#routing).
+- [x] Check that opening `#/radio` directly focuses Radio Tower, and that browser Back returns to the overview.
 
 ### 13. Classic CV
 
-- [ ] Create `src/ui/ClassicCV.tsx`, rendered at `#/cv`, built only from `cv.ts`.
-- [ ] Reuse the layout and print styles from `reference/Renat_Kalimulin_CV.html`, so printing still gives a clean A4 page.
-- [ ] Add "Back to the sky" and "Download PDF" buttons.
-- [ ] Put `cv.pdf` in `public/`. Export it from the classic CV page with the browser's Save as PDF.
+- [x] Create `src/ui/ClassicCV.tsx`, rendered at `#/cv`, built only from `cv.ts`.
+- [x] Reuse the layout and print styles from `reference/Renat_Kalimulin_CV.html`, so printing still gives a clean A4 page.
+- [x] Add "Back to the sky" and "Download PDF" buttons.
+- [x] Put `cv.pdf` in `public/`. Export it from the classic CV page with the browser's Save as PDF.
 
 ### 14. WebGL fallback
 
-- [ ] Create `useWebGLSupport()`: try `canvas.getContext('webgl2')`, and if it returns null show the classic CV with a short note.
+- [x] Create `useWebGLSupport()`: try `canvas.getContext('webgl2')`, and if it returns null show the classic CV with a short note.
 
 ### 15. Deploy and share
 
-- [ ] Deploy, open it on a phone, and send the address to one friend for honest feedback.
+- [ ] Deploy, open it on a phone, and send the address to one friend for honest feedback. Waiting for Vercel.
 
 ---
 
 ## Acceptance criteria
 
-- [ ] Every line of the CV can be reached by clicking islands or through the Islands menu.
-- [ ] Camera flights are smooth and never pass through an island.
-- [ ] `#/radio` and `#/cv` work when opened directly, and browser Back works.
-- [ ] The whole CV is usable with a keyboard only.
-- [ ] On a phone, the bottom sheet is readable and the island stays visible above it.
-- [ ] Without WebGL, the classic CV appears.
-- [ ] Data, store and routing tests pass.
+- [x] Every line of the CV can be reached by clicking islands or through the Islands menu.
+- [ ] Camera flights are smooth and never pass through an island. Smooth in tests; check the flights between neighbouring islands by eye on a real GPU.
+- [x] `#/radio` and `#/cv` work when opened directly, and browser Back works.
+- [x] The whole CV is usable with a keyboard only.
+- [x] On a phone, the bottom sheet is readable and the island stays visible above it.
+- [x] Without WebGL, the classic CV appears.
+- [x] Data, store and routing tests pass.
 
 ## Pitfalls
 
@@ -223,3 +223,16 @@ export function Island({ layout, children }: { layout: IslandLayout; children?: 
 - **Html labels are expensive in large numbers.** Seven is fine. Do not use `Html` for every small object later.
 - **Html labels show through islands.** Use `occlude` only if needed, because it costs a raycast per frame. Hiding non-focused labels usually solves it.
 - **Store and hash loop forever.** Compare before writing in both directions.
+
+---
+
+## Progress notes
+
+- **Labels.** drei `Html` was replaced by plain DOM buttons positioned by `LabelProjector`. No extra React roots, normal tab order, and long names use `shortName` (Monetech, Kafka UI).
+- **Camera.** On tall screens the camera backs off by up to 2.2 times, so phones see whole islands. On phones the vertical focal offset is positive: it lifts the island above the bottom sheet. A negative value pushed it under the sheet.
+- **Bottom sheet.** It has a handle that toggles between half and full height. Dragging can come in Phase 7.
+- **Routing.** The store-to-address effect reads the live store value. Reading the rendered value overwrote deep links on first load.
+- **PDF.** `npm run pdf` builds the site and prints `#/cv` to `public/cv.pdf` (2 A4 pages). Run it after every CV change.
+- **Photo.** The reference CV links a photo that is not in the repo. Put one in `public/` and set `profile.photo` to show it on the classic page.
+- **Tests.** 28 unit tests and 14 browser tests, covering labels, Esc and focus return, deep links and Back, the Islands menu, keyboard only, the classic CV and PDF, and the no-WebGL fallback. Browser tests run one at a time, because CPU-rendered 3D pages starved each other in parallel.
+- **Phone overview.** All islands are visible, but the outermost labels are cut at the screen edges. Phase 7 handles phone framing.

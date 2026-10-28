@@ -24,7 +24,7 @@ Read the first three once. Then work through the phases in order.
 | --- | ---------------------------------------------------------------------------------- | ------------ | -------------------------------------------------------------- | ------------------------------- |
 | 0   | [Setup](docs/plan/phase-0-setup.md)                                                | 1 day        | A rotating toon cube, auto-deployed                            | In progress, waiting for Vercel |
 | 1   | [Sky world](docs/plan/phase-1-sky-world.md)                                        | 2 to 3 days  | A painted sky with layered clouds                              | Built, check FPS on your GPU    |
-| 2   | [Islands and navigation](docs/plan/phase-2-islands-navigation.md)                  | 4 to 5 days  | The complete CV on placeholder islands, classic CV, deep links | Not started                     |
+| 2   | [Islands and navigation](docs/plan/phase-2-islands-navigation.md)                  | 4 to 5 days  | The complete CV on placeholder islands, classic CV, deep links | Built, waiting for Vercel       |
 | 3   | [Welcome and fly-in](docs/plan/phase-3-welcome-flyin.md)                           | 2 days       | Welcome screen, cloud dive, sound                              | Not started                     |
 | 4   | [Island art](docs/plan/phase-4-island-art.md)                                      | 1 to 3 weeks | Every island with its own look                                 | Not started                     |
 | 5   | [Interactive objects](docs/plan/phase-5-interactive-objects.md)                    | 1 to 2 weeks | One animated object per achievement                            | Not started                     |

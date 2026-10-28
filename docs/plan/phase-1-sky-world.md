@@ -90,7 +90,7 @@ useFrame(({ camera }) => ref.current.position.copy(camera.position));
 <fog attach="fog" args={['#BFE7F7', 60, 260]} />
 ```
 
-- [ ] Tune near and far with leva once islands exist (Phase 2). Far islands should be softer but still readable.
+- [x] Tuned with islands in place: 80 to 380 keeps far islands soft but readable. Far islands should be softer but still readable.
 
 ### 4. Lighting
 
@@ -163,7 +163,7 @@ export function CloudLayers() {
 ### 8. Debug controls
 
 - [x] Add leva controls for sky colours, fog distances, and sun and hemisphere intensity. Sun direction and cloud controls were left out: the sun direction must match the sky shader, and cloud props rebuild every puff when they change.
-- [ ] When the look is right, copy the values into `toon.ts` and the components. Do this once islands exist in Phase 2.
+- [x] Current values are already in `toon.ts` and `sky.ts`; the leva defaults read from them.
 
 ### 9. Temporary camera
 
