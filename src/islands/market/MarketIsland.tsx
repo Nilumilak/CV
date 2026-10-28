@@ -47,8 +47,8 @@ const SPOTS = {
   fountain: [0, 0],
   houses: view(-1.9, -3.3),
   bank: view(1.6, -3.3),
-  crane: view(3.8, -1.0),
-  balloon: view(-3.9, -0.8),
+  crane: view(-3.9, -0.8),
+  balloon: view(3.8, -1.0),
   signpost: view(-2.6, 2.8),
   shack: view(2.6, 2.8),
   housesFront: view(-0.7, -2.3),
@@ -102,8 +102,7 @@ export function MarketIsland() {
       <Bunting from={above('housesFront', 3)} to={above('bank', BANK_HEIGHT * 0.62)} flags={6} />
       <Bunting from={above('bank', BANK_HEIGHT * 0.62)} to={above('pole', POLE_HEIGHT)} />
 
-      {/* Turned around so its arm reaches out over the right edge, not across the square. */}
-      <group position={at('crane')} rotation-y={deg(FACE_CAMERA + 180)}>
+      <group position={at('crane')} rotation-y={deg(FACE_CAMERA)}>
         <Interactable {...interactive('mone-packages')}>
           <Wobble id="mone-packages" angle={0.03} shakes={2}>
             <GeneratedModel url={craneUrl} height={4} />
