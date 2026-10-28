@@ -115,6 +115,8 @@ The interactive objects listed here are only modelled in this phase. They get th
 
 ### Radio Tower · Radio Gigabit
 
+Full design description: [islands/radio.md](islands/radio.md) (draft for review).
+
 - **Base:** rocky island with grass patches and ferns, like reference 1.
 - **Landmark:** tall lattice antenna tower with a blinking yellow beacon on top.
 - **Objects to model:** satellite dish on a turntable, bunker lab with a yellow door, outdoor test rack with LED rows, terminal screen on a post, small helper robot, stack of shipping containers.
