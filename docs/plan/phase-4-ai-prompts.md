@@ -409,17 +409,17 @@ Full design description and decisions: [islands/market.md](islands/market.md).
 
 A sunny hilltop market square: a domed bank with stacked houses behind it, a coin fountain, a little tram, a signpost, a hot-air balloon, a toy crane and an old shack beside a glass building. Every prompt asks for a three-quarter view (volume rule), and the base asks for grass right up to the edge (lesson from Radio).
 
-| #   | File name         | Object                            | Budget           | Interactive           | Status |
-| --- | ----------------- | --------------------------------- | ---------------- | --------------------- | ------ |
-| 1   | `island-base.glb` | Island with a cobbled square      | 15,000 triangles | No                    | To do  |
-| 2   | `bank.glb`        | Domed bank                        | 6,000            | No (landmark)         | To do  |
-| 3   | `houses.glb`      | Cluster of stacked town houses    | 6,000            | No                    | To do  |
-| 4   | `fountain.glb`    | Round coin fountain               | 3,000            | Yes: PDL app          | To do  |
-| 5   | `shack-glass.glb` | Old shack beside a glass building | 4,000            | Yes: Next.js move     | To do  |
-| 6   | `tram.glb`        | One small tram car                | 3,000            | Yes: BNPL flows       | To do  |
-| 7   | `signpost.glb`    | Signpost with 6 arms              | 2,000            | Yes: account areas    | To do  |
-| 8   | `balloon.glb`     | Hot-air balloon with basket       | 3,000            | Yes: FSD and releases | To do  |
-| 9   | `crane.glb`       | Small toy-like tower crane        | 3,000            | Yes: shared packages  | To do  |
+| #   | File name         | Object                            | Budget           | Interactive           | Status   |
+| --- | ----------------- | --------------------------------- | ---------------- | --------------------- | -------- |
+| 1   | `island-base.glb` | Island with a cobbled square      | 15,000 triangles | No                    | **Done** |
+| 2   | `bank.glb`        | Domed bank                        | 6,000            | No (landmark)         | **Done** |
+| 3   | `houses.glb`      | Cluster of stacked town houses    | 6,000            | No                    | **Done** |
+| 4   | `fountain.glb`    | Round coin fountain               | 3,000            | Yes: PDL app          | **Done** |
+| 5   | `shack-glass.glb` | Old shack beside a glass building | 4,000            | Yes: Next.js move     | **Done** |
+| 6   | `tram.glb`        | One small tram car                | 3,000            | Yes: BNPL flows       | **Done** |
+| 7   | `signpost.glb`    | Signpost with 6 arms              | 2,000            | Yes: account areas    | **Done** |
+| 8   | `balloon.glb`     | Hot-air balloon with basket       | 3,000            | Yes: FSD and releases | **Done** |
+| 9   | `crane.glb`       | Small toy-like tower crane        | 3,000            | Yes: shared packages  | **Done** |
 
 ### 1. Island base
 
