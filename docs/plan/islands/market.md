@@ -61,15 +61,15 @@ Market sits on the right of the world (`[30, 5, -8]`). From the overview it must
                      front (towards the camera)
 ```
 
-| Object                 | Across, towards | Size     | Notes                                      |
-| ---------------------- | --------------- | -------- | ------------------------------------------ |
-| Fountain and tram loop | island centre   | 1.6 wide | Tram loop 1.4 m from the fountain's centre |
-| Stacked houses         | −1.9, −3.3      | 4.2 tall | Back left                                  |
-| Domed bank             | 1.6, −3.3       | 3.6 tall | Back right of the houses; landmark         |
-| Crane                  | −3.9, −0.8      | 4 tall   | Left side                                  |
-| Balloon                | −3.9, −0.8      | 3.2 tall | Left side, floating a little above its pad |
-| Signpost               | −2.6, 2.8       | 2 tall   | Front left                                 |
-| Shack and glass        | 2.6, 2.8        | 2.2 long | Front right                                |
+| Object                 | Across, towards | Size     | Notes                                       |
+| ---------------------- | --------------- | -------- | ------------------------------------------- |
+| Fountain and tram loop | island centre   | 1.6 wide | Tram loop 1.4 m from the fountain's centre  |
+| Stacked houses         | −1.9, −3.3      | 4.2 tall | Back left                                   |
+| Domed bank             | 1.6, −3.3       | 3.6 tall | Back right of the houses; landmark          |
+| Crane                  | −3.9, −0.8      | 4 tall   | Left side                                   |
+| Balloon                | 3.8, −1.0       | 3.2 tall | Right side, floating a little above its pad |
+| Signpost               | −2.6, 2.8       | 2 tall   | Front left                                  |
+| Shack and glass        | 2.6, 2.8        | 2.2 long | Front right                                 |
 
 ---
 
