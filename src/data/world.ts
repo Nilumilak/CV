@@ -11,7 +11,7 @@ export const OVERVIEW: { position: Vec3; target: Vec3 } = {
 };
 
 const islandCamera = (target: Vec3): IslandLayout['camera'] => ({
-  position: [target[0] + 8, target[1] + 6, target[2] + 14],
+  position: [target[0] + 10, target[1] + 7, target[2] + 18],
   target,
 });
 

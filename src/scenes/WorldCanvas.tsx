@@ -1,11 +1,12 @@
 import { Suspense, lazy } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
 import { Leva } from 'leva';
+import { CameraRig } from '@/camera/CameraRig';
 import { OVERVIEW } from '@/data/world';
 import { debugCamera, isDebug } from '@/debug/isDebug';
 import { useWorldControls } from '@/debug/useWorldControls';
 import { Islands } from '@/islands/Islands';
+import { useWorld } from '@/store/useWorld';
 import { CloudLayers } from '@/world/CloudLayers';
 import { Lighting } from '@/world/Lighting';
 import { Route } from '@/world/Route';
@@ -29,6 +30,8 @@ export default function WorldCanvas() {
         }}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         aria-hidden
+        // Clicking empty sky returns to the overview.
+        onPointerMissed={() => useWorld.getState().back()}
       >
         <fog attach="fog" args={[c.horizon, c.fogNear, c.fogFar]} />
         <SkyDome top={c.top} horizon={c.horizon} bottom={c.bottom} exponent={c.exponent} />
@@ -38,7 +41,7 @@ export default function WorldCanvas() {
         </Suspense>
         <Islands />
         <Route />
-        <OrbitControls target={debugCamera.target ?? OVERVIEW.target} maxDistance={300} />
+        <CameraRig />
         {isDebug && (
           <Suspense fallback={null}>
             <Debug />
