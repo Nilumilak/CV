@@ -2,13 +2,14 @@
 //   Models:   meshopt-compressed geometry, WebP textures (1024 px, or 512 for small props).
 //   Textures: resized WebP.
 // Flat models (paper-thin image-to-3D results) are refused; see model-shape.mjs.
-// Models with a `grade` get their texture colour-corrected first; see art-grade.mjs.
+// Models with a `grade` get their texture colour-corrected first, and island bases with
+// `grassTop` get bare grey patches on their top repainted as grass; see art-grade.mjs.
 // Usage: npm run art
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, statSync } from 'node:fs';
 import { dirname } from 'node:path';
 import sharp from 'sharp';
-import { GRADES, gradeModel } from './art-grade.mjs';
+import { GRADES, gradeModel, grassTopModel } from './art-grade.mjs';
 import { checkModelShape } from './model-shape.mjs';
 
 /** Only approved art is listed here. Source paths are relative to art-source/. */
@@ -28,7 +29,13 @@ const MODELS = [
   // flower-bush: postponed, every try so far came out flat (docs/plan/islands/home.md).
 
   // Radio Tower island
-  { from: 'radio/island-base.glb', to: 'models/radio/island-base.glb', texture: 1024 },
+  // grassTop: the generated top had bare grey strips along its rim.
+  {
+    from: 'radio/island-base.glb',
+    to: 'models/radio/island-base.glb',
+    texture: 1024,
+    grassTop: true,
+  },
   { from: 'radio/tower.glb', to: 'models/radio/tower.glb', texture: 1024 },
   { from: 'radio/bunker.glb', to: 'models/radio/bunker.glb', texture: 1024 },
   { from: 'radio/dish.glb', to: 'models/radio/dish.glb', texture: 512 },
@@ -64,10 +71,11 @@ for (const m of MODELS) {
   }
   // Graded copies go next to the raw art (also ignored by git), never over it.
   let input = src(m.from);
-  if (m.grade) {
+  if (m.grade || m.grassTop) {
     input = src(`.graded/${m.from}`);
     mkdirSync(dirname(input), { recursive: true });
-    await gradeModel(src(m.from), input, GRADES[m.grade]);
+    if (m.grassTop) await grassTopModel(src(m.from), input);
+    if (m.grade) await gradeModel(m.grassTop ? input : src(m.from), input, GRADES[m.grade]);
   }
   mkdirSync(dirname(out(m.to)), { recursive: true });
   execFileSync(

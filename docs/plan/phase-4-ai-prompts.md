@@ -332,6 +332,8 @@ short grass with a few patches of bare rock showing through, so buildings can st
 than it is tall.
 ```
 
+**Lesson for the next islands:** the "patches of bare rock" above came out as grey strips all along the rim, which looked like gaps. `npm run art` now repaints them as grass (`grassTop: true` in `scripts/optimize-art.mjs`). For future bases, ask for "the whole top evenly covered in grass right up to the edge, no bare patches" instead, and add rocks as separate models where wanted.
+
 ### 2. Radio tower
 
 ```

@@ -34,6 +34,138 @@ export async function gradeModel(input, output, grade) {
   await io.write(output, document);
 }
 
+/**
+ * Island bases: repaints bare grey patches on the grass top in the island's own grass
+ * colour. Only texture areas used by upward-facing triangles near the top are touched,
+ * so the grey cliffs underneath stay rock. Each pixel keeps its own lightness variation,
+ * so the brush strokes survive.
+ */
+export async function grassTopModel(input, output) {
+  const io = new NodeIO().registerExtensions(ALL_EXTENSIONS);
+  const document = await io.read(input);
+  for (const mesh of document.getRoot().listMeshes()) {
+    for (const prim of mesh.listPrimitives()) {
+      const texture = prim.getMaterial()?.getBaseColorTexture();
+      if (!texture) continue;
+      const image = await sharp(texture.getImage())
+        .ensureAlpha()
+        .raw()
+        .toBuffer({ resolveWithObject: true });
+      const topPixels = upwardPixels(prim, image.info.width, image.info.height);
+      repaintGrey(image.data, topPixels);
+      texture
+        .setImage(await sharp(image.data, { raw: image.info }).png().toBuffer())
+        .setMimeType('image/png');
+    }
+  }
+  await io.write(output, document);
+}
+
+/** Faces whose normal points up at least this much count as the grass top. */
+const UP = 0.55;
+/** ...and whose centre is within this share of the model's height from the top. */
+const TOP_BAND = 0.2;
+
+/** Indices of texture pixels covered by upward-facing triangles near the top. */
+function upwardPixels(prim, width, height) {
+  const pos = prim.getAttribute('POSITION');
+  const uv = prim.getAttribute('TEXCOORD_0');
+  const idx = prim.getIndices();
+  const min = pos.getMinNormalized([]);
+  const max = pos.getMaxNormalized([]);
+  const topLimit = max[1] - (max[1] - min[1]) * TOP_BAND;
+  const covered = new Set();
+  const a = [],
+    b = [],
+    c = [],
+    ta = [],
+    tb = [],
+    tc = [];
+
+  for (let i = 0; i < idx.getCount(); i += 3) {
+    const [ia, ib, ic] = [idx.getScalar(i), idx.getScalar(i + 1), idx.getScalar(i + 2)];
+    pos.getElement(ia, a);
+    pos.getElement(ib, b);
+    pos.getElement(ic, c);
+    if ((a[1] + b[1] + c[1]) / 3 < topLimit) continue;
+    // Face normal from the winding: cross(b - a, c - a), normalised; keep its y.
+    const ux = b[0] - a[0],
+      uy = b[1] - a[1],
+      uz = b[2] - a[2];
+    const vx = c[0] - a[0],
+      vy = c[1] - a[1],
+      vz = c[2] - a[2];
+    const nx = uy * vz - uz * vy,
+      ny = uz * vx - ux * vz,
+      nz = ux * vy - uy * vx;
+    if (ny / (Math.hypot(nx, ny, nz) || 1) < UP) continue;
+
+    uv.getElement(ia, ta);
+    uv.getElement(ib, tb);
+    uv.getElement(ic, tc);
+    rasterize(ta, tb, tc, width, height, (p) => covered.add(p));
+  }
+  return covered;
+}
+
+/** Calls `put` for every pixel inside a UV triangle (glTF UVs: origin top left). */
+function rasterize(ta, tb, tc, width, height, put) {
+  const pts = [ta, tb, tc].map(([u, v]) => [u * width, v * height]);
+  const xs = pts.map((p) => p[0]),
+    ys = pts.map((p) => p[1]);
+  const x0 = Math.max(0, Math.floor(Math.min(...xs))),
+    x1 = Math.min(width - 1, Math.ceil(Math.max(...xs)));
+  const y0 = Math.max(0, Math.floor(Math.min(...ys))),
+    y1 = Math.min(height - 1, Math.ceil(Math.max(...ys)));
+  const [[ax, ay], [bx, by], [cx, cy]] = pts;
+  const area = (bx - ax) * (cy - ay) - (cx - ax) * (by - ay);
+  if (Math.abs(area) < 1e-9) return;
+  for (let y = y0; y <= y1; y++) {
+    for (let x = x0; x <= x1; x++) {
+      const px = x + 0.5,
+        py = y + 0.5;
+      const w0 = ((bx - px) * (cy - py) - (cx - px) * (by - py)) / area;
+      const w1 = ((cx - px) * (ay - py) - (ax - px) * (cy - py)) / area;
+      const w2 = 1 - w0 - w1;
+      // A little slack, so pixels on shared edges are included.
+      if (w0 >= -0.02 && w1 >= -0.02 && w2 >= -0.02) put(y * width + x);
+    }
+  }
+}
+
+/** Repaints greyish pixels among `pixels` with the average grass colour found among them. */
+function repaintGrey(data, pixels) {
+  // The island's own grass colour: average of clearly green pixels on the top.
+  let gh = 0,
+    gs = 0,
+    gl = 0,
+    n = 0;
+  for (const p of pixels) {
+    const [h, s, l] = rgbToHsl(data[p * 4], data[p * 4 + 1], data[p * 4 + 2]);
+    if (h > 60 && h < 150 && s > 0.25) {
+      gh += h;
+      gs += s;
+      gl += l;
+      n++;
+    }
+  }
+  if (!n) return;
+  [gh, gs, gl] = [gh / n, gs / n, gl / n];
+
+  for (const p of pixels) {
+    const [h, s, l] = rgbToHsl(data[p * 4], data[p * 4 + 1], data[p * 4 + 2]);
+    // Grey or sandy-grey: low saturation, or a warm low-saturation stone colour.
+    const grey = s < 0.22 || (s < 0.35 && (h < 50 || h > 180));
+    if (!grey) continue;
+    // Keep the pixel's light/dark variation around the grass average.
+    const nl = Math.min(0.85, Math.max(0.12, gl + (l - 0.55) * 0.6));
+    const [r, g, b] = hslToRgb(gh, gs, nl);
+    data[p * 4] = r;
+    data[p * 4 + 1] = g;
+    data[p * 4 + 2] = b;
+  }
+}
+
 /** Grades an encoded image (PNG, JPEG, WebP) and returns it as PNG. */
 export async function gradeImage(input, grade) {
   const { data, info } = await sharp(input)
