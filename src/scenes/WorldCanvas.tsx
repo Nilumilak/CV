@@ -8,6 +8,7 @@ import { useWorldControls } from '@/debug/useWorldControls';
 import { Islands } from '@/islands/Islands';
 import { CloudLayers } from '@/world/CloudLayers';
 import { Lighting } from '@/world/Lighting';
+import { Route } from '@/world/Route';
 import { SkyDome } from '@/world/SkyDome';
 
 const Debug = lazy(() => import('@/debug/Debug'));
@@ -36,6 +37,7 @@ export default function WorldCanvas() {
           <CloudLayers />
         </Suspense>
         <Islands />
+        <Route />
         <OrbitControls target={debugCamera.target ?? OVERVIEW.target} maxDistance={300} />
         {isDebug && (
           <Suspense fallback={null}>

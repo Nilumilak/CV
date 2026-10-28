@@ -11,12 +11,10 @@ interface IslandProps {
   layout: IslandLayout;
   /** Real island art (Phase 4). Falls back to the placeholder. */
   children?: ReactNode;
-  /** Rendered outside the bobbing group so it does not wobble. */
-  label?: ReactNode;
 }
 
 /** Positions an island, makes it bob, and handles hover and click to focus. */
-export function Island({ layout, children, label }: IslandProps) {
+export function Island({ layout, children }: IslandProps) {
   const [hovered, setHovered] = useState(false);
   const isFocused = useWorld((s) => s.focused === layout.id);
   const focus = useWorld((s) => s.focus);
@@ -47,7 +45,6 @@ export function Island({ layout, children, label }: IslandProps) {
           {children ?? <PlaceholderIsland id={layout.id} seed={layout.seed} />}
         </group>
       </Float>
-      {label}
     </group>
   );
 }

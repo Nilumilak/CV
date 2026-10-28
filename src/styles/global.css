@@ -5,6 +5,8 @@
   --ink: #2b2422;
   --accent-gold: #f3c25b;
   --outline: #3a2e2a;
+  --font-display: Fredoka, Nunito, system-ui, sans-serif;
+  --font-body: Nunito, system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
 *,
@@ -30,4 +32,21 @@ body {
     -apple-system,
     'Segoe UI',
     sans-serif;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

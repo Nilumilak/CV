@@ -21,7 +21,7 @@ export const ISLANDS: IslandLayout[] = [
     position: [0, 0, 16],
     scale: 1.2,
     seed: 1,
-    labelOffset: [0, 7, 0],
+    labelOffset: [0, 5.2, 0],
     camera: islandCamera([0, 1, 16]),
     accent: '#E08A3C',
   },
@@ -72,11 +72,11 @@ export const ISLANDS: IslandLayout[] = [
   },
   {
     id: 'lighthouse',
-    position: [-22, -6, 14],
+    position: [-19, -6, 13],
     scale: 0.6,
     seed: 7,
     labelOffset: [0, 6, 0],
-    camera: islandCamera([-22, -5, 14]),
+    camera: islandCamera([-19, -5, 13]),
     accent: '#D94B4B',
   },
 ];

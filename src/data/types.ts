@@ -32,6 +32,8 @@ export interface Chapter {
   id: Exclude<IslandId, 'home'>;
   kind: 'job' | 'open-source';
   company: string;
+  /** Shorter name for labels and menus when company is long. */
+  shortName?: string;
   role: string;
   /** 'YYYY-MM' */
   start: string;

@@ -7,6 +7,8 @@ export default defineConfig({
   testDir: './tests/e2e',
   globalSetup: './tests/e2e/global-setup.ts',
   reporter: process.env.CI ? 'github' : 'list',
+  // Software WebGL on a busy machine can be slow; give visibility checks room.
+  expect: { timeout: 15_000 },
   use: {
     baseURL: `http://127.0.0.1:${E2E_PORT}`,
     // Software WebGL so tests also run on CI machines without a GPU.
