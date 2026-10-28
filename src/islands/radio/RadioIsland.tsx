@@ -60,6 +60,12 @@ const SPOTS = {
   rocks1: view(-4, 0),
   rocks2: view(4, 0),
   rocks3: view(-0.9, 3.8),
+  // Along the right and back rims, covering the base's bare grey patches there.
+  rocks4: view(4.4, 1.6),
+  rocks5: view(4.3, -1.5),
+  rocks6: view(3.4, -3.3),
+  rocks7: view(1.3, -4.3),
+  rocks8: view(-1.4, -4.3),
 } satisfies Record<string, [number, number]>;
 
 /** Turn that makes a model's front (+Z) face the focus camera. */
@@ -67,10 +73,18 @@ const FACE_CAMERA = 54;
 
 const TOWER_HEIGHT = 9;
 
+/** How far a rock is sunk into the ground, as a share of its size. */
+const ROCK_SINK = 0.12;
+
 const ROCKS = [
   { spot: 'rocks1', size: 1.6, turn: 20 },
   { spot: 'rocks2', size: 1.3, turn: 140 },
   { spot: 'rocks3', size: 1.1, turn: 260 },
+  { spot: 'rocks4', size: 1.5, turn: 80 },
+  { spot: 'rocks5', size: 1.8, turn: 200 },
+  { spot: 'rocks6', size: 1.4, turn: 310 },
+  { spot: 'rocks7', size: 1.7, turn: 45 },
+  { spot: 'rocks8', size: 1.3, turn: 170 },
 ] as const;
 
 /**
@@ -145,15 +159,19 @@ export function RadioIsland() {
         <CheckMarkPop id="radio-backend" position={[0, 2.3, 0]} />
       </group>
 
-      {ROCKS.map((r) => (
-        <GeneratedModel
-          key={r.spot}
-          url={rockUrl}
-          length={r.size}
-          position={at(r.spot)}
-          rotation-y={deg(r.turn)}
-        />
-      ))}
+      {ROCKS.map((r) => {
+        const [x, ground, z] = at(r.spot);
+        return (
+          <GeneratedModel
+            key={r.spot}
+            url={rockUrl}
+            length={r.size}
+            // Sunk a little, so rocks on the uneven rim never show a gap underneath.
+            position={[x, ground - ROCK_SINK * r.size, z]}
+            rotation-y={deg(r.turn)}
+          />
+        );
+      })}
     </group>
   );
 }
