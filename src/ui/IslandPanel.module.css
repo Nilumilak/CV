@@ -312,7 +312,8 @@
   border-radius: 10px;
 }
 
-.homeSection[data-flash] {
+.homeSection[data-flash],
+.achievement[data-flash] {
   animation: section-flash 1.4s ease-out;
 }
 
@@ -360,4 +361,15 @@
   border-color: var(--accent-gold);
   background: rgb(243 194 91 / 22%);
   color: var(--ink);
+}
+
+.achievementHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.achievementHead .showMe {
+  margin-top: 0;
 }

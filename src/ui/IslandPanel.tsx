@@ -2,8 +2,9 @@ import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 
 import { motion, useReducedMotion } from 'motion/react';
 import { profile } from '@/data/cv';
 import { objectForSection, type HomeSection } from '@/data/homeObjects';
+import { objectForAchievement } from '@/data/islandObjects';
 import { chapterOf, datesOf, neighbours } from '@/data/navigation';
-import type { Chapter, IslandId } from '@/data/types';
+import type { Achievement, Chapter, IslandId } from '@/data/types';
 import { layoutOf } from '@/data/world';
 import { useWorld } from '@/store/useWorld';
 import { IslandIcon } from './IslandIcon';
@@ -170,10 +171,7 @@ function ChapterBody({ chapter }: { chapter: Chapter }) {
       <h3 className={styles.sectionTitle}>Highlights</h3>
       <ul className={styles.achievements}>
         {chapter.achievements.map((a) => (
-          <li key={a.id} className={styles.achievement} data-achievement={a.id}>
-            <strong>{a.title}</strong>
-            <p>{a.text}</p>
-          </li>
+          <AchievementItem key={a.id} achievement={a} />
         ))}
       </ul>
 
@@ -306,32 +304,61 @@ function HomeSectionBlock({
   children: ReactNode;
 }) {
   const object = objectForSection(section);
-  const activate = useWorld((s) => s.activateObject);
-  const setHint = useWorld((s) => s.setHint);
-  const hint = () => setHint(object.id);
-  const unhint = () => setHint(null);
-
   return (
-    <section
-      className={styles.homeSection}
-      data-object={object.id}
-      onMouseEnter={hint}
-      onMouseLeave={unhint}
-      onFocus={hint}
-      onBlur={unhint}
-    >
+    <section className={styles.homeSection} {...useObjectLink(object.id)}>
       <div className={styles.sectionHead}>
         <h3 className={styles.sectionTitle}>{title}</h3>
-        <button
-          type="button"
-          className={styles.showMe}
-          onClick={() => activate(object.id)}
-          aria-label={`Show me ${object.name}`}
-        >
-          Show me
-        </button>
+        <ShowMe id={object.id} name={object.name} />
       </div>
       {children}
     </section>
+  );
+}
+
+/** One achievement, linked to its object on the island when there is one. */
+function AchievementItem({ achievement }: { achievement: Achievement }) {
+  const object = objectForAchievement(achievement.id);
+  const link = useObjectLink(object?.id ?? null);
+  return (
+    <li className={styles.achievement} data-achievement={achievement.id} {...link}>
+      <div className={styles.achievementHead}>
+        <strong>{achievement.title}</strong>
+        {object && <ShowMe id={object.id} name={object.name} />}
+      </div>
+      <p>{achievement.text}</p>
+    </li>
+  );
+}
+
+/**
+ * Links a panel block to an object on the island: hovering or focusing the block makes
+ * the object glow, and `data-object` lets an activation scroll to and flash the block.
+ */
+function useObjectLink(id: string | null) {
+  const setHint = useWorld((s) => s.setHint);
+  if (!id) return {};
+  const hint = () => setHint(id);
+  const unhint = () => setHint(null);
+  return {
+    'data-object': id,
+    onMouseEnter: hint,
+    onMouseLeave: unhint,
+    onFocus: hint,
+    onBlur: unhint,
+  };
+}
+
+/** Plays the object's reaction: the keyboard path to what a click on the island does. */
+function ShowMe({ id, name }: { id: string; name: string }) {
+  const activate = useWorld((s) => s.activateObject);
+  return (
+    <button
+      type="button"
+      className={styles.showMe}
+      onClick={() => activate(id)}
+      aria-label={`Show me ${name}`}
+    >
+      Show me
+    </button>
   );
 }

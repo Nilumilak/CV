@@ -110,7 +110,7 @@ function rampTo(param: AudioParam, value: number, seconds: number) {
 }
 
 /** Short, soft reaction sounds for interactive objects. All under a second. */
-export type SoundCue = 'mrrp' | 'chime' | 'paper' | 'knock' | 'whirr';
+export type SoundCue = 'mrrp' | 'chime' | 'paper' | 'knock' | 'whirr' | 'beep' | 'hum' | 'click';
 
 /** One oscillator with a gliding pitch and a quick attack, exponential fade. */
 function voice(
@@ -273,6 +273,37 @@ const CUES: Record<SoundCue, (ac: AudioContext, t: number) => void> = {
       ],
       0.07,
       0.9,
+    ),
+  // Two friendly robot blips, the second higher.
+  beep: (ac, t) => {
+    voice(ac, t, 'square', [[0, 880]], 0.04, 0.09);
+    voice(ac, t + 0.11, 'square', [[0, 1320]], 0.04, 0.12);
+  },
+  // A low electric hum swelling and fading, like a lab switching on.
+  hum: (ac, t) =>
+    voice(
+      ac,
+      t,
+      'sine',
+      [
+        [0, 110],
+        [0.6, 120],
+      ],
+      0.12,
+      0.9,
+    ),
+  // A soft switch click.
+  click: (ac, t) =>
+    voice(
+      ac,
+      t,
+      'triangle',
+      [
+        [0, 1800],
+        [0.04, 600],
+      ],
+      0.08,
+      0.06,
     ),
 };
 

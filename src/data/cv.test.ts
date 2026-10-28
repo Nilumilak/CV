@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { chapters, profile } from './cv';
+import { ISLAND_OBJECTS } from './islandObjects';
 import { ISLAND_IDS } from './types';
 import { ISLANDS, layoutOf } from './world';
 
@@ -7,6 +8,11 @@ describe('cv data', () => {
   it('has unique achievement ids', () => {
     const ids = chapters.flatMap((c) => c.achievements.map((a) => a.id));
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('links every island object to a real achievement', () => {
+    const ids = new Set(chapters.flatMap((c) => c.achievements.map((a) => a.id)));
+    for (const o of ISLAND_OBJECTS) expect(ids.has(o.id), o.id).toBe(true);
   });
 
   it('has unique chapter ids', () => {
