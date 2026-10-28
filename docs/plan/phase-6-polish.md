@@ -74,6 +74,10 @@ export function Effects() {
 
 ### 5. Sound design
 
+**Decided 2026-10-28:** sound effects will be made with an AI sound generator, after all the visuals are finished. The sounds synthesized in `src/audio/sound.ts` (wind, the chord pad, the whoosh and the object cues like the cat's "mrrp") are placeholders until then. Swap them for recorded files behind the same `sound` API (`setEnabled`, `whoosh`, `cue`), so nothing else in the code has to change.
+
+- [ ] Choose the AI sound tool, check that its licence allows use on a public site, and add a credit line to `CREDITS.md` if needed.
+- [ ] Generate and swap: ambient wind and music, the fly-in whoosh, and one cue per interactive object.
 - [ ] Per-island ambience with drei `PositionalAudio`, or simple distance-based volume through howler: radio static, crowd, birds and water, machinery, tram bells.
 - [ ] Lower the ambient music slightly when an island is focused, so the island's own sound comes through.
 - [ ] Check the overall mix on laptop speakers and on headphones. Nothing should be startling.
