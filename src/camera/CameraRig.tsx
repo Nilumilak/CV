@@ -21,6 +21,26 @@ const DISTANCE = {
 
 const tmp = new THREE.Vector3();
 
+/** Screens narrower than this aspect ratio see less width, so the camera backs off. */
+const REFERENCE_ASPECT = 1.2;
+const MAX_BACKOFF = 2.2;
+
+/** How much further away the camera sits on tall, narrow screens such as phones in portrait. */
+export function backoffFor(aspect: number): number {
+  if (aspect >= REFERENCE_ASPECT) return 1;
+  return Math.min(Math.pow(REFERENCE_ASPECT / aspect, 0.85), MAX_BACKOFF);
+}
+
+/** Moves the camera away from (or towards) its target along the same line of sight. */
+function scalePose(pose: { position: Vec3; target: Vec3 }, k: number) {
+  const [tx, ty, tz] = pose.target;
+  const [px, py, pz] = pose.position;
+  return {
+    target: pose.target,
+    position: [tx + (px - tx) * k, ty + (py - ty) * k, tz + (pz - tz) * k] as Vec3,
+  };
+}
+
 /**
  * Shift the view so the focused island sits beside the panel (desktop) or above the
  * bottom sheet (phone). Returns a focal offset in world units at the target distance.
@@ -35,8 +55,9 @@ function panelOffset(
   const visibleHeight = 2 * distance * Math.tan(THREE.MathUtils.degToRad(fov) / 2);
   const visibleWidth = visibleHeight * (width / height);
   if (isMobileWidth(width)) {
+    // Positive Y lifts the island into the space above the sheet.
     const sheetPx = height * SHEET_SHARE;
-    return [0, -(sheetPx / 2 / height) * visibleHeight, 0];
+    return [0, (sheetPx / 2 / height) * visibleHeight, 0];
   }
   return [(PANEL_WIDTH / 2 / width) * visibleWidth, 0, 0];
 }
@@ -67,7 +88,8 @@ export function CameraRig() {
   useEffect(() => {
     const c = ref.current;
     if (!c) return;
-    const pose = focused ? layoutOf(focused).camera : OVERVIEW;
+    const k = backoffFor(size.width / size.height);
+    const pose = scalePose(focused ? layoutOf(focused).camera : OVERVIEW, k);
     const animate = !first.current;
 
     if (first.current && debugCamera.position) {
@@ -79,8 +101,8 @@ export function CameraRig() {
     first.current = false;
 
     const limits = focused ? DISTANCE.focus : DISTANCE.overview;
-    c.minDistance = limits.min;
-    c.maxDistance = limits.max;
+    c.minDistance = limits.min * k;
+    c.maxDistance = limits.max * k;
 
     const offset = focused ? panelOffset(pose, fov, size.width, size.height) : [0, 0, 0];
     void c.setFocalOffset(offset[0], offset[1], offset[2], animate);

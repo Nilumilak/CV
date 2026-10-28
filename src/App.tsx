@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { IslandLabels } from '@/islands/IslandLabel';
+import { Overlay } from '@/ui/Overlay';
 
 const WorldCanvas = lazy(() => import('@/scenes/WorldCanvas'));
 
@@ -9,7 +9,7 @@ export default function App() {
       <Suspense fallback={null}>
         <WorldCanvas />
       </Suspense>
-      <IslandLabels />
+      <Overlay />
     </>
   );
 }
