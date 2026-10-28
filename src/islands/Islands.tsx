@@ -2,6 +2,7 @@ import { Suspense, type ReactNode } from 'react';
 import type { IslandId } from '@/data/types';
 import { ISLANDS } from '@/data/world';
 import { HomeIsland } from './home/HomeIsland';
+import { RadioIsland } from './radio/RadioIsland';
 import { Island } from './Island';
 import { LabelProjector } from './LabelProjector';
 import { PlaceholderIsland } from './PlaceholderIsland';
@@ -9,6 +10,7 @@ import { PlaceholderIsland } from './PlaceholderIsland';
 /** Islands that have real art. The rest stay placeholders until their turn in Phase 4. */
 const ART: Partial<Record<IslandId, (seed: number) => ReactNode>> = {
   home: () => <HomeIsland />,
+  radio: () => <RadioIsland />,
 };
 
 /** All islands from world.ts. Each real island loads in its own Suspense, showing its placeholder meanwhile. */

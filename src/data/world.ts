@@ -48,7 +48,7 @@ export const ISLANDS: IslandLayout[] = [
     position: [0, 4, -22],
     scale: 1.1,
     seed: 4,
-    labelOffset: [0, 9, 0],
+    labelOffset: [0, 11.5, 0], // above the tower's beacon
     camera: islandCamera([0, 5, -22]),
     accent: '#F3C25B',
   },

@@ -26,6 +26,18 @@ const MODELS = [
   { from: 'home/stump.glb', to: 'models/home/stump.glb', texture: 512 },
   { from: 'home/stepping-stone.glb', to: 'models/home/stepping-stone.glb', texture: 512 },
   // flower-bush: postponed, every try so far came out flat (docs/plan/islands/home.md).
+
+  // Radio Tower island
+  { from: 'radio/island-base.glb', to: 'models/radio/island-base.glb', texture: 1024 },
+  { from: 'radio/tower.glb', to: 'models/radio/tower.glb', texture: 1024 },
+  { from: 'radio/bunker.glb', to: 'models/radio/bunker.glb', texture: 1024 },
+  { from: 'radio/dish.glb', to: 'models/radio/dish.glb', texture: 512 },
+  { from: 'radio/screen.glb', to: 'models/radio/screen.glb', texture: 512 },
+  { from: 'radio/robot.glb', to: 'models/radio/robot.glb', texture: 512 },
+  { from: 'radio/containers.glb', to: 'models/radio/containers.glb', texture: 512 },
+
+  // Shared kit, reused across islands
+  { from: 'shared/rock-cluster.glb', to: 'models/shared/rock-cluster.glb', texture: 512 },
 ];
 
 const TEXTURES = [
