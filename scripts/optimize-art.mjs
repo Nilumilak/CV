@@ -43,6 +43,17 @@ const MODELS = [
   { from: 'radio/robot.glb', to: 'models/radio/robot.glb', texture: 512 },
   { from: 'radio/containers.glb', to: 'models/radio/containers.glb', texture: 512 },
 
+  // Market Town island
+  { from: 'market/island-base.glb', to: 'models/market/island-base.glb', texture: 1024 },
+  { from: 'market/bank.glb', to: 'models/market/bank.glb', texture: 1024 },
+  { from: 'market/houses.glb', to: 'models/market/houses.glb', texture: 1024 },
+  { from: 'market/fountain.glb', to: 'models/market/fountain.glb', texture: 512 },
+  { from: 'market/shack-glass.glb', to: 'models/market/shack-glass.glb', texture: 512 },
+  { from: 'market/tram.glb', to: 'models/market/tram.glb', texture: 512 },
+  { from: 'market/signpost.glb', to: 'models/market/signpost.glb', texture: 512 },
+  { from: 'market/balloon.glb', to: 'models/market/balloon.glb', texture: 512 },
+  { from: 'market/crane.glb', to: 'models/market/crane.glb', texture: 512 },
+
   // Shared kit, reused across islands
   { from: 'shared/rock-cluster.glb', to: 'models/shared/rock-cluster.glb', texture: 512 },
 ];

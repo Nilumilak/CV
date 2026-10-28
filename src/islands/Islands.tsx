@@ -2,6 +2,7 @@ import { Suspense, type ReactNode } from 'react';
 import type { IslandId } from '@/data/types';
 import { ISLANDS } from '@/data/world';
 import { HomeIsland } from './home/HomeIsland';
+import { MarketIsland } from './market/MarketIsland';
 import { RadioIsland } from './radio/RadioIsland';
 import { Island } from './Island';
 import { LabelProjector } from './LabelProjector';
@@ -11,6 +12,7 @@ import { PlaceholderIsland } from './PlaceholderIsland';
 const ART: Partial<Record<IslandId, (seed: number) => ReactNode>> = {
   home: () => <HomeIsland />,
   radio: () => <RadioIsland />,
+  market: () => <MarketIsland />,
 };
 
 /** All islands from world.ts. Each real island loads in its own Suspense, showing its placeholder meanwhile. */

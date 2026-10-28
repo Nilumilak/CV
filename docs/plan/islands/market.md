@@ -2,7 +2,7 @@
 
 [Back to Phase 4](../phase-4-island-art.md) · [AI model prompts](../phase-4-ai-prompts.md) · Previous: [Radio Tower](radio.md)
 
-**Status:** design decided (2026-10-28, section 7). Generating models.
+**Status:** built on 2026-10-29. All 9 models generated (the signpost concept was redrawn once, for depth) and placed; all six achievement objects interactive. First layout, to be tuned from screenshots.
 
 ---
 
