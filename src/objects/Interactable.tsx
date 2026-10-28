@@ -19,6 +19,8 @@ interface InteractableProps {
 }
 
 const GLOW = new THREE.Color(colors.accentGold);
+/** Seconds the hover lift and glow take to settle. Slow enough to feel soft, not snappy. */
+const HOVER_EASE = 0.3;
 /** How strongly a hovered or hinted object glows gold. */
 const GLOW_INTENSITY = 0.32;
 
@@ -81,12 +83,12 @@ export function Interactable({ id, island, label, cue, children }: InteractableP
   useEffect(() => () => tooltip.hide(id), [id]);
 
   useFrame((_, delta) => {
-    easing.damp(glow, 'current', active || hinted ? GLOW_INTENSITY : 0, 0.12, delta);
+    easing.damp(glow, 'current', active || hinted ? GLOW_INTENSITY : 0, HOVER_EASE, delta);
     const meshes = glowingMeshes.current;
     for (let i = 0; i < meshes.length; i++) {
       (meshes[i].material as Glowing).emissiveIntensity = glow.current;
     }
-    easing.damp3(ref.current.scale, active ? 1.06 : 1, 0.12, delta);
+    easing.damp3(ref.current.scale, active ? 1.05 : 1, HOVER_EASE, delta);
   });
 
   return (

@@ -14,7 +14,7 @@ import treeUrl from '@/assets/models/home/big-tree.glb?url';
 import { homeObject, type HomeObjectId } from '@/data/homeObjects';
 import { Interactable } from '@/objects/Interactable';
 import { Hop, Spin, Wobble } from '@/objects/reactions';
-import { Breathe, ChimneySmoke, LanternGlow, PoppingLetter, Sway } from '../ambient';
+import { Breathe, ChimneySmoke, Fireflies, LanternGlow, PoppingLetter, Sway } from '../ambient';
 import { GeneratedModel } from '../GeneratedModel';
 import { useGroundHeights } from '../useGroundHeights';
 
@@ -122,6 +122,7 @@ export function HomeIsland() {
           <GeneratedModel url={lanternUrl} height={2.1} />
           <LanternGlow position={[0, 1.55, 0]} flareFor="home-lantern" />
         </Interactable>
+        <Fireflies position={[0, 1.55, 0]} />
       </group>
 
       <group position={at('mailbox')} rotation-y={deg(-120)}>

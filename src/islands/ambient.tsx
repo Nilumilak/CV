@@ -104,7 +104,7 @@ export function ChimneySmoke({
   );
 }
 
-/** A warm flickering glow with a few fireflies, for lanterns and lamps. */
+/** A warm flickering glow for lanterns and lamps. Pair it with Fireflies for a swarm. */
 export function LanternGlow({
   position,
   radius = 0.12,
@@ -140,17 +140,27 @@ export function LanternGlow({
         <meshBasicMaterial color="#ffd27a" />
       </mesh>
       <pointLight ref={light} color={colors.accentGold} distance={3} decay={2} />
-      {/* Fireflies are decoration: never let them catch the pointer (points have a wide hit area). */}
-      <Sparkles
-        raycast={noHit}
-        count={7}
-        scale={[1.6, 1.4, 1.6]}
-        size={3}
-        speed={0.25}
-        color="#ffe39a"
-        opacity={0.9}
-      />
     </group>
+  );
+}
+
+/**
+ * A small swarm of fireflies drifting slowly around one spot, e.g. a lantern.
+ * Keep it outside an Interactable, so hovering the object never moves the swarm.
+ */
+export function Fireflies({ position }: { position: [number, number, number] }) {
+  return (
+    // Decoration only: never let them catch the pointer (points have a wide hit area).
+    <Sparkles
+      position={position}
+      raycast={noHit}
+      count={11}
+      scale={[2.2, 1.8, 2.2]}
+      size={3}
+      speed={0.2}
+      color="#ffe39a"
+      opacity={0.9}
+    />
   );
 }
 
