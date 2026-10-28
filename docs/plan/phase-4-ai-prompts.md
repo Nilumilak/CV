@@ -311,16 +311,16 @@ Full design description and decisions: [islands/radio.md](islands/radio.md).
 
 A small friendly field station on a rock: a radio tower with a beacon, a bunker lab, a satellite dish, an outdoor screen, a little robot and two shipping containers. Workflow as for Home: concept image (style block + image prompt), review, then image-to-3D. Every prompt asks for a three-quarter view from slightly above, per the volume rule.
 
-| #   | File name          | Object                          | Budget           | Interactive          | Status |
-| --- | ------------------ | ------------------------------- | ---------------- | -------------------- | ------ |
-| 1   | `island-base.glb`  | Rocky island, grass patches     | 15,000 triangles | No                   | To do  |
-| 2   | `tower.glb`        | Radio tower (lattice mast)      | 6,000            | No (landmark)        | To do  |
-| 3   | `bunker.glb`       | Bunker in a rock mound          | 6,000            | Yes: test platform   | To do  |
-| 4   | `dish.glb`         | Satellite dish on a post        | 3,000            | Yes: 5 services      | To do  |
-| 5   | `screen.glb`       | Outdoor screen on two legs      | 3,000            | Yes: framework UI    | To do  |
-| 6   | `robot.glb`        | Little hovering tin robot       | 3,000            | Yes: LLM generator   | To do  |
-| 7   | `containers.glb`   | Two stacked shipping containers | 3,000            | Yes: backend & tests | To do  |
-| 8   | `rock-cluster.glb` | Three mossy rocks (shared kit)  | 2,000            | No                   | To do  |
+| #   | File name          | Object                          | Budget           | Interactive          | Status   |
+| --- | ------------------ | ------------------------------- | ---------------- | -------------------- | -------- |
+| 1   | `island-base.glb`  | Rocky island, grass patches     | 15,000 triangles | No                   | **Done** |
+| 2   | `tower.glb`        | Radio tower (lattice mast)      | 6,000            | No (landmark)        | **Done** |
+| 3   | `bunker.glb`       | Bunker in a rock mound          | 6,000            | Yes: test platform   | **Done** |
+| 4   | `dish.glb`         | Satellite dish on a post        | 3,000            | Yes: 5 services      | **Done** |
+| 5   | `screen.glb`       | Outdoor screen on two legs      | 3,000            | Yes: framework UI    | **Done** |
+| 6   | `robot.glb`        | Little hovering tin robot       | 3,000            | Yes: LLM generator   | **Done** |
+| 7   | `containers.glb`   | Two stacked shipping containers | 3,000            | Yes: backend & tests | **Done** |
+| 8   | `rock-cluster.glb` | Three mossy rocks (shared kit)  | 2,000            | No                   | **Done** |
 
 ### 1. Island base
 

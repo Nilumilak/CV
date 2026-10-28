@@ -2,7 +2,7 @@
 
 [Back to Phase 4](../phase-4-island-art.md) · [AI model prompts](../phase-4-ai-prompts.md) · Previous: [Home](home.md)
 
-**Status:** design decided (2026-10-28, section 9). Next: concept images.
+**Status:** built on 2026-10-28. All 8 models generated and placed, all five achievement objects interactive. The screen shows a generic UI drawing until a reference arrives (decision 5).
 
 ---
 
