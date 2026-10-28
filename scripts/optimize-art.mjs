@@ -1,5 +1,5 @@
 // Turns raw AI-generated art (art-source/, not in git) into small web assets (src/assets/, in git).
-//   Models:   meshopt-compressed geometry, WebP textures at most 1024 px.
+//   Models:   meshopt-compressed geometry, WebP textures (1024 px, or 512 for small props).
 //   Textures: resized WebP.
 // Usage: npm run art
 import { execFileSync } from 'node:child_process';
@@ -9,8 +9,19 @@ import sharp from 'sharp';
 
 /** Only approved art is listed here. Source paths are relative to art-source/. */
 const MODELS = [
-  { from: 'home/cat.glb', to: 'models/home/cat.glb' },
-  { from: 'home/cottage.glb', to: 'models/home/cottage.glb' },
+  // Home island
+  { from: 'home/island-base.glb', to: 'models/home/island-base.glb', texture: 1024 },
+  { from: 'home/cottage.glb', to: 'models/home/cottage.glb', texture: 1024 },
+  { from: 'home/big-tree.glb', to: 'models/home/big-tree.glb', texture: 1024 },
+  { from: 'home/cat.glb', to: 'models/home/cat.glb', texture: 1024 },
+  { from: 'home/lantern.glb', to: 'models/home/lantern.glb', texture: 512 },
+  { from: 'home/mailbox.glb', to: 'models/home/mailbox.glb', texture: 512 },
+  { from: 'home/bookshelf.glb', to: 'models/home/bookshelf.glb', texture: 1024 },
+  { from: 'home/globe.glb', to: 'models/home/globe.glb', texture: 512 },
+  { from: 'home/bench.glb', to: 'models/home/bench.glb', texture: 512 },
+  { from: 'home/stump.glb', to: 'models/home/stump.glb', texture: 512 },
+  { from: 'home/stepping-stone.glb', to: 'models/home/stepping-stone.glb', texture: 512 },
+  { from: 'home/flower-bush.glb', to: 'models/home/flower-bush.glb', texture: 512 },
 ];
 
 const TEXTURES = [
