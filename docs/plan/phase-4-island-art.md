@@ -135,7 +135,7 @@ Full design description: [islands/home.md](islands/home.md).
 
 ### Market Town · Monetech
 
-Full design description: [islands/market.md](islands/market.md) (draft for review).
+Full design description: [islands/market.md](islands/market.md).
 
 - **Base:** a tall narrow cliff with houses stacked up its sides, as in reference 4. The tallest island on the map.
 - **Landmark:** a domed bank on top, bunting flags across streets, as in reference 6.

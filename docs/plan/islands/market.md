@@ -2,7 +2,7 @@
 
 [Back to Phase 4](../phase-4-island-art.md) · [AI model prompts](../phase-4-ai-prompts.md) · Previous: [Radio Tower](radio.md)
 
-**Status:** design draft for review (2026-10-28). Nothing generated yet.
+**Status:** design decided (2026-10-28, section 7). Generating models.
 
 ---
 
@@ -147,9 +147,9 @@ Lessons applied: every concept is a three-quarter view (volume rule); the base p
 
 ---
 
-## 7. Questions for you
+## 7. Decisions (2026-10-28)
 
-1. **The town backdrop.** The plan imagined a tall cliff with houses stacked up its sides. That's hard for AI and leaves little room on top. Instead: a normal island base plus a separate "stacked houses" model at the back edge. Keep the houses (+33 credits), or the bank alone?
-2. **Shack and glass building.** One combined model with a simple reaction (dust puff, glass lights up), or two separate models where the shack sinks away and the glass building rises in its place (+30 credits, more code)?
-3. **The tram.** One tram car riding a loop around the fountain. OK, or would you like something else for the 7 BNPL flows?
-4. **Credits.** About 330 of your 362. That leaves very little until the reset on November 28. OK, or should we trim (for example, skip the houses)?
+1. **Keep the stacked houses** as a separate backdrop model behind the bank.
+2. **Shack and glass building are one model**, with the simple reaction (dust puff, glass lights up).
+3. **One tram car** riding a loop around the fountain stands for the 7 BNPL flows.
+4. **Credits approved:** about 330 of the 362.

@@ -403,6 +403,100 @@ green moss on the tops, a couple of tiny pebbles around them.
 
 ---
 
+## Market Town island
+
+Full design description and decisions: [islands/market.md](islands/market.md).
+
+A sunny hilltop market square: a domed bank with stacked houses behind it, a coin fountain, a little tram, a signpost, a hot-air balloon, a toy crane and an old shack beside a glass building. Every prompt asks for a three-quarter view (volume rule), and the base asks for grass right up to the edge (lesson from Radio).
+
+| #   | File name         | Object                            | Budget           | Interactive           | Status |
+| --- | ----------------- | --------------------------------- | ---------------- | --------------------- | ------ |
+| 1   | `island-base.glb` | Island with a cobbled square      | 15,000 triangles | No                    | To do  |
+| 2   | `bank.glb`        | Domed bank                        | 6,000            | No (landmark)         | To do  |
+| 3   | `houses.glb`      | Cluster of stacked town houses    | 6,000            | No                    | To do  |
+| 4   | `fountain.glb`    | Round coin fountain               | 3,000            | Yes: PDL app          | To do  |
+| 5   | `shack-glass.glb` | Old shack beside a glass building | 4,000            | Yes: Next.js move     | To do  |
+| 6   | `tram.glb`        | One small tram car                | 3,000            | Yes: BNPL flows       | To do  |
+| 7   | `signpost.glb`    | Signpost with 6 arms              | 2,000            | Yes: account areas    | To do  |
+| 8   | `balloon.glb`     | Hot-air balloon with basket       | 3,000            | Yes: FSD and releases | To do  |
+| 9   | `crane.glb`       | Small toy-like tower crane        | 3,000            | Yes: shared packages  | To do  |
+
+### 1. Island base
+
+```
+A small floating sky island seen from a three-quarter view from slightly above: a chunk of warm
+sandy rock shaped like an upside-down cone, layered strata, a few hanging roots underneath. The top
+is flat and open: a round cobbled town square in the middle, surrounded by short green grass that
+covers the rest of the top evenly, right up to the edge, with no bare rock patches. Wider than it
+is tall.
+```
+
+### 2. Domed bank
+
+```
+A small domed bank building in a sunny southern town style, seen from a three-quarter view from
+slightly above: cream stone walls, four white columns and a few steps at the front, tall arched
+windows, terracotta trim, a round gold dome on top with a tiny flag. Charming storybook proportions.
+```
+
+### 3. Stacked houses
+
+```
+A tight cluster of five narrow town houses built together on different levels, like a tiny hillside
+village, seen from a three-quarter view from slightly above: plaster walls in cream, ochre, peach
+and pale blue, terracotta tile roofs, small balconies with flower pots, wooden shutters. One compact
+solid group.
+```
+
+### 4. Coin fountain
+
+```
+A round stone fountain for a town square, seen from a three-quarter view from slightly above: a wide
+low basin of warm sandy stone, a short central pillar with a small bowl on top pouring water, clear
+blue water with gold coins glinting at the bottom.
+```
+
+### 5. Old shack and glass building
+
+```
+An old leaning wooden shack with a patched tin roof standing right against a small modern two-storey
+building of glass and white frames, the two touching as one small group, old and new side by side.
+Seen from a three-quarter view from slightly above. Storybook proportions.
+```
+
+### 6. Tram
+
+```
+A single small old-fashioned tram car, cream and terracotta red with gold trim, a rounded roof, big
+front windows, a little bell and a pantograph on the roof, standing on its own small wheels with no
+rails. Seen from a three-quarter view from slightly above. Cute, chunky, toy-like.
+```
+
+### 7. Signpost
+
+```
+A wooden signpost on a sturdy post with six arrow-shaped arms pointing in different directions at
+different heights, painted terracotta, cream, sky blue and gold, blank arms with no writing. Seen
+from a three-quarter view from slightly above.
+```
+
+### 8. Hot-air balloon
+
+```
+A hot-air balloon with a round striped envelope in terracotta, cream and gold, a small wicker basket
+hanging below on ropes, floating. Seen from a three-quarter view from slightly above.
+```
+
+### 9. Crane
+
+```
+A small toy-like yellow tower crane, seen from a three-quarter view from slightly above: a chunky
+lattice mast on a square base, a horizontal jib with a counterweight block, a tiny operator cab, a
+hook hanging on a cable. Thick beams, bold readable shapes.
+```
+
+---
+
 ## Checklist for a good result
 
 - [ ] The concept shows the object from a three-quarter view, with shading that shows its volume (see the volume rule).
