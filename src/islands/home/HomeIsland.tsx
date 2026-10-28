@@ -25,16 +25,16 @@ const deg = (d: number) => (d * Math.PI) / 180;
  */
 const SPOTS = {
   cottage: [0.2, -1.0],
-  tree: [-3, -1.],
+  tree: [-3, -1],
   bookshelf: [-1.4, 1],
   stump: [-1.6, 2.6],
   bench: [2.6, -1.0],
-  lantern: [2.3, 2.5],
-  mailbox: [3.2, 1.6],
-  stone1: [1.2, 0.75],
-  stone2: [1.7, 1.0],
-  stone3: [2.2, 1.25],
-  stone4: [2.7, 1.45],
+  lantern: [1, 2.8],
+  mailbox: [3, 2.1],
+  stone1: [0.8, 0.7],
+  stone2: [1.2, 1.4],
+  stone3: [1.8, 1.85],
+  stone4: [2, 2.6],
   // Flower bushes are postponed until a solid model exists (home.md, placement table).
 } as const satisfies Record<string, [number, number]>;
 
@@ -102,8 +102,8 @@ export function HomeIsland() {
       </group>
 
       <group position={at('lantern')}>
-        <GeneratedModel url={lanternUrl} height={1.6} />
-        <LanternGlow position={[0, 1.32, 0]} />
+        <GeneratedModel url={lanternUrl} height={2.1} />
+        <LanternGlow position={[0, 1.55, 0]} />
       </group>
 
       <GeneratedModel

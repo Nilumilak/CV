@@ -81,7 +81,7 @@ The island top is roughly a circle about 12 metres across. The visitor's camera 
 | Big tree             | Back left, canopy partly over the roof              |                         |
 | Bookshelf            | Left of the door, against the wall, under the eaves | Camera                  |
 | Bench with the cat   | Right of the door, in the sun                       | Camera                  |
-| Stump with the globe | Right side, next to the cottage corner              | Camera                  |
+| Stump with the globe | Front left, the study corner by the bookshelf       | Camera                  |
 | Garden lantern       | Beside the stepping-stone path                      |                         |
 | Mailbox              | Front right edge, where the path ends               | Camera                  |
 | Flower bushes        | Around the rim, left and front                      |                         |
@@ -205,17 +205,17 @@ Agreed on 2026-10-28.
 
 Positions are in island units: the island's own frame before its 1.2 scale, with the grass surface at height 0. **+Z faces the overview camera, +X is the visitor's right.** "Turn" is the rotation around the vertical axis in degrees; positive turns the front towards the visitor's right, where the focus camera sits.
 
-| Object          | Position (x, z)                              | Size                      | Turn   | Notes                                                       |
-| --------------- | -------------------------------------------- | ------------------------- | ------ | ----------------------------------------------------------- |
-| Cottage         | 0.2, −1.0                                    | 5 tall (done)             | 17°    | Round window glows warmly                                   |
-| Big tree        | −3.1, −2.8                                   | 5.6 tall                  | 90°    | Behind the roof, clear of it; narrow side faces the house   |
-| Bookshelf       | −1.7, 0.3                                    | 1.4 tall                  | 17°    | Against the wall left of the door, same turn as the house   |
-| Bench + cat     | 2.6, −1.0                                    | bench 1.6 long (cat done) | −30°   | Sunny side, beside the house right of the door              |
-| Stump + globe   | −1.6, 2.0                                    | stump 0.6 tall, globe 0.8 | 30°    | Study corner, front left of the bookshelf                   |
-| Garden lantern  | 2.3, 2.5                                     | 1.6 tall                  | 0°     | In front of the path, left of the mailbox                   |
-| Mailbox         | 3.2, 1.6                                     | 1.2 tall                  | −120°  | Where the path ends; red flag faces the camera              |
-| Stepping stones | 1.2, 0.75 → 1.7, 1.0 → 2.2, 1.25 → 2.7, 1.45 | 0.6 to 0.8 wide           | random | From the door to the mailbox                                |
-| Flower bushes   | −3.7, 1.0 · −2.2, 3.4 · 3.9, −0.4            | 1.0 to 1.3 wide           | random | Around the rim, framing the front. **Postponed**, see below |
+| Object          | Position (x, z)                            | Size                      | Turn   | Notes                                                       |
+| --------------- | ------------------------------------------ | ------------------------- | ------ | ----------------------------------------------------------- |
+| Cottage         | 0.2, −1.0                                  | 5 tall (done)             | 17°    | Round window glows warmly                                   |
+| Big tree        | −3.0, −1.0                                 | 5.6 tall                  | 90°    | Left of the house, clear of the roof                        |
+| Bookshelf       | −1.4, 1.0                                  | 1.4 tall                  | 35°    | Left of the door, turned towards the camera                 |
+| Bench + cat     | 2.6, −1.0                                  | bench 1.6 long (cat done) | −30°   | Sunny side, beside the house right of the door              |
+| Stump + globe   | −1.6, 2.6                                  | stump 0.6 tall, globe 0.8 | 30°    | Study corner, in front of the bookshelf                     |
+| Garden lantern  | 1.0, 2.8                                   | 2.1 tall                  | 0°     | Front, left of the path                                     |
+| Mailbox         | 3.0, 2.1                                   | 1.2 tall                  | −120°  | Where the path ends; red flag faces the camera              |
+| Stepping stones | 0.8, 0.7 → 1.2, 1.4 → 1.8, 1.85 → 2.0, 2.6 | 0.6 to 0.8 wide           | random | From the door towards the front, the mailbox on the right   |
+| Flower bushes   | −3.7, 1.0 · −2.2, 3.4 · 3.9, −0.4          | 1.0 to 1.3 wide           | random | Around the rim, framing the front. **Postponed**, see below |
 
 **Flower bushes are postponed (decided 2026-10-28).** Both generated bushes came out paper-thin: Meshy turns a round, edgeless blob of leaves into a flat painted card, even from a concept with clear volume. The next attempt should use multi-view: front, side and back views of the bush, then multi-image-to-3D, about 33 credits. The first big tree was flat too; it was regenerated from a three-quarter-view concept and is solid. Its leaves came out olive, so `npm run art` grades them toward the palette greens (the `foliage` grade in `scripts/art-grade.mjs`); the trunk keeps its brown. See the volume rule in [phase-4-ai-prompts.md](../phase-4-ai-prompts.md).
 
