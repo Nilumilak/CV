@@ -154,7 +154,7 @@ export function Fireflies({ position }: { position: [number, number, number] }) 
     <Sparkles
       position={position}
       raycast={noHit}
-      count={11}
+      count={20}
       scale={[2.2, 1.8, 2.2]}
       size={3}
       speed={0.2}
