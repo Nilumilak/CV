@@ -54,6 +54,8 @@ Warm terracotta roofs `#C9573E`, sunlit sandy rock `#D8B98C`, fresh grass green 
 
 ## Home island
 
+Full design description, layout and open questions: [islands/home.md](islands/home.md).
+
 Every visitor sees it first. It holds your summary, contacts, skills, education and languages. A cosy cottage under a big tree, with a cat on the windowsill, as in your lofi reference.
 
 | #   | File name              | Object                                | Budget           | Interactive    |

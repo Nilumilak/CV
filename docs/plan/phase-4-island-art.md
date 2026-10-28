@@ -123,6 +123,8 @@ The interactive objects listed here are only modelled in this phase. They get th
 
 ### Home · About
 
+Full design description: [islands/home.md](islands/home.md).
+
 - **Base:** round grassy island with a big tree, roots hanging from below.
 - **Landmark:** small cottage with a round window. Through it you see a desk, lamp, plant and books, as in reference 7.
 - **Objects to model:** cat on the windowsill, desk lamp, mailbox with a flag, bookshelf, globe.
