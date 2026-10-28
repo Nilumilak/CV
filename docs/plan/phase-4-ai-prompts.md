@@ -56,19 +56,25 @@ Warm terracotta roofs `#C9573E`, sunlit sandy rock `#D8B98C`, fresh grass green 
 
 Full design description, layout and open questions: [islands/home.md](islands/home.md).
 
-Every visitor sees it first. It holds your summary, contacts, skills, education and languages. A cosy cottage under a big tree, with a cat on the windowsill, as in your lofi reference.
+Every visitor sees it first. It holds your summary, contacts, skills, education and languages. A cosy cottage under a big tree, with a cat on the bench by the door and a lofi desk behind the round window.
 
-| #   | File name              | Object                                | Budget           | Interactive    |
-| --- | ---------------------- | ------------------------------------- | ---------------- | -------------- |
-| 1   | `island-base.glb`      | Floating rock island with grassy top  | 15,000 triangles | No             |
-| 2   | `cottage.glb`          | Cottage with a round window           | 8,000            | No             |
-| 3   | `big-tree.glb`         | Big broad tree                        | 8,000            | No             |
-| 4   | `cat.glb`              | Orange tabby cat, lying down          | 3,000            | Yes: summary   |
-| 5   | `lantern.glb`          | Garden lantern on a post              | 2,000            | Yes: skills    |
-| 6   | `mailbox.glb`          | Wooden mailbox with a red flag        | 2,000            | Yes: contacts  |
-| 7   | `bookshelf.glb`        | Small outdoor bookshelf               | 3,000            | Yes: education |
-| 8   | `globe.glb`            | Antique globe on a stand              | 2,000            | Yes: languages |
-| 9   | `props.glb` (optional) | Bench, flower bushes, stepping stones | 4,000            | No             |
+| #   | File name            | Object                               | Budget           | Interactive    | Status                |
+| --- | -------------------- | ------------------------------------ | ---------------- | -------------- | --------------------- |
+| 1   | `island-base.glb`    | Floating rock island with grassy top | 15,000 triangles | No             | Planned               |
+| 2   | `cottage.glb`        | Cottage with a round window          | 8,000            | No             | **Done** (concept v2) |
+| 3   | `big-tree.glb`       | Big broad tree                       | 8,000            | No             | Planned               |
+| 4   | `cat.glb`            | Orange tabby cat, lying down         | 3,000            | Yes: summary   | **Done** (concept v1) |
+| 5   | `lantern.glb`        | Garden lantern on a post             | 2,000            | Yes: skills    | Planned               |
+| 6   | `mailbox.glb`        | Wooden mailbox with a red flag       | 2,000            | Yes: contacts  | Planned               |
+| 7   | `bookshelf.glb`      | Small outdoor bookshelf              | 3,000            | Yes: education | Planned               |
+| 8   | `globe.glb`          | Antique globe on a stand             | 2,000            | Yes: languages | Planned               |
+| 9   | `bench.glb`          | Rustic garden bench for the cat      | 2,000            | No             | Planned               |
+| 10  | `stump.glb`          | Tree stump, table for the globe      | 1,500            | No             | Planned               |
+| 11  | `stepping-stone.glb` | One flat stepping stone, reused ×4   | 500              | No             | Planned               |
+| 12  | `flower-bush.glb`    | Flowering bush, reused ×3            | 2,500            | No             | Planned               |
+| —   | `desk-window.webp`   | Painted desk behind the round window | image only       | No             | **Done**              |
+
+Everything a visitor sees up close is generated, so painted textures never sit next to flat code shapes. Repeated pieces (stones, bushes) are one model placed several times, so they cost one generation each.
 
 Interactive objects must be separate files, so I can animate them on their own.
 
@@ -208,20 +214,71 @@ Antique world globe on carved honey-wood stand, brass meridian ring, faded sea-b
 parchment-colored continents.
 ```
 
-### 9. Props (optional)
+### 9. Bench
 
-Generate these one at a time, or skip them. I can fill gaps with simple shapes in code.
-
-```
-A short rustic wooden garden bench with a curved backrest.
-```
+**Image prompt**
 
 ```
-A round flowering bush with small white and pink flowers.
+A short rustic wooden garden bench for one or two people, thick honey-colored planks, a gently
+curved backrest, sturdy slightly wonky legs, worn soft edges.
 ```
 
+**3D prompt**
+
 ```
-Three flat round stepping stones in a short row.
+Short rustic wooden garden bench, thick honey-colored planks, gently curved backrest, sturdy slightly
+wonky legs, worn soft edges.
+```
+
+### 10. Tree stump
+
+**Image prompt**
+
+```
+An old wide tree stump cut flat on top, with visible tree rings, thick bark, a few roots spreading
+out at the bottom and a little patch of moss on one side. Short and sturdy, wider than it is tall.
+```
+
+**3D prompt**
+
+```
+Old wide tree stump cut flat on top, visible tree rings, thick bark, spreading roots, small patch of
+moss, short and sturdy.
+```
+
+### 11. Stepping stone
+
+One stone, placed four times with different turns and sizes.
+
+**Image prompt**
+
+```
+A single flat round garden stepping stone, warm sandy grey, softly rounded edges, a little moss in
+the cracks. Seen from a three-quarter view above.
+```
+
+**3D prompt**
+
+```
+Single flat round garden stepping stone, warm sandy grey, softly rounded edges, a little moss in the
+cracks.
+```
+
+### 12. Flower bush
+
+One bush, placed three times with different turns and sizes.
+
+**Image prompt**
+
+```
+A round leafy garden bush made of soft clumps of fresh green leaves, dotted with small white and
+pink flowers. Cheerful and compact, about as wide as it is tall.
+```
+
+**3D prompt**
+
+```
+Round leafy garden bush, soft clumps of fresh green leaves, small white and pink flowers, compact.
 ```
 
 ---

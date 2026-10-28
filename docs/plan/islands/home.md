@@ -168,17 +168,20 @@ A chunk of warm sandy rock shaped like an upside-down cone, with a flat lush gra
 
 ## 7. What is AI-generated and what is code
 
-| Made with AI (Meshy)                                                    | Made in code                                                                          |
-| ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| Island base, cottage, big tree, cat, lantern, mailbox, bookshelf, globe | Placement, scale and lighting                                                         |
-| Optional: bench, flower bushes, stepping stones                         | Chimney smoke, window glow, fireflies, falling leaves                                 |
-|                                                                         | Stump, simple stones (if not generated)                                               |
-|                                                                         | All animations, clicks, outlines, speech bubbles, the letter, book spines, globe pins |
+| Made with AI (Meshy)                                                      | Made in code                                                                          |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Island base, cottage, big tree, cat, lantern, mailbox, bookshelf, globe   | Placement, scale and lighting                                                         |
+| Bench, stump, one stepping stone (placed ×4), one flower bush (placed ×3) | Chimney smoke, window glow, fireflies, falling leaves                                 |
+| The painted desk behind the round window (an image, not a model)          | All animations, clicks, outlines, speech bubbles, the letter, book spines, globe pins |
 
-Concept images made so far (in `art-source/home/concepts/`, not in git):
+Everything a visitor sees up close is generated. The style test showed that a flat code-made bench looks out of place next to the painted cat.
 
-- `cat-v1.png`: approved look, chubby smiling tabby.
-- `cottage-v1.png`: good, but has chimney smoke painted in. Smoke would turn into a solid blob in 3D, so it needs one more image without smoke.
+Concept images so far (in `art-source/home/concepts/`, not in git):
+
+- `cat-v1.png`: used for the cat model.
+- `cottage-v1.png`: rejected, chimney smoke painted in.
+- `cottage-v2.png`: used for the cottage model.
+- `desk-window-v1.png`: used behind the round window.
 
 ---
 
@@ -191,3 +194,45 @@ Agreed on 2026-10-28.
 3. **The globe sits on a tree stump** next to the cottage corner.
 4. **No extra personal objects for now.** We can add some later.
 5. **The "You are here" bubble stays** for first-time visitors.
+
+---
+
+## 9. Build plan for the remaining objects
+
+### Placement
+
+Positions are in island units: the island's own frame before its 1.2 scale, with the grass surface at height 0. **+Z faces the overview camera, +X is the visitor's right.** "Turn" is the rotation around the vertical axis in degrees; positive turns the front towards the visitor's right, where the focus camera sits.
+
+| Object          | Position (x, z)                           | Size                      | Turn   | Notes                                                            |
+| --------------- | ----------------------------------------- | ------------------------- | ------ | ---------------------------------------------------------------- |
+| Cottage         | 0.2, −1.0                                 | 5 tall (done)             | 17°    | Desk painting behind the round window                            |
+| Big tree        | −2.7, −2.4                                | 7 tall                    | 0°     | Canopy overlaps the back left of the roof                        |
+| Bookshelf       | −1.7, 0.3                                 | 1.4 tall                  | 17°    | Against the wall left of the door, same turn as the house        |
+| Bench + cat     | 2.6, 1.2                                  | bench 1.6 long (cat done) | −23°   | Sunny side, right of the door                                    |
+| Stump + globe   | 2.6, −1.2                                 | stump 0.6 tall, globe 0.8 | 0°     | Globe sits on the stump top                                      |
+| Garden lantern  | −0.1, 2.3                                 | 1.6 tall                  | 0°     | Left of the path, halfway to the edge                            |
+| Mailbox         | 2.4, 3.4                                  | 1.2 tall                  | 35°    | Front right rim, where the path ends; flag on the visitor's side |
+| Stepping stones | 0.7, 0.9 → 1.1, 1.7 → 1.5, 2.5 → 2.0, 3.1 | 0.6 to 0.8 wide           | random | From the door to the mailbox                                     |
+| Flower bushes   | −3.7, 1.0 · −2.2, 3.4 · 3.9, −0.4         | 1.0 to 1.3 wide           | random | Around the rim, framing the front                                |
+
+Interactive objects all stand on the front half and face the front right, so they are visible in the focus view with the panel open.
+
+### The island base
+
+The generated base replaces the procedural rock. Two risks and how code handles them:
+
+- **The top is not perfectly flat.** Code drops every object onto the actual grass surface (a downward ray test when the island loads), so nothing floats or sinks.
+- **The size and shape differ from the placeholder.** Code scales the base so its top is about 11 units across, and the positions above are adjusted after one screenshot.
+
+### Order and cost
+
+| Step                                         | Items | Credits |
+| -------------------------------------------- | ----- | ------- |
+| Concept images, standard model (nano-banana) | 10    | 30      |
+| Review the concepts with you                 |       | 0       |
+| Textured 3D models (Meshy 7.1)               | 10    | 300     |
+| **Total**                                    |       | **330** |
+
+Balance before this batch: 1028 credits. Images first, then I show them to you, then 3D only for the approved ones. A rejected concept costs 3 credits to redo, not 30.
+
+Order of 3D generation: island base and big tree first (they decide the composition), then the interactive objects, then bench, stump, stone and bush.
