@@ -244,6 +244,11 @@ export function CheckMarkPop({ id, position }: { id: string; position: Vec3 }) {
 /**
  * A simplified drawing of the test platform UI on the big screen, in light or dark theme.
  * Each activation switches the theme with a soft cross-fade.
+ *
+ * One surface blends both themes in its shader. Two stacked planes (one per theme) would
+ * z-fight with each other and with the screen's own face, which shows as flicker once
+ * the island is far away and depth precision drops. The polygon offset pulls the picture
+ * towards the camera in the depth test, so it always wins against the screen face.
  */
 export function ScreenPicture({
   id,
@@ -257,9 +262,9 @@ export function ScreenPicture({
   height: number;
 }) {
   const [dark, setDark] = useState(false);
-  const darkPane = useRef<THREE.Mesh>(null!);
   const fade = useRef(0);
-  const textures = useMemo(() => ({ light: uiTexture(false), dark: uiTexture(true) }), []);
+  const screen = useRef<THREE.Mesh>(null!);
+  const material = useMemo(() => screenMaterial(uiTexture(false), uiTexture(true)), []);
 
   useEffect(
     () =>
@@ -271,21 +276,45 @@ export function ScreenPicture({
 
   useFrame((_, delta) => {
     easing.damp(fade, 'current', dark ? 1 : 0, 0.25, delta);
-    (darkPane.current.material as THREE.MeshBasicMaterial).opacity = fade.current;
+    (screen.current.material as THREE.ShaderMaterial).uniforms.mixAmount.value = fade.current;
   });
 
   return (
-    <group position={position}>
-      <mesh raycast={() => null}>
-        <planeGeometry args={[width, height]} />
-        <meshBasicMaterial map={textures.light} toneMapped={false} />
-      </mesh>
-      <mesh ref={darkPane} position={[0, 0, 0.002]} raycast={() => null}>
-        <planeGeometry args={[width, height]} />
-        <meshBasicMaterial map={textures.dark} transparent opacity={0} toneMapped={false} />
-      </mesh>
-    </group>
+    <mesh ref={screen} position={position} material={material} raycast={() => null}>
+      <planeGeometry args={[width, height]} />
+    </mesh>
   );
+}
+
+/** Unlit material that shows a blend of two textures: 0 = the first, 1 = the second. */
+function screenMaterial(light: THREE.Texture, dark: THREE.Texture) {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      light: { value: light },
+      dark: { value: dark },
+      mixAmount: { value: 0 },
+    },
+    vertexShader: /* glsl */ `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      uniform sampler2D light;
+      uniform sampler2D dark;
+      uniform float mixAmount;
+      varying vec2 vUv;
+      void main() {
+        gl_FragColor = mix(texture2D(light, vUv), texture2D(dark, vUv), mixAmount);
+        #include <colorspace_fragment>
+      }
+    `,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -8,
+  });
 }
 
 // --- Canvas drawings -------------------------------------------------------------
