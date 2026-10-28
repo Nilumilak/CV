@@ -22,6 +22,13 @@ export const ISLAND_OBJECTS = [
   { id: 'radio-ui', label: 'Framework UI', name: 'the screen', cue: 'click' },
   { id: 'radio-services', label: '5 services', name: 'the satellite dish', cue: 'whirr' },
   { id: 'radio-backend', label: 'Backend and tests', name: 'the containers', cue: 'knock' },
+  // Market Town (design: docs/plan/islands/market.md)
+  { id: 'mone-pdl', label: 'PDL app', name: 'the fountain', cue: 'coins' },
+  { id: 'mone-nextjs', label: 'Next.js migration', name: 'the old shack', cue: 'whirr' },
+  { id: 'mone-bnpl', label: 'BNPL flows', name: 'the tram', cue: 'bell' },
+  { id: 'mone-account', label: 'Account areas', name: 'the signpost', cue: 'whirr' },
+  { id: 'mone-fsd', label: 'FSD and releases', name: 'the balloon', cue: 'hum' },
+  { id: 'mone-packages', label: 'UI kit and API core', name: 'the crane', cue: 'knock' },
 ] as const satisfies readonly IslandObject[];
 
 export type IslandObjectId = (typeof ISLAND_OBJECTS)[number]['id'];

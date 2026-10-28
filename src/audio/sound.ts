@@ -110,7 +110,8 @@ function rampTo(param: AudioParam, value: number, seconds: number) {
 }
 
 /** Short, soft reaction sounds for interactive objects. All under a second. */
-export type SoundCue = 'mrrp' | 'chime' | 'paper' | 'knock' | 'whirr' | 'beep' | 'hum' | 'click';
+export type SoundCue =
+  'mrrp' | 'chime' | 'paper' | 'knock' | 'whirr' | 'beep' | 'hum' | 'click' | 'bell' | 'coins';
 
 /** One oscillator with a gliding pitch and a quick attack, exponential fade. */
 function voice(
@@ -305,6 +306,24 @@ const CUES: Record<SoundCue, (ac: AudioContext, t: number) => void> = {
       0.08,
       0.06,
     ),
+  // A little tram bell: two quick dings.
+  bell: (ac, t) => {
+    voice(ac, t, 'sine', [[0, 1318]], 0.08, 0.5);
+    voice(ac, t + 0.18, 'sine', [[0, 1318]], 0.07, 0.6);
+  },
+  // Coins tumbling: a handful of short bright pings at random pitches.
+  coins: (ac, t) => {
+    for (let i = 0; i < 6; i++) {
+      voice(
+        ac,
+        t + i * 0.06 + Math.random() * 0.03,
+        'sine',
+        [[0, 2200 + Math.random() * 1400]],
+        0.04,
+        0.18,
+      );
+    }
+  },
 };
 
 export const sound = {

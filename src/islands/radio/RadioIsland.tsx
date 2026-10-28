@@ -12,6 +12,7 @@ import { islandObject, type IslandObjectId } from '@/data/islandObjects';
 import { Interactable } from '@/objects/Interactable';
 import { Hop, Spin, Wobble } from '@/objects/reactions';
 import { GeneratedModel } from '../GeneratedModel';
+import { deg, FACE_CAMERA, view } from '../layout';
 import { useGroundHeights } from '../useGroundHeights';
 import {
   Beacon,
@@ -25,8 +26,6 @@ import {
   SlowTurn,
 } from './effects';
 
-const deg = (d: number) => (d * Math.PI) / 180;
-
 /** Props for an object's Interactable, from the shared list in data/islandObjects.ts. */
 const interactive = (id: IslandObjectId) => {
   const { label, cue } = islandObject(id);
@@ -34,22 +33,10 @@ const interactive = (id: IslandObjectId) => {
 };
 
 /**
- * Where everything stands, in island units (+Z faces the overview camera, +X is the
- * visitor's right). Matches the layout in docs/plan/islands/radio.md.
- *
- * Two rows across the focus camera's view (it looks from the front right, about 54°
- * from +X, and about 19° down):
- * - back row, tall things: tower left, bunker middle, dish right;
- * - front row, about 5 m closer: screen left, robot middle, containers right.
- * Each front object has its own column, and the gap between the rows makes it show
- * below the back row on screen, so nothing hides anything. Rocks sit at the side edges.
- * The helper turns "across the view, towards the camera" into island x and z.
+ * Where everything stands, as "across the view, towards the camera" (see ../layout.ts).
+ * Matches the layout in docs/plan/islands/radio.md: back row tower, bunker, dish;
+ * front row screen, robot, containers. Rocks sit at the side edges.
  */
-const view = (across: number, towards: number): [number, number] => [
-  +(0.59 * across + 0.8 * towards).toFixed(2),
-  +(-0.8 * across + 0.59 * towards).toFixed(2),
-];
-
 const SPOTS = {
   tower: view(-2.5, -3),
   bunker: view(0, -3),
@@ -61,9 +48,6 @@ const SPOTS = {
   rocks2: view(4, 0),
   rocks3: view(-0.9, 3.8),
 } satisfies Record<string, [number, number]>;
-
-/** Turn that makes a model's front (+Z) face the focus camera. */
-const FACE_CAMERA = 54;
 
 const TOWER_HEIGHT = 9;
 
