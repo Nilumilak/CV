@@ -58,20 +58,22 @@ The island top is roughly a circle about 12 metres across. The visitor's camera 
                /        ( ( BIG TREE ) )              \
               /       ( (  canopy over  ) )            \
              |          (  the roof   )   [chimney]     |
-             |             trunk  ┌──────────────┐      |
-             |    [bookshelf]     │   COTTAGE    │      |
+             |             trunk  ┌──────────────┐ [bench|
+             |    [bookshelf]     │   COTTAGE    │ + CAT]|
      left    |                    │  round window│      |   right
-             |    bush            └───door───────┘  [stump + globe]
-             |                       stone step         |
-             |                         o  [bench + CAT]  |
-              \           [lantern]     o               /
-               \   bush                   o  [MAILBOX] /
+             |                    └───door───────┘      |
+             |  [stump + globe]          o  o  o  o     |
+             |                                [MAILBOX] |
+              \                     [lantern]           /
+               \                                       /
                  '-----------------------------------'
                        front (towards the camera)
                                   ↘ camera
 ```
 
-`o o o` are stepping stones leading from the door to the mailbox at the front edge.
+`o o o` are stepping stones leading from the door to the mailbox at the right edge.
+
+**Layout rule (2026-10-28).** The focus camera looks from the front right, at roughly 54° from the +X axis. Objects are spread across that view rather than lined up along it, so none hides another. In the first layout the bench stood straight in front of the globe. Now the left side is a study corner (bookshelf and globe: education and languages), the door stays clear in the middle, and the right side has the mailbox at the end of the path with the cat's bench behind it, beside the house. The empty front-left grass is kept for the flower bushes.
 
 | Object               | Position on the island                              | Faces                   |
 | -------------------- | --------------------------------------------------- | ----------------------- |
@@ -203,19 +205,19 @@ Agreed on 2026-10-28.
 
 Positions are in island units: the island's own frame before its 1.2 scale, with the grass surface at height 0. **+Z faces the overview camera, +X is the visitor's right.** "Turn" is the rotation around the vertical axis in degrees; positive turns the front towards the visitor's right, where the focus camera sits.
 
-| Object          | Position (x, z)                           | Size                      | Turn   | Notes                                                            |
-| --------------- | ----------------------------------------- | ------------------------- | ------ | ---------------------------------------------------------------- |
-| Cottage         | 0.2, −1.0                                 | 5 tall (done)             | 17°    | Desk painting behind the round window                            |
-| Big tree        | −2.7, −2.4                                | 6 tall                    | 0°     | Canopy overlaps the back left of the roof                        |
-| Bookshelf       | −1.7, 0.3                                 | 1.4 tall                  | 17°    | Against the wall left of the door, same turn as the house        |
-| Bench + cat     | 2.6, 1.2                                  | bench 1.6 long (cat done) | −23°   | Sunny side, right of the door                                    |
-| Stump + globe   | 2.6, −1.2                                 | stump 0.6 tall, globe 0.8 | 0°     | Globe sits on the stump top                                      |
-| Garden lantern  | −0.1, 2.3                                 | 1.6 tall                  | 0°     | Left of the path, halfway to the edge                            |
-| Mailbox         | 2.4, 3.4                                  | 1.2 tall                  | 35°    | Front right rim, where the path ends; flag on the visitor's side |
-| Stepping stones | 0.7, 0.9 → 1.1, 1.7 → 1.5, 2.5 → 2.0, 3.1 | 0.6 to 0.8 wide           | random | From the door to the mailbox                                     |
-| Flower bushes   | −3.7, 1.0 · −2.2, 3.4 · 3.9, −0.4         | 1.0 to 1.3 wide           | random | Around the rim, framing the front. **Postponed**, see below      |
+| Object          | Position (x, z)                                | Size                      | Turn   | Notes                                                       |
+| --------------- | ---------------------------------------------- | ------------------------- | ------ | ----------------------------------------------------------- |
+| Cottage         | 0.2, −1.0                                      | 5 tall (done)             | 17°    | Desk painting behind the round window                       |
+| Big tree        | −2.7, −2.4                                     | 6 tall                    | 0°     | Canopy overlaps the back left of the roof                   |
+| Bookshelf       | −1.7, 0.3                                      | 1.4 tall                  | 17°    | Against the wall left of the door, same turn as the house   |
+| Bench + cat     | 2.6, −1.0                                      | bench 1.6 long (cat done) | −30°   | Sunny side, beside the house right of the door              |
+| Stump + globe   | −1.6, 2.0                                      | stump 0.6 tall, globe 0.8 | 30°    | Study corner, front left of the bookshelf                   |
+| Garden lantern  | 2.3, 2.5                                       | 1.6 tall                  | 0°     | In front of the path, left of the mailbox                   |
+| Mailbox         | 3.7, 1.3                                       | 1.2 tall                  | 35°    | Right rim, where the path ends                              |
+| Stepping stones | 1.25, 0.75 → 1.9, 0.95 → 2.55, 1.1 → 3.15, 1.2 | 0.6 to 0.8 wide           | random | From the door to the mailbox                                |
+| Flower bushes   | −3.7, 1.0 · −2.2, 3.4 · 3.9, −0.4              | 1.0 to 1.3 wide           | random | Around the rim, framing the front. **Postponed**, see below |
 
-**Flower bushes are postponed (decided 2026-10-28).** Both generated bushes came out paper-thin: Meshy turns a round, edgeless blob of leaves into a flat painted card, even from a concept with clear volume. The next attempt should use multi-view: front, side and back views of the bush, then multi-image-to-3D, about 33 credits. The first big tree was flat too; it was regenerated from a three-quarter-view concept and is solid. See the volume rule in [phase-4-ai-prompts.md](../phase-4-ai-prompts.md).
+**Flower bushes are postponed (decided 2026-10-28).** Both generated bushes came out paper-thin: Meshy turns a round, edgeless blob of leaves into a flat painted card, even from a concept with clear volume. The next attempt should use multi-view: front, side and back views of the bush, then multi-image-to-3D, about 33 credits. The first big tree was flat too; it was regenerated from a three-quarter-view concept and is solid. Its leaves came out olive, so `npm run art` grades them toward the palette greens (the `foliage` grade in `scripts/art-grade.mjs`); the trunk keeps its brown. See the volume rule in [phase-4-ai-prompts.md](../phase-4-ai-prompts.md).
 
 Interactive objects all stand on the front half and face the front right, so they are visible in the focus view with the panel open.
 
@@ -254,6 +256,6 @@ What is built now:
 | Flower bushes | Sway gently, each slightly out of step (when the bushes come back)            |
 | Cat           | Breathes slowly                                                               |
 | Cottage       | Smoke puffs curl from the chimney; the painted desk glows in the round window |
-| Lantern       | Flickers warmly, lights the ground around it, a few fireflies drift nearby    |
+| Lantern       | Flickers softly, a dim warm light on the grass, a few fireflies drift nearby  |
 
 Each generated model is one solid piece, so parts like the globe ball or the mailbox flag cannot move on their own. Any later click animation moves the whole object, or adds effects made in code.

@@ -113,7 +113,7 @@ export function LanternGlow({
     // Two slow waves plus a quick shimmer: reads as a small flame, never strobes.
     const flicker =
       0.85 + Math.sin(t * 2.1) * 0.06 + Math.sin(t * 5.3 + 1) * 0.04 + Math.sin(t * 13.7) * 0.02;
-    light.current.intensity = 2.2 * flicker;
+    light.current.intensity = 0.9 * flicker;
     glow.current.scale.setScalar(flicker);
   });
 
@@ -121,9 +121,10 @@ export function LanternGlow({
     <group position={position}>
       <mesh ref={glow}>
         <sphereGeometry args={[radius, 12, 10]} />
-        <meshBasicMaterial color="#ffd68a" toneMapped={false} />
+        {/* Tone-mapped, so the bulb reads as a warm glass glow rather than a white hot spot. */}
+        <meshBasicMaterial color="#ffd27a" />
       </mesh>
-      <pointLight ref={light} color={colors.accentGold} distance={4} decay={2} />
+      <pointLight ref={light} color={colors.accentGold} distance={3} decay={2} />
       <Sparkles
         count={7}
         scale={[1.6, 1.4, 1.6]}

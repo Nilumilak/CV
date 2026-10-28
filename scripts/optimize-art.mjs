@@ -2,11 +2,13 @@
 //   Models:   meshopt-compressed geometry, WebP textures (1024 px, or 512 for small props).
 //   Textures: resized WebP.
 // Flat models (paper-thin image-to-3D results) are refused; see model-shape.mjs.
+// Models with a `grade` get their texture colour-corrected first; see art-grade.mjs.
 // Usage: npm run art
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, statSync } from 'node:fs';
 import { dirname } from 'node:path';
 import sharp from 'sharp';
+import { GRADES, gradeModel } from './art-grade.mjs';
 import { checkModelShape } from './model-shape.mjs';
 
 /** Only approved art is listed here. Source paths are relative to art-source/. */
@@ -14,7 +16,7 @@ const MODELS = [
   // Home island
   { from: 'home/island-base.glb', to: 'models/home/island-base.glb', texture: 1024 },
   { from: 'home/cottage.glb', to: 'models/home/cottage.glb', texture: 1024 },
-  { from: 'home/big-tree.glb', to: 'models/home/big-tree.glb', texture: 1024 },
+  { from: 'home/big-tree.glb', to: 'models/home/big-tree.glb', texture: 1024, grade: 'foliage' },
   { from: 'home/cat.glb', to: 'models/home/cat.glb', texture: 1024 },
   { from: 'home/lantern.glb', to: 'models/home/lantern.glb', texture: 512 },
   { from: 'home/mailbox.glb', to: 'models/home/mailbox.glb', texture: 512 },
@@ -48,13 +50,20 @@ for (const m of MODELS) {
     process.exitCode = 1;
     continue;
   }
+  // Graded copies go next to the raw art (also ignored by git), never over it.
+  let input = src(m.from);
+  if (m.grade) {
+    input = src(`.graded/${m.from}`);
+    mkdirSync(dirname(input), { recursive: true });
+    await gradeModel(src(m.from), input, GRADES[m.grade]);
+  }
   mkdirSync(dirname(out(m.to)), { recursive: true });
   execFileSync(
     process.execPath,
     [
       cli,
       'optimize',
-      src(m.from),
+      input,
       out(m.to),
       '--compress',
       'meshopt',

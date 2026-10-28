@@ -21,19 +21,21 @@ const deg = (d: number) => (d * Math.PI) / 180;
 /**
  * Where everything stands, in island units (+Z faces the overview camera, +X is the
  * visitor's right). Matches the placement table in docs/plan/islands/home.md.
+ * The focus camera looks from the front right, so objects are spread across that view
+ * rather than lined up along it, where one would hide the next.
  */
 const SPOTS = {
   cottage: [0.2, -1.0],
   tree: [-2.7, -2.4],
   bookshelf: [-1.7, 0.3],
-  bench: [2.6, 1.2],
-  stump: [2.6, -1.2],
-  lantern: [-0.1, 2.3],
-  mailbox: [2.4, 3.4],
-  stone1: [0.7, 0.9],
-  stone2: [1.1, 1.7],
-  stone3: [1.5, 2.5],
-  stone4: [2.0, 3.1],
+  stump: [-1.6, 2.0],
+  bench: [2.6, -1.0],
+  lantern: [2.3, 2.5],
+  mailbox: [3.7, 1.3],
+  stone1: [1.25, 0.75],
+  stone2: [1.9, 0.95],
+  stone3: [2.55, 1.1],
+  stone4: [3.15, 1.2],
   // Flower bushes are postponed until a solid model exists (home.md, placement table).
 } as const satisfies Record<string, [number, number]>;
 
@@ -82,7 +84,7 @@ export function HomeIsland() {
         rotation-y={deg(17)}
       />
 
-      <group position={at('bench')} rotation-y={deg(-23)}>
+      <group position={at('bench')} rotation-y={deg(-30)}>
         <GeneratedModel url={benchUrl} length={1.6} />
         <group position={[0.15, BENCH_SEAT_HEIGHT, 0]} rotation-y={deg(30)}>
           <Breathe>
@@ -97,7 +99,7 @@ export function HomeIsland() {
           url={globeUrl}
           height={0.8}
           position={[0, STUMP_HEIGHT - 0.03, 0]}
-          rotation-y={deg(-30)}
+          rotation-y={deg(30)}
         />
       </group>
 
