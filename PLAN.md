@@ -44,7 +44,8 @@ Phases 0 to 3 take about two weeks and already give a complete, shareable CV wit
 3. **Every phase ends deployed.** Auto-deploy is set up in Phase 0, so each phase can be shown to people.
 4. **Basics come early.** The classic CV, deep links, keyboard navigation and the mobile panel layout are built in Phase 2, because they shape the architecture.
 5. **One tool per job.** drei CameraControls for the camera, maath for frame easing, motion for DOM animation, Web Audio synthesis for sound, gltfjsx for models.
-6. **Inspired by Ghibli, not copied.** No Studio Ghibli images, characters or music on the site.
+6. **Island art is AI-generated with painterly textures.** You generate models from the prompts in [AI model prompts](docs/plan/phase-4-ai-prompts.md); code places, lights, animates and wires them. Home is the style test.
+7. **Inspired by Ghibli, not copied.** No Studio Ghibli images, characters or music on the site.
 
 ## Working rhythm
 

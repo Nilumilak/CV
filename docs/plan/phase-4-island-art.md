@@ -21,7 +21,7 @@ Build one island completely first, judge it on a phone, then do the rest.
 
 **Recommended mix:** packs for rocks, trees, bushes, fences and crates. Blender or AI generation for each island's landmark and its interactive objects, because those must match the story exactly.
 
-- [ ] Pick the strategy and write it down in `PLAN.md` under Key decisions.
+- [x] Pick the strategy and write it down in `PLAN.md` under Key decisions. **Decided: AI-generated models with painterly textures.** You generate them from the prompts in [AI model prompts](phase-4-ai-prompts.md); I integrate them. Only the island art is AI-made; layout, animation and interaction stay in code.
 - [ ] Create `CREDITS.md` and add every asset with author, licence and link as soon as you download it.
 
 ---
@@ -66,7 +66,9 @@ Keep the original `.glb` out of `public` after converting, or add it to `.gitign
 - [ ] Preview models quickly at https://gltf.pmnd.rs before writing any code.
 - [ ] KTX2 textures save GPU memory but need extra tools. Consider them only if Phase 7 shows memory problems on phones.
 
-## 5. Swap in toon materials
+## 5. Materials for painted textures
+
+**Decided look: painterly textures.** AI models keep their painted base-colour texture. Code wraps it in a toon material (`MeshToonMaterial` with the texture as `map`), so the brush strokes stay and the light still falls in soft bands, matching the sky and clouds. The palette-material swap below applies only to untextured kit pieces built in code.
 
 gltfjsx gives you JSX with `material={materials.toon_grass}`. Replace those with the shared palette materials.
 
@@ -107,7 +109,7 @@ For vertex-coloured models, use one shared `MeshToonMaterial` with `vertexColors
 
 ## 8. Island build sheets
 
-Order of work: Radio Tower first because it matches reference 1, then Home because every visitor sees it, then Market Town, Arena, Green Grove, Workshop, Lighthouse.
+Order of work: **Home first as the style test** (decided), then Radio Tower, then Market Town, Arena, Green Grove, Workshop, Lighthouse.
 
 The interactive objects listed here are only modelled in this phase. They get their behaviour in [Phase 5](phase-5-interactive-objects.md#object-catalogue).
 

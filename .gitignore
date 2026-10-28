@@ -29,3 +29,6 @@ dist-ssr
 test-results/
 playwright-report/
 .vercel/
+
+# Raw AI-generated models (large). Only optimised versions are committed.
+art-source/
