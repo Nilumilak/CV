@@ -16,8 +16,8 @@ interface IslandProps {
 
 /** How far an island rises and sinks, in island units. */
 const BOB_HEIGHT = 0.45;
-/** Radians per second: one full rise and fall takes about 10 seconds. */
-const BOB_SPEED = 0.6;
+/** Radians per second: one full rise and fall takes about 18 seconds. */
+const BOB_SPEED = 0.35;
 /** Peak tilt that goes with the bob, in radians. */
 const BOB_TILT = 0.012;
 
