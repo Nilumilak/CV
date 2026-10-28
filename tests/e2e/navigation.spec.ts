@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('island navigation', () => {
   test('a label opens its panel, Esc closes it and focus returns', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/?skipIntro');
     const label = page.getByRole('button', { name: /^Radio Gigabit/ });
     await label.click();
 
@@ -18,7 +18,7 @@ test.describe('island navigation', () => {
   });
 
   test('deep links open an island and Back returns', async ({ page }) => {
-    await page.goto('/#/market');
+    await page.goto('/?skipIntro#/market');
     await expect(page.getByRole('dialog').getByRole('heading', { level: 2 })).toHaveText(
       'Senior Frontend Developer',
     );
@@ -29,7 +29,7 @@ test.describe('island navigation', () => {
   });
 
   test('the Islands menu reaches every island', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/?skipIntro');
     await page.getByRole('button', { name: /^Islands/ }).click();
     const items = page.getByRole('list', { name: 'Islands' }).getByRole('button');
     await expect(items).toHaveCount(7);
@@ -40,7 +40,7 @@ test.describe('island navigation', () => {
   });
 
   test('works with the keyboard only', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/?skipIntro');
     // Tab through the top bar to the first island label, then open it.
     const firstLabel = page.getByRole('button', { name: /^Home/ });
     await expect(firstLabel).toBeVisible();
