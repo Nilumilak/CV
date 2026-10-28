@@ -112,7 +112,7 @@ export function RadioIsland() {
         <Interactable {...interactive('radio-services')}>
           <SlowTurn>
             <Spin id="radio-services" turns={1} seconds={1.6}>
-              <GeneratedModel url={dishUrl} height={2.2} />
+              <GeneratedModel url={dishUrl} height={2.2} centre="base" />
             </Spin>
           </SlowTurn>
         </Interactable>
