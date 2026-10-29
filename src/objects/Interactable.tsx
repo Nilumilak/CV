@@ -78,7 +78,7 @@ export function Interactable({ id, island, label, cue, lift = true, children }: 
   useEffect(
     () =>
       useWorld.subscribe((s, prev) => {
-        if (s.activeCount !== prev.activeCount && s.activeObject === id) sound.cue(cue);
+        if (s.activeCount !== prev.activeCount && s.activeObject === id) sound.cue(cue, id);
       }),
     [id, cue],
   );

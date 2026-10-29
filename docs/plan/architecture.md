@@ -16,7 +16,7 @@ Versions checked in October 2026. Always install the latest versions, but keep t
 | Frame animation  | `maath`                                               | `easing.damp` helpers inside `useFrame`                                                                              |
 | DOM animation    | `motion` (formerly framer-motion)                     | Panels, buttons, welcome screen                                                                                      |
 | State            | `zustand` with `persist`                              | One store for the world, persisted visited islands and found objects                                                 |
-| Audio            | Web Audio API (synthesized)                           | Wind, chord pad and whoosh generated in code: no files or licences. howler can return in Phase 6 for recorded music. |
+| Audio            | Web Audio API, ElevenLabs files                        | Music and wind loops, the whoosh and per-object sounds made with ElevenLabs (scripts/sound-gen.mjs), played with plain Web Audio. Objects without a file yet use small synthesized cues. |
 | Shader extension | `three-custom-shader-material` (optional)             | Wind on grass and trees while keeping toon lighting                                                                  |
 | Models           | Blender, GLB, `gltfjsx --transform`                   | Draco geometry, WebP textures, typed React components                                                                |
 | Debug            | `leva`, `r3f-perf`                                    | Loaded only when the address has `?debug`                                                                            |

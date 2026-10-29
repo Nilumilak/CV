@@ -76,8 +76,14 @@ export function Effects() {
 
 **Decided 2026-10-28:** sound effects will be made with an AI sound generator, after all the visuals are finished. The sounds synthesized in `src/audio/sound.ts` (wind, the chord pad, the whoosh and the object cues like the cat's "mrrp") are placeholders until then. Swap them for recorded files behind the same `sound` API (`setEnabled`, `whoosh`, `cue`), so nothing else in the code has to change.
 
-- [ ] Choose the AI sound tool, check that its licence allows use on a public site, and add a credit line to `CREDITS.md` if needed.
-- [ ] Generate and swap: ambient wind and music, the fly-in whoosh, and one cue per interactive object.
+- [x] Choose the AI sound tool: **ElevenLabs** (sound effects and Music), on the Starter plan, whose licence allows commercial use without a credit line. The key lives only in the `ELEVENLABS_API_KEY` environment variable.
+- [ ] Generate and swap: ambient wind and music, the fly-in whoosh, and one sound per interactive object (not one per cue type: each lasts as long as its object's reaction). In progress, see below.
+
+**How the sounds are made (2026-10-30).** `node scripts/sound-gen.mjs` holds every prompt and length, generates versions into `art-source/audio/raw/`, levels them all to −24 LUFS in `art-source/audio/`, and builds `art-source/audio/listen.html` for picking by ear. `--export` compresses the `PICKS` into `src/assets/audio/`. Lessons so far:
+- Plain prompts come out loud and realistic; "very quiet, ASMR-soft, muffled" gives the cosy character but faint files, which the levelling fixes.
+- Wind and whoosh must ask for a *whimsical, hand-drawn animated film* sound and rule out realism ("no engine, no airplane"); realistic versions were rejected.
+- ElevenLabs Music writes a complete piece with an ending. The music loop cuts music-3 at 54 s, just after its final chord starts, and lays the chord's fading tail (54–60 s) over the opening, so the loop rings on into its first notes.
+- Picked: wind-5, music-3 (as the loop), whoosh-6, home-cat-6. The other objects still use the synthesized cues until theirs are picked.
 - [ ] Per-island ambience with drei `PositionalAudio`, or simple distance-based volume through howler: radio static, crowd, birds and water, machinery, tram bells.
 - [ ] Lower the ambient music slightly when an island is focused, so the island's own sound comes through.
 - [ ] Check the overall mix on laptop speakers and on headphones. Nothing should be startling.
