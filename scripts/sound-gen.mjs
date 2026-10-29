@@ -228,7 +228,6 @@ const PICKS = {
   'home-bookshelf': 'home-bookshelf-1',
   'home-mailbox': 'home-mailbox-1',
   'home-lantern': 'home-lantern-14',
-  'eco-admin': 'eco-admin-4',
   'eco-build': 'eco-build-7',
   'eco-lead': 'eco-lead-9',
   'eco-payments': 'eco-payments-6',
