@@ -239,6 +239,7 @@ const PICKS = {
   // A mix made with ffmpeg: kafka-auth-5 (waves) with kafka-auth-8 (gulls) at 70%.
   'kafka-auth': 'kafka-auth-11',
   'mone-account': 'mone-account-7',
+  'mone-fsd': 'mone-fsd-1',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */

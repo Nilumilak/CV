@@ -9,6 +9,7 @@
 import bookshelfUrl from '@/assets/audio/home-bookshelf.mp3?url';
 import catUrl from '@/assets/audio/home-cat.mp3?url';
 import signpostUrl from '@/assets/audio/mone-account.mp3?url';
+import balloonUrl from '@/assets/audio/mone-fsd.mp3?url';
 import lighthouseUrl from '@/assets/audio/kafka-auth.mp3?url';
 import saplingsUrl from '@/assets/audio/eco-build.mp3?url';
 import binsUrl from '@/assets/audio/eco-lead.mp3?url';
@@ -46,7 +47,8 @@ const OBJECT_SOUNDS: Record<string, { url: string; level?: number }> = {
   'eco-build': { url: saplingsUrl, level: 0.4 },
   // Its sharp thumps capped the levelling, so this file is about 5 dB quieter than the rest.
   'eco-lead': { url: binsUrl, level: 0.4 },
-  'mone-account': { url: signpostUrl },
+  'mone-fsd': { url: balloonUrl },
+  'mone-account': { url: signpostUrl, level: 0.6 },
   'kafka-auth': { url: lighthouseUrl, level: 0.3 },
   'eco-payments': { url: collectionBoxUrl },
 };
