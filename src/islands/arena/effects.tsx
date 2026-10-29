@@ -60,7 +60,8 @@ export function PodiumHop({
 /**
  * Spotlights that switch on one after another, each shining down onto one app from above
  * and in front, and stay on until the end of the roll call. Light only: a soft beam and a
- * light on the app. `targets` are the apps' middles, in roll-call order.
+ * gentle light on the app. `targets` are the tops of the apps, in roll-call order; each
+ * beam stops just above its app, because a beam laid over a model washes it out white.
  */
 export function Spotlights({ id, targets }: { id: string; targets: Vec3[] }) {
   const beams = useRef<THREE.Mesh[]>([]);
@@ -69,8 +70,8 @@ export function Spotlights({ id, targets }: { id: string; targets: Vec3[] }) {
   const shapes = useMemo(
     () =>
       targets.map((target) => {
-        const to = new THREE.Vector3(...target);
-        const from = to.clone().add(new THREE.Vector3(0, 2.2, 1.0));
+        const to = new THREE.Vector3(...target).add(new THREE.Vector3(0, 0.08, 0.1));
+        const from = to.clone().add(new THREE.Vector3(0, 2.0, 1.0));
         const length = from.distanceTo(to);
         // The cylinder's +Y end is the narrow lamp end, up and in front.
         const turn = new THREE.Quaternion().setFromUnitVectors(
@@ -88,11 +89,11 @@ export function Spotlights({ id, targets }: { id: string; targets: Vec3[] }) {
     const end = p === null ? 0 : smoothstep(clamp01((ROLL_CALL_SECONDS - t) / 0.4));
     shapes.forEach((s, i) => {
       const on = p === null ? 0 : smoothstep(clamp01((t - LIT_AT[i]!) / 0.25)) * end;
-      s.material.uniforms.strength!.value = 0.5 * on;
+      s.material.uniforms.strength!.value = 0.2 * on;
       const beam = beams.current[i];
       if (beam) beam.visible = on > 0.01;
       const light = lights.current[i];
-      if (light) light.intensity = 3 * on;
+      if (light) light.intensity = 0.8 * on;
     });
   });
   return (
@@ -110,13 +111,14 @@ export function Spotlights({ id, targets }: { id: string; targets: Vec3[] }) {
             renderOrder={3}
             raycast={noHit}
           >
-            <cylinderGeometry args={[0.05, 0.4, s.length, 20, 1, true]} />
+            <cylinderGeometry args={[0.05, 0.3, s.length, 20, 1, true]} />
           </mesh>
+          {/* Up the beam and in front, so the app is lit, not blown out. */}
           <pointLight
             ref={(el) => {
               if (el) lights.current[i] = el;
             }}
-            position={[s.to.x, s.to.y + 0.6, s.to.z + 0.4]}
+            position={[s.to.x, s.to.y + 0.7, s.to.z + 0.8]}
             color="#fff1c4"
             intensity={0}
             distance={2}

@@ -47,7 +47,7 @@ const SPOTS = {
   stadium: [0, 0],
   scoreboard: view(0, -4.1),
   booths: view(-4.0, -1.2),
-  podium: view(2.6, 3.0),
+  podium: view(3.0, 2.5),
   shoe: view(-2.5, 3.3),
   rocks1: view(4.2, -1.0),
   rocks2: view(-4.3, 1.6),
@@ -137,7 +137,7 @@ export function ArenaIsland() {
       </group>
 
       {/* The three apps are the winners; the spotlights call them third to first. */}
-      <group position={at('podium')} rotation-y={deg(FACE_CAMERA)}>
+      <group position={at('podium')} rotation-y={deg(FACE_CAMERA - 90)}>
         <Interactable {...interactive('olimp-apps')}>
           <GeneratedModel url={podiumUrl} height={PODIUM_HEIGHT} />
           {PODIUM_APPS.map((app, order) => (
@@ -150,7 +150,7 @@ export function ArenaIsland() {
         </Interactable>
         <Spotlights
           id="olimp-apps"
-          targets={PODIUM_APPS.map((a) => [a.step[0], a.step[1] + a.height / 2, a.step[2]])}
+          targets={PODIUM_APPS.map((a) => [a.step[0], a.step[1] + a.height, a.step[2]])}
         />
         <Confetti id="olimp-apps" position={[0, PODIUM_HEIGHT + 0.3, 0.2]} />
         <PercentTag
