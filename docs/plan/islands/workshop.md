@@ -2,7 +2,7 @@
 
 [Back to Phase 4](../phase-4-island-art.md) · [AI model prompts](../phase-4-ai-prompts.md) · Previous: [Green Grove](grove.md)
 
-**Status:** design draft for review (2026-10-29). Nothing generated yet.
+**Status:** design decided (2026-10-29, section 7). Generating concepts.
 
 ---
 
@@ -128,11 +128,6 @@ Lessons applied: three-quarter views with volume for every concept (and multi-vi
 
 ---
 
-## 7. Questions for you
+## 7. Decisions (2026-10-29)
 
-1. **Steam whistle with 20 hard hats** (5 blue developers, 15 orange workers) for leading the projects, instead of little worker figures. OK?
-2. **Oscilloscope:** a sine wave draws, then the frequency changes. OK?
-3. **Circuit board:** 100+ tiny parts light up in a wave. OK?
-4. **Scroll:** unrolls with Python code and a "faster, fewer errors" stamp. OK?
-5. **Gears:** three gears turning slowly on the factory wall (decoration). OK?
-6. **Credits:** about 265. OK?
+All six proposals accepted as written: the steam whistle with 20 hard hats (5 developers, 15 workers), the oscilloscope's sine wave, the circuit board lighting up, the scroll with Python code and the stamp, three gears turning on the factory wall, and about 265 credits.

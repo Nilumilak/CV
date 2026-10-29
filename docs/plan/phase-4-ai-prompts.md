@@ -642,6 +642,82 @@ donation box at a nature reserve. No writing.
 
 ---
 
+## Workshop island
+
+Full design description and decisions: [islands/workshop.md](islands/workshop.md).
+
+A cosy old engineering workshop: a red-brick factory with two chimneys, brass gears, a steam whistle, a workbench with an oscilloscope, a circuit board on an easel and a scroll on a lectern. Screen and board faces stay plain; their pictures are code-made.
+
+| #   | File name           | Object                                      | Budget           | Interactive           | Status |
+| --- | ------------------- | ------------------------------------------- | ---------------- | --------------------- | ------ |
+| 1   | `island-base.glb`   | Rock with metal plates and pipes, grass top | 15,000 triangles | No                    | To do  |
+| 2   | `factory.glb`       | Red-brick workshop with two chimneys        | 8,000            | No (landmark)         | To do  |
+| 3   | `gear.glb`          | One brass gear (placed ×3)                  | 1,500            | No (turns)            | To do  |
+| 4   | `whistle.glb`       | Brass steam whistle on a pipe stand         | 1,500            | Yes: led the projects | To do  |
+| 5   | `workbench.glb`     | Workbench with an oscilloscope              | 4,000            | Yes: 30+ projects     | To do  |
+| 6   | `circuit-board.glb` | Big circuit board on an easel               | 2,500            | Yes: 100+ elements    | To do  |
+| 7   | `lectern.glb`       | Wooden lectern with a rolled scroll         | 2,000            | Yes: Python macros    | To do  |
+
+### 1. Island base
+
+```
+A small floating sky island seen from a three-quarter view from slightly above: a chunk of warm
+sandy rock shaped like an upside-down cone, patched here and there with riveted copper and iron
+plates, a few short copper pipes sticking out of its sides, a couple of hanging roots underneath.
+The flat top is evenly covered in short green grass right up to the edge, with no bare patches.
+Wider than it is tall.
+```
+
+### 2. Factory
+
+```
+A small cosy red-brick workshop building seen from a three-quarter view from slightly above: two
+tall brick chimneys, arched windows with a warm glow inside, a big wooden double door, copper
+gutters and a few pipes along the walls, a slate roof. One side wall is plain brick, with room for
+gears. Charming storybook proportions, more watchmaker's shop than heavy industry.
+```
+
+### 3. Gear
+
+```
+A single chunky brass gear wheel lying flat, seen from a three-quarter view from slightly above:
+thick rounded teeth, a hub in the middle with a few bolts, slightly worn polished brass. One solid
+object with real thickness.
+```
+
+### 4. Steam whistle
+
+```
+A brass factory steam whistle on a short iron pipe stand, seen from a three-quarter view from
+slightly above: a tall polished brass bell-shaped whistle, a red valve wheel on the pipe, a small
+pressure gauge, bolts and a round iron foot.
+```
+
+### 5. Workbench with an oscilloscope
+
+```
+A sturdy wooden workbench seen from a three-quarter view from slightly above, with an old boxy
+oscilloscope on top whose round-cornered screen is plain dark green and empty, a soldering iron in
+a stand, a few small electronic parts and a little lamp. Warm wood, brass knobs.
+```
+
+### 6. Circuit board on an easel
+
+```
+A large green printed circuit board standing on a wooden easel, seen from a three-quarter view from
+slightly above: copper traces, rows of tiny electronic parts, a few chips and capacitors, a thick
+board with a frame. Chunky, readable shapes.
+```
+
+### 7. Lectern with a scroll
+
+```
+A wooden lectern with a slanted top, seen from a three-quarter view from slightly above, with a
+rolled paper scroll tied with a ribbon lying on the slanted top. Carved warm wood, simple and solid.
+```
+
+---
+
 ## Checklist for a good result
 
 - [ ] The concept shows the object from a three-quarter view, with shading that shows its volume (see the volume rule).
