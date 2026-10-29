@@ -215,9 +215,11 @@ Positions are in island units: the island's own frame before its 1.2 scale, with
 | Garden lantern  | 1.0, 2.8                                   | 2.1 tall                  | 0°     | Front, left of the path                                     |
 | Mailbox         | 3.0, 2.1                                   | 1.2 tall                  | −120°  | Where the path ends; red flag faces the camera              |
 | Stepping stones | 0.8, 0.7 → 1.2, 1.4 → 1.8, 1.85 → 2.0, 2.6 | 0.6 to 0.8 wide           | random | From the door towards the front, the mailbox on the right   |
-| Flower bushes   | −3.7, 1.0 · −2.2, 3.4 · 3.9, −0.4          | 1.0 to 1.3 wide           | random | Around the rim, framing the front. **Postponed**, see below |
+| Flower bushes   | −3.7, 1.0 (hydrangea) · −2.2, 3.4 (daisy)  | 1.3 and 1.0 wide          | 20°, 110° | Front-left grass. The third spot (3.9, −0.4) is dropped: it stands in front of the bench and would cover the cat |
 
-**Flower bushes are postponed (decided 2026-10-28).** Both generated bushes came out paper-thin: Meshy turns a round, edgeless blob of leaves into a flat painted card, even from a concept with clear volume. The next attempt should use multi-view: front, side and back views of the bush, then multi-image-to-3D, about 33 credits. The first big tree was flat too; it was regenerated from a three-quarter-view concept and is solid. Its leaves came out olive, so `npm run art` grades them toward the palette greens (the `foliage` grade in `scripts/art-grade.mjs`); the trunk keeps its brown. See the volume rule in [phase-4-ai-prompts.md](../phase-4-ai-prompts.md).
+**Flower bushes are back (2026-10-29).** A pink hydrangea dome and a white-and-yellow daisy ball, each made from front, side and back views of an approved concept, then multi-image-to-3D. Both came out solid. Their files are heavy for bushes (about 830 KB and 660 KB): Meshy splits their texture layout into tiny pieces, so the optimizer's simplify step can't reduce them; a Meshy remesh to a lower polycount would.
+
+**Earlier (2026-10-28) they were postponed.** Both generated bushes came out paper-thin: Meshy turns a round, edgeless blob of leaves into a flat painted card, even from a concept with clear volume. The next attempt should use multi-view: front, side and back views of the bush, then multi-image-to-3D, about 33 credits. The first big tree was flat too; it was regenerated from a three-quarter-view concept and is solid. Its leaves came out olive, so `npm run art` grades them toward the palette greens (the `foliage` grade in `scripts/art-grade.mjs`); the trunk keeps its brown. See the volume rule in [phase-4-ai-prompts.md](../phase-4-ai-prompts.md).
 
 Interactive objects all stand on the front half and face the front right, so they are visible in the focus view with the panel open.
 
@@ -253,7 +255,7 @@ What is built now:
 | ------------- | ---------------------------------------------------------------------------- |
 | Whole island  | Bobs slowly (shared by all islands)                                          |
 | Big tree      | Sways very gently                                                            |
-| Flower bushes | Sway gently, each slightly out of step (when the bushes come back)           |
+| Flower bushes | Sway gently, each slightly out of step                                         |
 | Cat           | Breathes slowly                                                              |
 | Cottage       | Smoke puffs curl from the chimney; the round window glows warmly             |
 | Lantern       | Flickers softly, a dim warm light on the grass, a few fireflies drift nearby |
