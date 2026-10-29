@@ -2,7 +2,7 @@
 
 [Back to Phase 4](../phase-4-island-art.md) · [AI model prompts](../phase-4-ai-prompts.md) · Previous: [Market Town](market.md)
 
-**Status:** design decided (2026-10-29, section 7). Generating models.
+**Status:** built on 2026-10-29. All 6 models generated and placed; all four achievement objects interactive. Screen, scoreboard, window and floodlight positions were measured on the models themselves. First layout, to be tuned from screenshots.
 
 ---
 

@@ -54,6 +54,14 @@ const MODELS = [
   { from: 'market/balloon.glb', to: 'models/market/balloon.glb', texture: 512 },
   { from: 'market/crane.glb', to: 'models/market/crane.glb', texture: 512 },
 
+  // Arena island
+  { from: 'arena/island-base.glb', to: 'models/arena/island-base.glb', texture: 1024 },
+  { from: 'arena/stadium.glb', to: 'models/arena/stadium.glb', texture: 1024 },
+  { from: 'arena/scoreboard.glb', to: 'models/arena/scoreboard.glb', texture: 512 },
+  { from: 'arena/display-stands.glb', to: 'models/arena/display-stands.glb', texture: 512 },
+  { from: 'arena/parcel.glb', to: 'models/arena/parcel.glb', texture: 512 },
+  { from: 'arena/twin-towers.glb', to: 'models/arena/twin-towers.glb', texture: 512 },
+
   // Shared kit, reused across islands
   { from: 'shared/rock-cluster.glb', to: 'models/shared/rock-cluster.glb', texture: 512 },
 ];

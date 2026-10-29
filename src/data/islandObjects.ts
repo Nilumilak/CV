@@ -29,6 +29,11 @@ export const ISLAND_OBJECTS = [
   { id: 'mone-account', label: 'Account areas', name: 'the signpost', cue: 'whirr' },
   { id: 'mone-fsd', label: 'FSD and releases', name: 'the balloon', cue: 'hum' },
   { id: 'mone-packages', label: 'UI kit and API core', name: 'the crane', cue: 'knock' },
+  // Arena (design: docs/plan/islands/arena.md)
+  { id: 'olimp-apps', label: '3 apps, team of 6', name: 'the display stands', cue: 'chime' },
+  { id: 'olimp-preact', label: 'Bundle −40%', name: 'the parcel', cue: 'knock' },
+  { id: 'olimp-virtual', label: 'Virtual scrolling', name: 'the scoreboard', cue: 'whirr' },
+  { id: 'olimp-iframe', label: 'iframe messages', name: 'the twin towers', cue: 'beep' },
 ] as const satisfies readonly IslandObject[];
 
 export type IslandObjectId = (typeof ISLAND_OBJECTS)[number]['id'];

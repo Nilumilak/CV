@@ -1,0 +1,139 @@
+import { useRef } from 'react';
+import type * as THREE from 'three';
+import standsUrl from '@/assets/models/arena/display-stands.glb?url';
+import baseUrl from '@/assets/models/arena/island-base.glb?url';
+import parcelUrl from '@/assets/models/arena/parcel.glb?url';
+import scoreboardUrl from '@/assets/models/arena/scoreboard.glb?url';
+import stadiumUrl from '@/assets/models/arena/stadium.glb?url';
+import towersUrl from '@/assets/models/arena/twin-towers.glb?url';
+import rockUrl from '@/assets/models/shared/rock-cluster.glb?url';
+import { islandObject, type IslandObjectId } from '@/data/islandObjects';
+import { Interactable } from '@/objects/Interactable';
+import { Squash } from '@/objects/reactions';
+import { GeneratedModel } from '../GeneratedModel';
+import { deg, FACE_CAMERA, view } from '../layout';
+import { useGroundHeights } from '../useGroundHeights';
+import {
+  FloodlightGlows,
+  MessageBall,
+  PercentTag,
+  ScoreboardRows,
+  StandScreen,
+  TeamFlags,
+} from './effects';
+
+/** Props for an object's Interactable, from the shared list in data/islandObjects.ts. */
+const interactive = (id: IslandObjectId) => {
+  const { label, cue } = islandObject(id);
+  return { id, label, cue, island: 'arena' as const };
+};
+
+/**
+ * Where everything stands (design: docs/plan/islands/arena.md, section 4).
+ * A ring around the stadium: the stadium is the centre; the scoreboard stands behind it,
+ * the twin towers on the left, the display stands and the parcel in front. Ring spots are
+ * "across the view, towards the camera" (see ../layout.ts).
+ */
+const SPOTS = {
+  stadium: [0, 0],
+  scoreboard: view(0, -4.1),
+  towers: view(-4.0, -1.2),
+  stands: view(2.6, 3.3),
+  parcel: view(-2.5, 3.3),
+  rocks1: view(4.2, -1.0),
+  rocks2: view(-4.3, 1.6),
+} satisfies Record<string, [number, number]>;
+
+/** Model sizes; the screen, window and lamp positions below are measured on these sizes. */
+const STADIUM_HEIGHT = 1.7;
+const SCOREBOARD_HEIGHT = 3;
+const STANDS_HEIGHT = 1.8;
+const TOWERS_HEIGHT = 3.5;
+
+/**
+ * Positions found on the models themselves (colour and facing of their surfaces), in each
+ * model's own space after scaling, so code-made parts land exactly on the right spot.
+ */
+const FLOODLIGHT_LAMPS: [number, number, number][] = [
+  [-1.61, 1.6, 1.4],
+  [1.66, 1.6, -1.31],
+  [1.96, 1.6, 0.95],
+  [-1.48, 1.6, -1.35],
+];
+
+/**
+ * Arena island (design: docs/plan/islands/arena.md). Every model is AI-generated; code
+ * places them, adds the floodlight glow and gives the four achievement objects their
+ * reactions.
+ */
+export function ArenaIsland() {
+  const frame = useRef<THREE.Group>(null);
+  const base = useRef<THREE.Group>(null);
+  const y = useGroundHeights(frame, base, SPOTS);
+  const at = (spot: keyof typeof SPOTS): [number, number, number] => [
+    SPOTS[spot][0],
+    y[spot],
+    SPOTS[spot][1],
+  ];
+
+  return (
+    <group ref={frame}>
+      <GeneratedModel ref={base} url={baseUrl} length={11} anchor="top" />
+
+      {/* Centre: the stadium landmark (not interactive), long side across the view. */}
+      <group position={at('stadium')} rotation-y={deg(FACE_CAMERA)}>
+        <GeneratedModel url={stadiumUrl} height={STADIUM_HEIGHT} />
+        <FloodlightGlows positions={FLOODLIGHT_LAMPS} />
+      </group>
+
+      <group position={at('scoreboard')} rotation-y={deg(FACE_CAMERA)}>
+        <Interactable {...interactive('olimp-virtual')}>
+          <GeneratedModel url={scoreboardUrl} height={SCOREBOARD_HEIGHT} />
+          <ScoreboardRows id="olimp-virtual" position={[0, 1.92, 0.22]} width={1.7} height={1.5} />
+        </Interactable>
+      </group>
+
+      <group position={at('towers')} rotation-y={deg(FACE_CAMERA)}>
+        <Interactable {...interactive('olimp-iframe')}>
+          <GeneratedModel url={towersUrl} height={TOWERS_HEIGHT} />
+        </Interactable>
+        <MessageBall id="olimp-iframe" from={[-0.42, 2.2, 0]} to={[0.42, 2.2, 0]} />
+      </group>
+
+      <group position={at('stands')} rotation-y={deg(FACE_CAMERA)}>
+        <Interactable {...interactive('olimp-apps')}>
+          <GeneratedModel url={standsUrl} height={STANDS_HEIGHT} />
+          <StandScreen
+            id="olimp-apps"
+            kind="phone"
+            delay={0}
+            position={[-1.1, 0.99, 0.03]}
+            width={0.5}
+            height={1.3}
+          />
+          <StandScreen
+            id="olimp-apps"
+            kind="desktop"
+            delay={0.12}
+            position={[0, 0.92, 0.07]}
+            width={0.9}
+            height={0.5}
+          />
+        </Interactable>
+        <TeamFlags id="olimp-apps" position={[0, 0.1, 0.55]} />
+      </group>
+
+      <group position={at('parcel')} rotation-y={deg(FACE_CAMERA - 15)}>
+        <Interactable {...interactive('olimp-preact')}>
+          <Squash id="olimp-preact">
+            <GeneratedModel url={parcelUrl} height={1} />
+          </Squash>
+        </Interactable>
+        <PercentTag id="olimp-preact" position={[0, 1.5, 0]} />
+      </group>
+
+      <GeneratedModel url={rockUrl} length={1.4} position={at('rocks1')} rotation-y={deg(40)} />
+      <GeneratedModel url={rockUrl} length={1.1} position={at('rocks2')} rotation-y={deg(200)} />
+    </group>
+  );
+}

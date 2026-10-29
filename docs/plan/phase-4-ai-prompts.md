@@ -503,14 +503,14 @@ Full design description and decisions: [islands/arena.md](islands/arena.md).
 
 A little floating stadium on match day: the stadium in the middle, a scoreboard, three display stands, a parcel box and two towers facing each other. Screen and scoreboard faces stay plain; their pictures are drawn in code.
 
-| #   | File name            | Object                                      | Budget           | Interactive          | Status |
-| --- | -------------------- | ------------------------------------------- | ---------------- | -------------------- | ------ |
-| 1   | `island-base.glb`    | Wide flat island, grass to the edge         | 15,000 triangles | No                   | To do  |
-| 2   | `stadium.glb`        | Small oval stadium with 4 floodlights       | 8,000            | No (landmark)        | To do  |
-| 3   | `scoreboard.glb`     | Tall scoreboard on two legs                 | 3,000            | Yes: virtual scroll  | To do  |
-| 4   | `display-stands.glb` | Three display stands (phone, desktop, gate) | 4,000            | Yes: 3 apps, team    | To do  |
-| 5   | `parcel.glb`         | Big taped cardboard parcel box              | 1,500            | Yes: bundle −40%     | To do  |
-| 6   | `twin-towers.glb`    | Two slim towers facing each other           | 4,000            | Yes: iframe messages | To do  |
+| #   | File name            | Object                                      | Budget           | Interactive          | Status   |
+| --- | -------------------- | ------------------------------------------- | ---------------- | -------------------- | -------- |
+| 1   | `island-base.glb`    | Wide flat island, grass to the edge         | 15,000 triangles | No                   | **Done** |
+| 2   | `stadium.glb`        | Small oval stadium with 4 floodlights       | 8,000            | No (landmark)        | **Done** |
+| 3   | `scoreboard.glb`     | Tall scoreboard on two legs                 | 3,000            | Yes: virtual scroll  | **Done** |
+| 4   | `display-stands.glb` | Three display stands (phone, desktop, gate) | 4,000            | Yes: 3 apps, team    | **Done** |
+| 5   | `parcel.glb`         | Big taped cardboard parcel box              | 1,500            | Yes: bundle −40%     | **Done** |
+| 6   | `twin-towers.glb`    | Two slim towers facing each other           | 4,000            | Yes: iframe messages | **Done** |
 
 ### 1. Island base
 
