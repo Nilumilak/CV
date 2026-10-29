@@ -39,7 +39,7 @@ export const ISLANDS: IslandLayout[] = [
     position: [-18, -2, -16],
     scale: 1,
     seed: 3,
-    labelOffset: [0, 7, 0],
+    labelOffset: [0, 8.5, 0], // above the big tree
     camera: islandCamera([-18, -1, -16]),
     accent: '#4E8B3A',
   },

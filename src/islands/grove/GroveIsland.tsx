@@ -6,7 +6,7 @@ import boardUrl from '@/assets/models/grove/noticeboard.glb?url';
 import binsUrl from '@/assets/models/grove/recycling-bins.glb?url';
 import saplingUrl from '@/assets/models/grove/sapling.glb?url';
 import shrineUrl from '@/assets/models/grove/shrine.glb?url';
-import willowUrl from '@/assets/models/grove/willow.glb?url';
+import treeUrl from '@/assets/models/grove/big-tree.glb?url';
 import rockUrl from '@/assets/models/shared/rock-cluster.glb?url';
 import { islandObject, type IslandObjectId } from '@/data/islandObjects';
 import { Interactable } from '@/objects/Interactable';
@@ -35,12 +35,12 @@ const interactive = (id: IslandObjectId) => {
 
 /**
  * Where everything stands (design: docs/plan/islands/grove.md, section 4), as "across the
- * view, towards the camera" (see ../layout.ts): the willow at the back with the shrine at
+ * view, towards the camera" (see ../layout.ts): the big tree at the back with the shrine at
  * its foot, the noticeboard on the left, the collection box on the right, the recycling
  * bins front left, the saplings front right, and the waterfall off the right edge.
  */
 const SPOTS = {
-  willow: view(-0.6, -3.0),
+  tree: view(-0.6, -3.0),
   shrine: view(1.4, -2.3),
   board: view(-3.7, -0.4),
   box: view(3.0, -1.2),
@@ -62,7 +62,7 @@ const SAPLINGS = [
 ] as const;
 
 /** Model sizes; the positions of code-made parts below are measured on these sizes. */
-const WILLOW_HEIGHT = 6.5;
+const TREE_HEIGHT = 6.5;
 const BINS_HEIGHT = 1.1;
 const BOX_HEIGHT = 1.2;
 const BOARD_HEIGHT = 1.6;
@@ -107,14 +107,14 @@ export function GroveIsland() {
     <group ref={frame}>
       <GeneratedModel ref={base} url={baseUrl} length={11} anchor="top" />
 
-      {/* Back: the willow landmark with the shrine at its foot (not interactive). */}
+      {/* Back: the big tree (Home's tree, re-toned) with the shrine at its foot. */}
       <GeneratedModel
-        url={willowUrl}
-        height={WILLOW_HEIGHT}
-        position={at('willow')}
+        url={treeUrl}
+        height={TREE_HEIGHT}
+        position={at('tree')}
         rotation-y={deg(FACE_CAMERA)}
       />
-      <FallingLeaves centre={at('willow')} radius={2.4} height={WILLOW_HEIGHT * 0.75} />
+      <FallingLeaves centre={at('tree')} radius={2.4} height={TREE_HEIGHT * 0.75} />
       <GeneratedModel
         url={shrineUrl}
         height={1.2}

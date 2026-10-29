@@ -2,7 +2,7 @@
 
 [Back to Phase 4](../phase-4-island-art.md) · [AI model prompts](../phase-4-ai-prompts.md) · Previous: [Arena](arena.md)
 
-**Status:** design decided (2026-10-29, section 7). Generating models.
+**Status:** built on 2026-10-29. Six models generated and placed; the landmark is Home's big tree re-toned (see the note in section 7). All four achievement objects interactive. First layout, to be tuned from screenshots.
 
 ---
 
@@ -138,3 +138,7 @@ Lessons applied: three-quarter views with volume for every concept, extra care f
 ## 7. Decisions (2026-10-29)
 
 All seven proposals accepted as written: the code-made waterfall, the recycling bins with litter and the "trash-free.ru" tag, the growing saplings, the mossy stone shrine under the big tree, the collection box for ЮKassa, the noticeboard for admin-editable content, and about 265 credits.
+
+**Landmark tree (2026-10-29).** The first big-tree concept came out looking like Home's tree, so it was redrawn as a weeping willow. The willow then came out flat twice, from one image and from three views: Meshy cannot build long hanging leaf curtains as volume. To spend no more credits on this island, the landmark is now Home's big tree re-toned to a deeper, cooler forest green (the `grove` grade in `scripts/art-grade.mjs`). The sapling's first model also had a flat crown; it was rebuilt from three views and is solid. The shape check now measures every horizontal slice, so a model with one flat part is refused too.
+
+Credits used for this island: about 333 (concepts and views 33, 3D models 300, including the two flat willows).

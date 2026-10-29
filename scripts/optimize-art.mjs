@@ -79,7 +79,8 @@ const MODELS = [
 
   // Green Grove island
   { from: 'grove/island-base.glb', to: 'models/grove/island-base.glb', texture: 1024 },
-  { from: 'grove/willow.glb', to: 'models/grove/willow.glb', texture: 1024 },
+  // Landmark: Home's big tree re-toned (the willow came out flat twice; no new credits).
+  { from: 'home/big-tree.glb', to: 'models/grove/big-tree.glb', texture: 1024, grade: 'grove' },
   { from: 'grove/shrine.glb', to: 'models/grove/shrine.glb', texture: 512 },
   { from: 'grove/recycling-bins.glb', to: 'models/grove/recycling-bins.glb', texture: 512 },
   { from: 'grove/sapling.glb', to: 'models/grove/sapling.glb', texture: 512 },
@@ -128,7 +129,8 @@ for (const m of models) {
   // reads the previous step's output.
   let input = src(m.from);
   if (m.removeFaces || m.grassTop || m.grade) {
-    const fixed = src(`.graded/${m.from}`);
+    // Keyed by output, so two re-toned copies of one source never overwrite each other.
+    const fixed = src(`.graded/${m.to}`);
     mkdirSync(dirname(fixed), { recursive: true });
     if (m.removeFaces) {
       const removed = await removeFacesModel(input, fixed, m.removeFaces);

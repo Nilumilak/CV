@@ -22,6 +22,19 @@ export const GRADES = {
     saturation: 1.08,
     lift: 0.14, // raises dark values a little, so shadows read as green, not mud
   },
+  /**
+   * Home's tree re-toned for the Green Grove: a deeper, cooler forest green that matches
+   * the Grove's dark mossy rock, so the shared model doesn't read as a copy.
+   */
+  grove: {
+    from: 45,
+    to: 140,
+    feather: 20,
+    hueShift: 34,
+    shadowHueShift: 16,
+    saturation: 1.0,
+    lift: 0.02,
+  },
 };
 
 /** Writes a copy of a .glb with every texture graded. Meshy models (no PBR) only have colour maps. */
