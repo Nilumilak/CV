@@ -71,7 +71,10 @@ export function Spotlights({ id, targets }: { id: string; targets: Vec3[] }) {
     () =>
       targets.map((target) => {
         const to = new THREE.Vector3(...target).add(new THREE.Vector3(0, 0.08, 0.1));
-        const from = to.clone().add(new THREE.Vector3(0, 2.0, 1.0));
+        // Each from its own side, like stage lights: an app on the left is lit from the
+        // left, one on the right from the right, the middle one from straight above.
+        const side = Math.sign(Math.round(target[0] * 10));
+        const from = to.clone().add(new THREE.Vector3(side * 1.3, 2.0, 0.8));
         const length = from.distanceTo(to);
         // The cylinder's +Y end is the narrow lamp end, up and in front.
         const turn = new THREE.Quaternion().setFromUnitVectors(
@@ -79,7 +82,10 @@ export function Spotlights({ id, targets }: { id: string; targets: Vec3[] }) {
           from.clone().sub(to).normalize(),
         );
         const middle = from.clone().add(to).multiplyScalar(0.5);
-        return { length, turn, middle, to, material: beamShader() };
+        // The light sits a third of the way up the beam, so it falls on the app from the
+        // beam's side.
+        const lamp = to.clone().lerp(from, 0.35);
+        return { length, turn, middle, lamp, material: beamShader() };
       }),
     [targets],
   );
@@ -89,11 +95,11 @@ export function Spotlights({ id, targets }: { id: string; targets: Vec3[] }) {
     const end = p === null ? 0 : smoothstep(clamp01((ROLL_CALL_SECONDS - t) / 0.4));
     shapes.forEach((s, i) => {
       const on = p === null ? 0 : smoothstep(clamp01((t - LIT_AT[i]!) / 0.25)) * end;
-      s.material.uniforms.strength!.value = 0.2 * on;
+      s.material.uniforms.strength!.value = 0.35 * on;
       const beam = beams.current[i];
       if (beam) beam.visible = on > 0.01;
       const light = lights.current[i];
-      if (light) light.intensity = 0.8 * on;
+      if (light) light.intensity = 1.5 * on;
     });
   });
   return (
@@ -113,12 +119,11 @@ export function Spotlights({ id, targets }: { id: string; targets: Vec3[] }) {
           >
             <cylinderGeometry args={[0.05, 0.3, s.length, 20, 1, true]} />
           </mesh>
-          {/* Up the beam and in front, so the app is lit, not blown out. */}
           <pointLight
             ref={(el) => {
               if (el) lights.current[i] = el;
             }}
-            position={[s.to.x, s.to.y + 0.7, s.to.z + 0.8]}
+            position={s.lamp}
             color="#fff1c4"
             intensity={0}
             distance={2}
