@@ -66,7 +66,7 @@ Market sits on the right of the world (`[30, 5, -8]`). From the overview it must
 | Fountain and tram loop | island centre   | 1.6 wide | Tram loop 1.4 m from the fountain's centre  |
 | Stacked houses         | −1.9, −3.3      | 4.2 tall | Back left                                   |
 | Domed bank             | 1.6, −3.3       | 3.6 tall | Back right of the houses; landmark          |
-| Windmill               | −4.0, 0.3       | 3.2 tall | Left side, sails facing the camera          |
+| Windmill               | −4.0, 0.3       | 2.4 tall | Left side, sails facing the camera          |
 | Balloon                | 3.8, −1.0       | 3.2 tall | Right side, floating a little above its pad |
 | Signpost               | −2.6, 2.8       | 2 tall   | Front left                                  |
 | Shack and glass        | 2.6, 2.8        | 2.2 long | Front right                                 |

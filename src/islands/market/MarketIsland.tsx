@@ -64,12 +64,12 @@ const POLE_HEIGHT = 2.6;
 const HOUSES_HEIGHT = 4.2;
 const BANK_HEIGHT = 3.6;
 
-const WINDMILL_HEIGHT = 3.2;
+const WINDMILL_HEIGHT = 2.4;
 /**
  * The end of the windmill's axle, where the sails turn, measured on the model at this
  * size (centred on the tower's foot): the axle sticks out of the cap towards the front.
  */
-const WINDMILL_HUB: [number, number, number] = [0, 2.53, 1.7];
+const WINDMILL_HUB: [number, number, number] = [0, 1.9, 1.28];
 /**
  * Where the UI-kit pieces land, relative to the windmill (across, up, towards): the
  * houses, the bank, the fountain and the shack, every part of town built on the kit.
@@ -128,7 +128,7 @@ export function MarketIsland() {
         <Interactable {...interactive('mone-packages')}>
           <GeneratedModel url={windmillUrl} height={WINDMILL_HEIGHT} centre="base" />
           <group position={WINDMILL_HUB}>
-            <Sails id="mone-packages" />
+            <Sails id="mone-packages" length={1.0} />
           </group>
         </Interactable>
         <KitDelivery id="mone-packages" from={WINDMILL_HUB} targets={KIT_TARGETS} />
