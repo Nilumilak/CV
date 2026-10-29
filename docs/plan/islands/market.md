@@ -50,7 +50,7 @@ Market sits on the right of the world (`[30, 5, -8]`). From the overview it must
 **A ring around the town square (revised 2026-10-29).** The first layout used Radio's two rows, but it put the fountain off the base's cobbled square and the houses straight behind the bank, where their footprints overlapped. Market's base has a natural centre, so the layout is a ring instead:
 
 - **Middle:** the fountain with the tram loop, in the centre of the cobbled square (island centre).
-- **Around the edge, about 4 m out,** spaced so no footprints touch: houses and bank side by side at the back, crane and balloon at the sides, signpost and shack at the front.
+- **Around the edge, about 4 m out,** spaced so no footprints touch: houses and bank side by side at the back, windmill and balloon at the sides, signpost and shack at the front.
 
 ```
                  [HOUSES]  ~bunting~  [BANK]   ~bunting~  |pole|
