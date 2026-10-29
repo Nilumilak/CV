@@ -2,7 +2,7 @@
 
 [Back to Phase 4](../phase-4-island-art.md) · [AI model prompts](../phase-4-ai-prompts.md) · Previous: [Market Town](market.md)
 
-**Status:** design draft for review (2026-10-29). Nothing generated yet.
+**Status:** design decided (2026-10-29, section 7). Generating models.
 
 ---
 
@@ -128,10 +128,6 @@ Lessons applied: three-quarter views (volume rule), grass right up to the edge o
 
 ---
 
-## 7. Questions for you
+## 7. Decisions (2026-10-29)
 
-1. **The stadium in the middle**, with the four objects in a ring around it, like Market Town. OK?
-2. **Three display stands** as one model, lighting up one by one, plus six small team flags popping up. OK, or another idea for "3 apps, team of 6"?
-3. **Parcel box** squishing to 60% with a "−40%" tag. OK?
-4. **Twin towers** with a glowing ball flying between their windows. OK?
-5. **Credits:** about 230. OK?
+All five proposals accepted as written: the stadium in the middle with a ring of objects, three display stands with six team flags, the parcel box squishing with a "−40%" tag, the twin towers with a glowing ball, and about 230 credits.

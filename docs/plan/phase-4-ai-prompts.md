@@ -497,6 +497,73 @@ hook hanging on a cable. Thick beams, bold readable shapes.
 
 ---
 
+## Arena island
+
+Full design description and decisions: [islands/arena.md](islands/arena.md).
+
+A little floating stadium on match day: the stadium in the middle, a scoreboard, three display stands, a parcel box and two towers facing each other. Screen and scoreboard faces stay plain; their pictures are drawn in code.
+
+| #   | File name            | Object                                      | Budget           | Interactive          | Status |
+| --- | -------------------- | ------------------------------------------- | ---------------- | -------------------- | ------ |
+| 1   | `island-base.glb`    | Wide flat island, grass to the edge         | 15,000 triangles | No                   | To do  |
+| 2   | `stadium.glb`        | Small oval stadium with 4 floodlights       | 8,000            | No (landmark)        | To do  |
+| 3   | `scoreboard.glb`     | Tall scoreboard on two legs                 | 3,000            | Yes: virtual scroll  | To do  |
+| 4   | `display-stands.glb` | Three display stands (phone, desktop, gate) | 4,000            | Yes: 3 apps, team    | To do  |
+| 5   | `parcel.glb`         | Big taped cardboard parcel box              | 1,500            | Yes: bundle −40%     | To do  |
+| 6   | `twin-towers.glb`    | Two slim towers facing each other           | 4,000            | Yes: iframe messages | To do  |
+
+### 1. Island base
+
+```
+A small floating sky island seen from a three-quarter view from slightly above: a wide flat disc of
+land on a chunk of warm sandy rock shaped like a shallow upside-down cone, layered strata, a few
+hanging roots underneath. The flat top is evenly covered in short fresh green grass right up to
+the edge, with no bare patches. Much wider than it is tall.
+```
+
+### 2. Stadium
+
+```
+A small cute oval open-air football stadium seen from a three-quarter view from slightly above: low
+curved stands painted stadium blue and white with rows of little seats all around, a green pitch
+with white lines inside, four slim floodlight towers at the corners with lamp panels on top, a few
+pennant poles on the rim. Toy-like storybook proportions, compact.
+```
+
+### 3. Scoreboard
+
+```
+A tall old-fashioned stadium scoreboard standing on two sturdy legs, seen from a three-quarter view
+from slightly above: a big flat board face, plain dark blue and completely empty, framed in white
+with rounded corners, a small roof on top with a little round clock.
+```
+
+### 4. Display stands
+
+```
+Three outdoor display stands side by side on one low shared platform, seen from a three-quarter view
+from slightly above: a tall narrow one shaped like a giant phone, a wide one like a desktop monitor
+on a stand, and a small arched gate with a big golden padlock hanging on it. Screen faces plain,
+empty and dark blue. Stadium blue and white frames.
+```
+
+### 5. Parcel box
+
+```
+A big chunky cardboard parcel box, slightly bulging, wrapped with tan packing tape, a blank shipping
+label, soft rounded edges, seen from a three-quarter view from slightly above.
+```
+
+### 6. Twin towers
+
+```
+Two slim modern towers standing side by side with a small gap between them, joined at the base, seen
+from a three-quarter view from slightly above: white walls with stadium blue accents, a column of
+warm lit windows on each tower on the sides facing each other, flat roofs with small antennas.
+```
+
+---
+
 ## Checklist for a good result
 
 - [ ] The concept shows the object from a three-quarter view, with shading that shows its volume (see the volume rule).
