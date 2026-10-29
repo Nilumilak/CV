@@ -135,7 +135,9 @@ const SOUNDS = {
   // Market Town.
   'mone-account': {
     seconds: 1.4,
-    prompt: 'A wooden signpost spinning once around its post, a soft creaky wooden turn.',
+    prompt:
+      'Cartoon sound from a hand-drawn animated film: a quick whirling swish as a signpost spins ' +
+      'around once, an airy swirl rising and settling. Playful and light, not realistic.',
   },
   'mone-bnpl': {
     seconds: 4.5,
@@ -236,6 +238,7 @@ const PICKS = {
   'eco-payments': 'eco-payments-6',
   // A mix made with ffmpeg: kafka-auth-5 (waves) with kafka-auth-8 (gulls) at 70%.
   'kafka-auth': 'kafka-auth-11',
+  'mone-account': 'mone-account-7',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
