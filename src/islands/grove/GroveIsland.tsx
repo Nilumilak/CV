@@ -44,14 +44,14 @@ const SPOTS = {
   shrine: view(1.4, -2.3),
   board: view(-3.7, -0.4),
   box: view(3.0, -1.2),
-  bins: view(-2.2, 2.4),
-  sapling1: view(0.6, 2.4),
-  sapling2: view(1.4, 2.2),
-  sapling3: view(2.2, 2.5),
-  sapling4: view(3.0, 2.2),
+  bins: view(-1.9, 1.3),
+  sapling1: view(0.5, 3.1),
+  sapling2: view(1.4, 2.1),
+  sapling3: view(2.2, 3.3),
+  sapling4: view(3.1, 1.8),
   waterfall: view(5.1, -0.4),
-  rocks1: view(-4.4, 1.8),
-  rocks2: view(4.0, 3.0),
+  rocks1: view(-3.6, 3.2),
+  rocks2: view(4.3, 1.0),
 } satisfies Record<string, [number, number]>;
 
 const SAPLINGS = [

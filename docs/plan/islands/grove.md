@@ -58,16 +58,16 @@ The two-row rule from Radio: the tall tree at the back, the four objects in fron
                     front (towards the camera)
 ```
 
-| Object         | Across, towards | Size       | Notes                                        |
-| -------------- | --------------- | ---------- | -------------------------------------------- |
-| Big old tree   | −0.5, −3.0      | 7 tall     | Landmark; its crown spreads above the island |
-| Shrine         | 0.6, −2.0       | 1.2 tall   | Small, at the tree's foot, facing the camera |
-| Noticeboard    | −3.6, −0.2      | 1.6 tall   | Left side                                    |
-| Collection box | 2.9, −1.4       | 1.2 tall   | Right side, back from the waterfall's rim    |
-| Recycling bins | −2.2, 2.4       | 1.1 tall   | Front left, litter on the grass around them  |
-| Saplings ×4    | 0.8 to 3.2, 2.2 | 0.7 tall   | Front right, a short row                     |
-| Waterfall      | right edge      | code       | Pours from the rim down into the clouds      |
-| Rocks          | edges           | shared kit | A few, free                                  |
+| Object         | Across, towards        | Size       | Notes                                         |
+| -------------- | ---------------------- | ---------- | --------------------------------------------- |
+| Big old tree   | −0.5, −3.0             | 7 tall     | Landmark; its crown spreads above the island  |
+| Shrine         | 0.6, −2.0              | 1.2 tall   | Small, at the tree's foot, facing the camera  |
+| Noticeboard    | −3.6, −0.2             | 1.6 tall   | Left side                                     |
+| Collection box | 2.9, −1.4              | 1.2 tall   | Right side, back from the waterfall's rim     |
+| Recycling bins | −1.9, 1.3              | 1.1 tall   | Middle left, litter on the grass around them  |
+| Saplings ×4    | 0.5 to 3.1, 1.8 to 3.3 | 0.7 tall   | Front right, staggered in a zigzag, not a row |
+| Waterfall      | right edge             | code       | Pours from the rim down into the clouds       |
+| Rocks          | −3.6, 3.2 · 4.3, 1.0   | shared kit | Front-left corner and right side              |
 
 ---
 
