@@ -8,8 +8,9 @@
 import { useMemo, useRef, type ReactNode } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { colors } from '@/materials/toon';
+import { colors, gradientMap } from '@/materials/toon';
 import { useReaction } from '@/objects/useReaction';
+import { glareTexture } from '../lightMaterials';
 
 type Vec3 = [number, number, number];
 const noHit = () => null;
@@ -95,36 +96,174 @@ export function LightSwell({
   return <pointLight ref={light} position={position} color={color} distance={distance} decay={2} />;
 }
 
-// --- Circuit board: a light sweeps across it ------------------------------------------
+// --- Circuit board: parts fly in and lock on --------------------------------------------
+
+const PARTS = 14;
+/** Seconds over which the parts set off, one after another; each flight; locking in. */
+const STAGGER = 1.3;
+const FLIGHT = 0.7;
+const LOCK = 0.15;
+/** The whole reaction, in seconds. */
+export const PARTS_SECONDS = STAGGER + FLIGHT + LOCK + 0.1;
+
+const partMaterials = {
+  chip: new THREE.MeshToonMaterial({ color: '#2a2c33', gradientMap }),
+  capacitor: new THREE.MeshToonMaterial({ color: '#3f72b8', gradientMap }),
+  capacitorGreen: new THREE.MeshToonMaterial({ color: '#3c8f5a', gradientMap }),
+  resistor: new THREE.MeshToonMaterial({ color: '#d8bf8a', gradientMap }),
+};
+const partShapes = [
+  { geometry: new THREE.BoxGeometry(0.11, 0.025, 0.11), material: partMaterials.chip },
+  {
+    geometry: new THREE.CylinderGeometry(0.022, 0.022, 0.07, 10),
+    material: partMaterials.capacitor,
+  },
+  { geometry: new THREE.BoxGeometry(0.07, 0.02, 0.04), material: partMaterials.chip },
+  {
+    geometry: new THREE.CylinderGeometry(0.02, 0.02, 0.06, 10),
+    material: partMaterials.capacitorGreen,
+  },
+  { geometry: new THREE.CapsuleGeometry(0.013, 0.06, 2, 8), material: partMaterials.resistor },
+];
+
+/** Small deterministic random, so the parts fly the same way every time. */
+function random(seed: number) {
+  let s = seed;
+  return () => {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
 
 /**
- * A soft light that passes across in front of a surface, from one side to the other,
- * catching the real chips and traces of the model as it goes.
+ * Tiny electronic parts (chips, capacitors, resistors) swirl in from around the board and
+ * land on its face one after another, each with a spark, then sink into it: an assembly
+ * of many precise parts. They vanish as they lock in, so nothing stays drawn on the
+ * model's uneven face.
+ *
+ * The face is given by its centre, its width and height, and how far it leans back
+ * (radians, its top away from the viewer).
  */
-export function LightSweep({
+export function PartsFlyIn({
   id,
-  from,
-  to,
-  color = '#fff1c4',
-  peak = 4,
+  centre,
+  size,
+  tilt,
 }: {
   id: string;
-  from: Vec3;
-  to: Vec3;
-  color?: string;
-  peak?: number;
+  centre: Vec3;
+  size: [number, number];
+  tilt: number;
 }) {
-  const light = useRef<THREE.PointLight>(null!);
-  const progress = useReaction(id, 2.2);
-  const a = useMemo(() => new THREE.Vector3(...from), [from]);
-  const b = useMemo(() => new THREE.Vector3(...to), [to]);
+  const parts = useRef<THREE.Mesh[]>([]);
+  const sparks = useRef<THREE.Sprite[]>([]);
+  const glare = useMemo(() => glareTexture(), []);
+  const progress = useReaction(id, PARTS_SECONDS);
+
+  const flights = useMemo(() => {
+    const rand = random(17);
+    const middle = new THREE.Vector3(...centre);
+    const right = new THREE.Vector3(1, 0, 0);
+    const up = new THREE.Vector3(0, Math.cos(tilt), -Math.sin(tilt));
+    const out = new THREE.Vector3(0, Math.sin(tilt), Math.cos(tilt));
+    return Array.from({ length: PARTS }, (_, i) => {
+      const target = middle
+        .clone()
+        .addScaledVector(right, (rand() - 0.5) * size[0] * 0.85)
+        .addScaledVector(up, (rand() - 0.5) * size[1] * 0.85)
+        .addScaledVector(out, 0.03);
+      // Set off from a ring around the board, in front of it.
+      const a = rand() * Math.PI * 2;
+      const r = 0.9 + rand() * 0.4;
+      const start = middle
+        .clone()
+        .addScaledVector(right, Math.cos(a) * r)
+        .addScaledVector(up, Math.sin(a) * r * 0.7)
+        .addScaledVector(out, 0.5 + rand() * 0.4);
+      // Curve sideways on the way, so they swirl in rather than fly straight.
+      const swirl = new THREE.Vector3()
+        .subVectors(target, start)
+        .cross(out)
+        .normalize()
+        .multiplyScalar((rand() - 0.5) * 0.6);
+      return {
+        start,
+        target,
+        swirl,
+        shape: partShapes[i % partShapes.length]!,
+        tumble: new THREE.Euler(rand() * 6, rand() * 6, rand() * 6),
+        // Lying flat on the face, turned at random about its normal.
+        flat: new THREE.Euler(Math.PI / 2 - tilt, rand() * Math.PI, 0),
+        setOff: (i / PARTS) * STAGGER,
+      };
+    });
+  }, [centre, size, tilt]);
+
   useFrame(({ clock }) => {
     const p = progress(clock.elapsedTime);
-    const l = light.current;
-    l.intensity = p === null ? 0 : peak * Math.sin(p * Math.PI);
-    if (p !== null) l.position.lerpVectors(a, b, smoothstep(p));
+    const elapsed = p === null ? -1 : p * PARTS_SECONDS;
+    flights.forEach((f, i) => {
+      const part = parts.current[i];
+      const spark = sparks.current[i];
+      if (!part || !spark) return;
+      const k = p === null ? -1 : (elapsed - f.setOff) / FLIGHT;
+      const locked = (elapsed - f.setOff - FLIGHT) / LOCK;
+      part.visible = k > 0 && locked < 1;
+      if (part.visible) {
+        const e = smoothstep(clamp01(k));
+        part.position
+          .lerpVectors(f.start, f.target, e)
+          .addScaledVector(f.swirl, Math.sin(clamp01(k) * Math.PI));
+        part.rotation.set(
+          f.tumble.x * (1 - e) + f.flat.x * e,
+          f.tumble.y * (1 - e) + f.flat.y * e,
+          f.tumble.z * (1 - e),
+        );
+        // Pops into being, then sinks into the board once it has landed.
+        part.scale.setScalar(k < 1 ? Math.min(1, k / 0.15) : 1 - clamp01(locked));
+      }
+      // A spark where it lands.
+      const since = elapsed - f.setOff - FLIGHT;
+      const flash = p === null ? 0 : Math.max(0, 1 - Math.abs(since - 0.04) / 0.14);
+      spark.visible = flash > 0;
+      spark.position.copy(f.target);
+      spark.scale.setScalar(0.35 * flash);
+    });
   });
-  return <pointLight ref={light} color={color} intensity={0} distance={1.6} decay={2} />;
+
+  return (
+    <group>
+      {flights.map((f, i) => (
+        <group key={i}>
+          <mesh
+            ref={(el) => {
+              if (el) parts.current[i] = el;
+            }}
+            geometry={f.shape.geometry}
+            material={f.shape.material}
+            visible={false}
+            raycast={noHit}
+          />
+          <sprite
+            ref={(el) => {
+              if (el) sparks.current[i] = el;
+            }}
+            visible={false}
+            raycast={noHit}
+          >
+            <spriteMaterial
+              map={glare}
+              color="#fff3c8"
+              transparent
+              depthWrite={false}
+              blending={THREE.AdditiveBlending}
+              toneMapped={false}
+            />
+          </sprite>
+        </group>
+      ))}
+    </group>
+  );
 }
 
 // --- Lectern: loose pages flutter up ---------------------------------------------------

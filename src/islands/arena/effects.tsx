@@ -115,27 +115,34 @@ export function TeamFlags({
   );
 }
 
+/** How long a tag shows, from pop to fade. */
+const TAG_SECONDS = 1.6;
+
 /**
  * A gold tag (e.g. "−40%") that pops up above an object, rises a little and fades. Always
- * faces the camera. Its width follows the text, at a constant height.
+ * faces the camera. Its width follows the text, at a constant height. `delay` (seconds)
+ * holds it back after the click, e.g. until another reaction has played out.
  */
 export function PercentTag({
   id,
   position,
   text = '−40%',
+  delay = 0,
 }: {
   id: string;
   position: Vec3;
   text?: string;
+  delay?: number;
 }) {
   const sprite = useRef<THREE.Sprite>(null!);
-  const progress = useReaction(id, 1.6);
+  const progress = useReaction(id, TAG_SECONDS + delay);
   const { texture, aspect } = useMemo(() => tagTexture(text), [text]);
   useFrame(({ clock }) => {
-    const p = progress(clock.elapsedTime);
+    const whole = progress(clock.elapsedTime);
+    const p = whole === null ? null : (whole * (TAG_SECONDS + delay) - delay) / TAG_SECONDS;
     const s = sprite.current;
-    s.visible = p !== null;
-    if (p === null) return;
+    s.visible = p !== null && p >= 0;
+    if (p === null || p < 0) return;
     const pop = p < 0.15 ? Math.sin((p / 0.15) * Math.PI * 0.75) * 1.2 : 1;
     s.scale.set(0.45 * aspect * pop, 0.45 * pop, 1);
     s.position.set(position[0], position[1] + p * 0.5, position[2]);

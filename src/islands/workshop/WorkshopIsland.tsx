@@ -16,7 +16,14 @@ import { PercentTag } from '../arena/effects';
 import { GeneratedModel } from '../GeneratedModel';
 import { deg, FACE_CAMERA, view } from '../layout';
 import { useGroundHeights } from '../useGroundHeights';
-import { FlutterPages, LightSwell, LightSweep, SteamBurst, Turning } from './effects';
+import {
+  FlutterPages,
+  LightSwell,
+  PARTS_SECONDS,
+  PartsFlyIn,
+  SteamBurst,
+  Turning,
+} from './effects';
 
 /** Props for an object's Interactable, from the shared list in data/islandObjects.ts. */
 const interactive = (id: IslandObjectId) => {
@@ -137,8 +144,19 @@ export function WorkshopIsland() {
         <Interactable {...interactive('salyut-assemblies')}>
           <GeneratedModel url={boardUrl} height={BOARD_HEIGHT} />
         </Interactable>
-        {/* A light passes across in front of the board's face (measured centre y 0.83). */}
-        <LightSweep id="salyut-assemblies" from={[-0.55, 1.05, 0.5]} to={[0.55, 0.65, 0.5]} />
+        {/* Measured on the model: the face's middle, about 0.88 wide, leaning back 13.5°. */}
+        <PartsFlyIn
+          id="salyut-assemblies"
+          centre={[-0.01, 0.91, 0.06]}
+          size={[0.8, 0.8]}
+          tilt={deg(13.5)}
+        />
+        <PercentTag
+          id="salyut-assemblies"
+          position={[0, BOARD_HEIGHT + 0.5, 0]}
+          text="100+ elements"
+          delay={PARTS_SECONDS * 0.7}
+        />
       </group>
 
       <group position={at('lectern')} rotation-y={deg(FACE_CAMERA - 10)}>

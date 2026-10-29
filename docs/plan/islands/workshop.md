@@ -88,7 +88,7 @@ A sturdy wooden workbench with an old oscilloscope on it (plain dark-green scree
 
 A large green circuit board with copper traces, standing on a wooden easel.
 
-- **Click:** a soft light sweeps across in front of the board from one corner to the other, catching its real chips and traces as it passes.
+- **Click:** 14 tiny parts (chips, capacitors, resistors) swirl in from around the easel and land on the board's face one after another, each with a spark, then sink into it; a gold tag "100+ elements" pops up as the last ones land. (Revised 2026-10-29: the first version, a light sweeping across the face, was too easy to miss.)
 
 ### Scroll on a lectern · Python macros for documents
 
