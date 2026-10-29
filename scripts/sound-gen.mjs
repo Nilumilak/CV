@@ -97,7 +97,10 @@ const SOUNDS = {
   // Green Grove.
   'eco-admin': {
     seconds: 1.5,
-    prompt: 'Paper notes pinned on a cork noticeboard shuffling and fluttering softly.',
+    prompt:
+      'Cartoon sound from a hand-drawn animated film: a few sheets of paper being moved and slid ' +
+      'around on a wooden desk, a soft papery shuffle with light taps on the wood. Cosy and tidy, ' +
+      'not realistic.',
   },
   'eco-build': {
     seconds: 3.2,
@@ -225,6 +228,7 @@ const PICKS = {
   'home-bookshelf': 'home-bookshelf-1',
   'home-mailbox': 'home-mailbox-1',
   'home-lantern': 'home-lantern-14',
+  'eco-admin': 'eco-admin-4',
   'eco-build': 'eco-build-4',
   'eco-lead': 'eco-lead-9',
   'eco-payments': 'eco-payments-6',

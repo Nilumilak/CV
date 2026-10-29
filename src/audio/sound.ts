@@ -8,6 +8,7 @@
  */
 import bookshelfUrl from '@/assets/audio/home-bookshelf.mp3?url';
 import catUrl from '@/assets/audio/home-cat.mp3?url';
+import noticeboardUrl from '@/assets/audio/eco-admin.mp3?url';
 import saplingsUrl from '@/assets/audio/eco-build.mp3?url';
 import binsUrl from '@/assets/audio/eco-lead.mp3?url';
 import collectionBoxUrl from '@/assets/audio/eco-payments.mp3?url';
@@ -41,9 +42,10 @@ const OBJECT_SOUNDS: Record<string, { url: string; level?: number }> = {
   'home-bookshelf': { url: bookshelfUrl, level: 0.4 },
   'home-mailbox': { url: mailboxUrl, level: 0.4 },
   'home-lantern': { url: lanternUrl },
+  'eco-admin': { url: noticeboardUrl },
   'eco-build': { url: saplingsUrl },
   // Its sharp thumps capped the levelling, so this file is about 5 dB quieter than the rest.
-  'eco-lead': { url: binsUrl, level: 1.0 },
+  'eco-lead': { url: binsUrl, level: 0.4 },
   'eco-payments': { url: collectionBoxUrl },
 };
 
