@@ -215,6 +215,8 @@ const PICKS = {
   'home-cat': 'home-cat-6',
   'home-bookshelf': 'home-bookshelf-1',
   'home-mailbox': 'home-mailbox-1',
+  'home-globe': 'home-globe-7',
+  'home-lantern': 'home-lantern-4',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */

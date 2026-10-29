@@ -8,6 +8,8 @@
  */
 import bookshelfUrl from '@/assets/audio/home-bookshelf.mp3?url';
 import catUrl from '@/assets/audio/home-cat.mp3?url';
+import globeUrl from '@/assets/audio/home-globe.mp3?url';
+import lanternUrl from '@/assets/audio/home-lantern.mp3?url';
 import mailboxUrl from '@/assets/audio/home-mailbox.mp3?url';
 import musicUrl from '@/assets/audio/music.mp3?url';
 import rustleUrl from '@/assets/audio/rustle.mp3?url';
@@ -36,6 +38,8 @@ const OBJECT_SOUNDS: Record<string, { url: string; level?: number }> = {
   'home-cat': { url: catUrl, level: 0.45 },
   'home-bookshelf': { url: bookshelfUrl, level: 0.8 },
   'home-mailbox': { url: mailboxUrl },
+  'home-globe': { url: globeUrl },
+  'home-lantern': { url: lanternUrl },
 };
 
 let ctx: AudioContext | null = null;
