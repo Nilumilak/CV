@@ -63,6 +63,8 @@ const SAPLINGS = [
 
 /** Model sizes; the positions of code-made parts below are measured on these sizes. */
 const TREE_HEIGHT = 6.5;
+/** The grass falls away behind the tree, so it sinks a little to keep its back roots down. */
+const TREE_SINK = 0.2;
 const BINS_HEIGHT = 1.1;
 const BOX_HEIGHT = 1.2;
 const BOARD_HEIGHT = 1.6;
@@ -111,7 +113,7 @@ export function GroveIsland() {
       <GeneratedModel
         url={treeUrl}
         height={TREE_HEIGHT}
-        position={at('tree')}
+        position={[SPOTS.tree[0], y.tree - TREE_SINK, SPOTS.tree[1]]}
         rotation-y={deg(FACE_CAMERA)}
       />
       <FallingLeaves centre={at('tree')} radius={2.4} height={TREE_HEIGHT * 0.75} />
