@@ -2,6 +2,7 @@ import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useReducedMotion } from 'motion/react';
 import * as THREE from 'three';
+import { FLY_IN_CLOUD } from '@/data/world';
 import { gradientMap } from '@/materials/toon';
 import { useWorld } from '@/store/useWorld';
 
@@ -9,7 +10,8 @@ import { useWorld } from '@/store/useWorld';
  * Leaves, petals and specks of light carried on the wind through the foreground, like the
  * breezy skies of a Ghibli film. They live in a box that travels with the camera (each one
  * wraps around inside it), so they are always near the viewer, never piled up on the
- * islands. They fade in once the visitor is in the world and are off with reduced motion.
+ * islands. They appear during the dive, as the camera comes out under the clouds, and are
+ * off with reduced motion.
  */
 
 const LEAVES = 56;
@@ -143,6 +145,7 @@ function drift(
 const AHEAD = 10;
 const forward = new THREE.Vector3();
 const centre = new THREE.Vector3();
+const cloudCentre = new THREE.Vector3(...FLY_IN_CLOUD.position);
 
 export function WindParticles() {
   const reduceMotion = useReducedMotion();
@@ -177,9 +180,19 @@ export function WindParticles() {
 
   useFrame(({ camera, clock }, delta) => {
     const time = clock.elapsedTime;
-    const inWorld = useWorld.getState().phase === 'world' && !reduceMotion;
-    // Fade in over about two seconds after the dive lands; out quickly otherwise.
-    fade.current = THREE.MathUtils.damp(fade.current, inWorld ? 1 : 0, inWorld ? 1.2 : 4, delta);
+    const phase = useWorld.getState().phase;
+    // During the dive they appear as the camera bursts out under the dense cloud, while
+    // its white veil clears: the visitor flies out of the white into the flurry.
+    const out =
+      camera.position.y < FLY_IN_CLOUD.position[1]
+        ? smoothstep(
+            FLY_IN_CLOUD.radius * 0.5,
+            FLY_IN_CLOUD.radius * 0.9,
+            camera.position.distanceTo(cloudCentre),
+          )
+        : 0;
+    const target = reduceMotion ? 0 : phase === 'world' ? 1 : phase === 'flyIn' ? out : 0;
+    fade.current = THREE.MathUtils.damp(fade.current, target, 3, delta);
     const visible = fade.current > 0.01;
     leafMesh.current.visible = petalMesh.current.visible = points.current.visible = visible;
     if (!visible) return;
