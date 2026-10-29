@@ -109,9 +109,9 @@ const SOUNDS = {
   'eco-lead': {
     seconds: 2.6,
     prompt:
-      'Cartoon sound effect from a hand-drawn animated film: bits of litter flying through the air ' +
-      'with quick little swooshes, each landing in a bin with a soft bouncy plonk, one after another. ' +
-      'Playful and light, not realistic.',
+      'Cartoon sound from a hand-drawn animated film: a few sheets of paper and little books dropped ' +
+      'one after another into a cardboard box, soft papery flaps and cosy cardboard thumps, gentle ' +
+      'and tidy. Whimsical, not realistic.',
   },
   'eco-payments': {
     seconds: 1.8,
@@ -226,7 +226,7 @@ const PICKS = {
   'home-mailbox': 'home-mailbox-1',
   'home-lantern': 'home-lantern-14',
   'eco-build': 'eco-build-4',
-  'eco-lead': 'eco-lead-5',
+  'eco-lead': 'eco-lead-9',
   'eco-payments': 'eco-payments-6',
 };
 
