@@ -31,13 +31,15 @@ const interactive = (id: IslandObjectId) => {
  * the steam whistle on the right.
  */
 const SPOTS = {
-  factory: view(0, -3.0),
+  // The grass ends about 3.8 from the centre. The factory stands corner-on, so its back
+  // corner reaches about 2 further back than its middle.
+  factory: view(0, -1.6),
   bench: view(-3.0, 0.4),
   board: view(-1.2, 2.6),
-  lectern: view(1.6, 2.6),
-  whistle: view(3.6, 0.0),
-  rocks1: view(-4.2, 2.6),
-  rocks2: view(4.2, 2.4),
+  lectern: view(0.9, 2.4),
+  whistle: view(3.5, -0.6),
+  rocks1: view(-2.7, 1.9),
+  rocks2: view(2.4, 2.4),
 } satisfies Record<string, [number, number]>;
 
 /** Model sizes; the positions of code-made parts below are measured on these sizes. */
@@ -52,6 +54,12 @@ const WHISTLE_HEIGHT = 1.2;
  * equally (both about 45° off the view), so the gears on that wall show.
  */
 const FACTORY_TURN = 10;
+
+/**
+ * The ground falls away under the factory's back corner (about 0.3 below its middle), so
+ * it is set a little into the grass to stand on it everywhere.
+ */
+const FACTORY_SINK = 0.2;
 
 /** Chimney tops, measured on the factory model at this size. */
 const CHIMNEYS: [number, number, number][] = [
@@ -91,7 +99,10 @@ export function WorkshopIsland() {
       <GeneratedModel ref={base} url={baseUrl} length={11} anchor="top" />
 
       {/* Back: the factory with smoking chimneys and gears turning on its right wall. */}
-      <group position={at('factory')} rotation-y={deg(FACTORY_TURN)}>
+      <group
+        position={[SPOTS.factory[0], y.factory - FACTORY_SINK, SPOTS.factory[1]]}
+        rotation-y={deg(FACTORY_TURN)}
+      >
         <GeneratedModel url={factoryUrl} height={FACTORY_HEIGHT} />
         {CHIMNEYS.map((c, i) => (
           <ChimneySmoke key={i} position={c} scale={0.7} />

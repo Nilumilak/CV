@@ -39,9 +39,10 @@ export function useGroundHeights<K extends string>(
       if (first) result[key] = f.worldToLocal(hit.copy(first.point)).y;
     }
     setHeights(result);
-    // Points are a constant table per island; measure once per base.
+    // Points are a constant table per island, so this runs once per base; keyed by their
+    // values too, so moving a spot during development measures it again.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [frame, base]);
+  }, [frame, base, JSON.stringify(points)]);
 
   return heights;
 }
