@@ -66,13 +66,9 @@ const MODELS = [
     removeFaces: [{ min: [0.194, 0.167, -0.167], max: [0.361, 0.444, -0.028], minArea: 100 }],
   },
   { from: 'arena/parcel.glb', to: 'models/arena/parcel.glb', texture: 512 },
-  {
-    from: 'arena/twin-towers.glb',
-    to: 'models/arena/twin-towers.glb',
-    texture: 512,
-    // A broken white connector halfway up, in the gap between the towers.
-    removeFaces: [{ min: [-0.034, 0.343, -0.1], max: [0.034, 0.629, 0.1] }],
-  },
+  // The white connector halfway up is part of the design; it only looked broken while
+  // models were drawn one-sided, so no face removal here.
+  { from: 'arena/twin-towers.glb', to: 'models/arena/twin-towers.glb', texture: 512 },
 
   // Shared kit, reused across islands
   { from: 'shared/rock-cluster.glb', to: 'models/shared/rock-cluster.glb', texture: 512 },
