@@ -13,7 +13,7 @@ Olimpbet KZ, Frontend Software Engineer, May 2024 to September 2025. A betting p
 | Achievement                       | Object on the island                     |
 | --------------------------------- | ---------------------------------------- |
 | 3 apps, team of 6                 | Three display stands                     |
-| Auth service rebuilt, bundle −40% | Parcel box                               |
+| Auth service rebuilt, bundle −40% | Winged running shoe                      |
 | Virtual scrolling for big data    | Big scoreboard                           |
 | Cross-team iframe integration     | Two team booths with a tin-can telephone |
 
@@ -51,7 +51,7 @@ Like Market Town, a ring: the stadium is the centre, and the four objects stand 
        [TEAM BOOTHS]                          [DISPLAY STANDS]
                        ( STADIUM, pitch )
                         floodlights x 4
-               [PARCEL BOX]
+               [WINGED SHOE]
                      front (towards the camera)
 ```
 
@@ -61,7 +61,7 @@ Like Market Town, a ring: the stadium is the centre, and the four objects stand 
 | Scoreboard     | 0, −4.0         | 3 tall     | Back, facing the camera, above the stands      |
 | Team booths    | −4.0, −1.2      | 1.45 tall  | Left side; their windows face each other       |
 | Display stands | 3.8, −1.0       | 2 tall     | Right side, three screens turned to the camera |
-| Parcel box     | −1.8, 3.6       | 1 tall     | Front left, low, in front of the stadium       |
+| Winged shoe    | −2.5, 3.3       | 0.75 tall  | Front left, side-on, dashes off to the left    |
 | Rocks          | at the edges    | shared kit | A few, to fill gaps (free, already generated)  |
 
 ---
@@ -77,11 +77,11 @@ One model: three outdoor display stands side by side, a tall narrow one (the mob
 - **Idle:** the screens show simple app drawings, dimmed.
 - **Click:** the three screens light up one by one, and six small team flags pop up on little poles beside them, one after another.
 
-### Parcel box · Auth service rebuilt, bundle −40%
+### Winged shoe · Auth service rebuilt, bundle −40%
 
-A chunky cardboard parcel box, taped, a bit too big.
+Replaced the parcel box on 2026-10-29: the point of the rebuild is that it got faster, not only smaller. A chunky sky-blue running shoe with a golden stripe and two little white wings on its heel (`winged-shoe.glb`): lighter and faster in one picture. Side-on to the camera, toe to the left.
 
-- **Click:** it squishes down to 60% of its height and bounces back, and a small "−40%" tag pops up above it and fades.
+- **Click:** it shakes off a few grey weights (the old heavy code) that tumble to the grass, dashes off to the left with speed lines from its heel, skids round in a puff of dust, dashes back and skids round again; a gold tag "−40% · faster" pops up.
 
 ### Big scoreboard · Virtual scrolling for big data
 
@@ -112,7 +112,7 @@ Replaced the twin towers on 2026-10-29 (`team-booths.glb`, the third concept; a 
 | 2   | `stadium.glb`        | Small oval stadium with 4 floodlights       | 8,000       |
 | 3   | `scoreboard.glb`     | Tall scoreboard on two legs                 | 3,000       |
 | 4   | `display-stands.glb` | Three display stands (phone, desktop, gate) | 4,000       |
-| 5   | `parcel.glb`         | Big taped cardboard parcel box              | 1,500       |
+| 5   | `winged-shoe.glb`    | Winged running shoe (was the parcel box)    | 4,000       |
 | 6   | `team-booths.glb`    | Two team booths on a deck (was twin towers) | 6,000       |
 
 | Step               | Items | Credits  |

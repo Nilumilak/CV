@@ -2,14 +2,14 @@ import { useRef } from 'react';
 import type * as THREE from 'three';
 import standsUrl from '@/assets/models/arena/display-stands.glb?url';
 import baseUrl from '@/assets/models/arena/island-base.glb?url';
-import parcelUrl from '@/assets/models/arena/parcel.glb?url';
+import shoeUrl from '@/assets/models/arena/winged-shoe.glb?url';
 import scoreboardUrl from '@/assets/models/arena/scoreboard.glb?url';
 import stadiumUrl from '@/assets/models/arena/stadium.glb?url';
 import boothsUrl from '@/assets/models/arena/team-booths.glb?url';
 import rockUrl from '@/assets/models/shared/rock-cluster.glb?url';
 import { islandObject, type IslandObjectId } from '@/data/islandObjects';
 import { Interactable } from '@/objects/Interactable';
-import { Squash } from '@/objects/reactions';
+
 import { GeneratedModel } from '../GeneratedModel';
 import { deg, FACE_CAMERA, view } from '../layout';
 import { useGroundHeights } from '../useGroundHeights';
@@ -17,6 +17,9 @@ import {
   Floodlights,
   PercentTag,
   PHONE_SECONDS,
+  ShedWeights,
+  SHOE_SECONDS,
+  ShoeDash,
   ScoreboardRows,
   StandScreen,
   TeamFlags,
@@ -32,7 +35,7 @@ const interactive = (id: IslandObjectId) => {
 /**
  * Where everything stands (design: docs/plan/islands/arena.md, section 4).
  * A ring around the stadium: the stadium is the centre; the scoreboard stands behind it,
- * the team booths on the left, the display stands and the parcel in front. Ring spots are
+ * the team booths on the left, the display stands and the winged shoe in front. Ring spots are
  * "across the view, towards the camera" (see ../layout.ts).
  */
 const SPOTS = {
@@ -40,7 +43,7 @@ const SPOTS = {
   scoreboard: view(0, -4.1),
   booths: view(-4.0, -1.2),
   stands: view(2.6, 3.0),
-  parcel: view(-2.5, 3.3),
+  shoe: view(-2.5, 3.3),
   rocks1: view(4.2, -1.0),
   rocks2: view(-4.3, 1.6),
 } satisfies Record<string, [number, number]>;
@@ -49,6 +52,8 @@ const SPOTS = {
 const STADIUM_HEIGHT = 1.7;
 const SCOREBOARD_HEIGHT = 3;
 const STANDS_HEIGHT = 1.8;
+/** At this size the shoe is about 1.55 long, toe along −X. */
+const SHOE_HEIGHT = 0.75;
 /** At this size the deck is about 2.4 long: it fits between the stadium and the rim. */
 const BOOTHS_HEIGHT = 1.45;
 /**
@@ -141,13 +146,20 @@ export function ArenaIsland() {
         <TeamFlags id="olimp-apps" position={[0, 0.1, 0.55]} />
       </group>
 
-      <group position={at('parcel')} rotation-y={deg(FACE_CAMERA - 15)}>
+      {/* Side-on to the camera, toe to the left: it dashes off left, away from the stadium. */}
+      <group position={at('shoe')} rotation-y={deg(FACE_CAMERA)}>
         <Interactable {...interactive('olimp-preact')}>
-          <Squash id="olimp-preact">
-            <GeneratedModel url={parcelUrl} height={1} />
-          </Squash>
+          <ShoeDash id="olimp-preact">
+            <GeneratedModel url={shoeUrl} height={SHOE_HEIGHT} />
+          </ShoeDash>
         </Interactable>
-        <PercentTag id="olimp-preact" position={[0, 1.5, 0]} />
+        <ShedWeights id="olimp-preact" top={SHOE_HEIGHT} />
+        <PercentTag
+          id="olimp-preact"
+          position={[0, SHOE_HEIGHT + 0.7, 0]}
+          text="−40% · faster"
+          delay={SHOE_SECONDS * 0.3}
+        />
       </group>
 
       <GeneratedModel url={rockUrl} length={1.4} position={at('rocks1')} rotation-y={deg(40)} />

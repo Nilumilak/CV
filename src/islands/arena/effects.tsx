@@ -3,7 +3,7 @@
  * Screen and scoreboard pictures are single surfaces with a polygon offset, so they never
  * z-fight with the faces of the models they sit on (see ScreenPicture on Radio).
  */
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, type ReactNode } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { colors, gradientMap, palette } from '@/materials/toon';
@@ -182,6 +182,175 @@ export function ScoreboardRows({
       <planeGeometry args={[width, height]} />
       <meshBasicMaterial map={texture} toneMapped={false} {...PICTURE_OFFSET} />
     </mesh>
+  );
+}
+
+// --- Winged shoe: sheds weight, then dashes -----------------------------------------------
+
+/** The shoe's reaction, in seconds. */
+export const SHOE_SECONDS = 2.6;
+/** Its phases: shake off the weights, dash out, skid round, dash back, skid round. */
+const SHAKE = [0, 0.5] as const;
+const OUT = [0.55, 1.1] as const;
+const SKID_1 = [1.1, 1.35] as const;
+const BACK_DASH = [1.35, 1.9] as const;
+const SKID_2 = [1.9, 2.15] as const;
+/** How far it dashes, along its toe (local −X), in its own units. */
+const DASH = 1.0;
+
+const span = (t: number, [a, b]: readonly [number, number]) => clamp01((t - a) / (b - a));
+
+/**
+ * Wraps the winged shoe (toe along −X): it shakes, dashes out along its toe, skids round
+ * in a puff of dust, dashes back and skids round to face the way it started. Speed lines
+ * trail from its heel while it runs.
+ */
+export function ShoeDash({ id, children }: { id: string; children: ReactNode }) {
+  const run = useRef<THREE.Group>(null!);
+  const body = useRef<THREE.Group>(null!);
+  const lines = useRef<THREE.Mesh[]>([]);
+  const progress = useReaction(id, SHOE_SECONDS);
+  useFrame(({ clock }) => {
+    const p = progress(clock.elapsedTime);
+    const t = p === null ? -1 : p * SHOE_SECONDS;
+    const out = smoothstep(span(t, OUT));
+    const back = smoothstep(span(t, BACK_DASH));
+    run.current.position.x = p === null ? 0 : -DASH * (out - back);
+    // Each skid turns it half round; after both it faces the way it started.
+    run.current.rotation.y =
+      p === null ? 0 : Math.PI * (smoothstep(span(t, SKID_1)) + smoothstep(span(t, SKID_2)));
+    const dashing = (t > OUT[0] && t < OUT[1]) || (t > BACK_DASH[0] && t < BACK_DASH[1]);
+    const shaking = t > SHAKE[0] && t < SHAKE[1];
+    body.current.rotation.z = shaking ? Math.sin(t * 60) * 0.06 : 0;
+    // Little bounding hops while it runs.
+    body.current.position.y = dashing ? Math.abs(Math.sin(t * 22)) * 0.06 : 0;
+    lines.current.forEach((line, i) => {
+      line.visible = dashing;
+      line.scale.x = 0.6 + 0.4 * Math.abs(Math.sin(t * 17 + i * 2));
+    });
+  });
+  return (
+    <group ref={run}>
+      <group ref={body}>
+        {children}
+        {/* Speed lines streaming back from the heel (+X). */}
+        {[0.18, 0.32, 0.46].map((y, i) => (
+          <mesh
+            key={i}
+            ref={(el) => {
+              if (el) lines.current[i] = el;
+            }}
+            position={[0.95 + i * 0.08, y, 0]}
+            visible={false}
+            raycast={noHit}
+          >
+            <planeGeometry args={[0.45, 0.025]} />
+            <meshBasicMaterial color="#ffffff" transparent opacity={0.85} side={THREE.DoubleSide} />
+          </mesh>
+        ))}
+      </group>
+    </group>
+  );
+}
+
+const WEIGHTS = 4;
+const weightMaterial = new THREE.MeshToonMaterial({ color: '#6c7178', gradientMap });
+const weightGeometry = new THREE.BoxGeometry(0.13, 0.09, 0.11);
+const puffMaterial = new THREE.MeshBasicMaterial({
+  color: '#f4efe4',
+  transparent: true,
+  depthWrite: false,
+});
+const puffGeometry = new THREE.SphereGeometry(0.1, 10, 8);
+
+/**
+ * The old weight the shoe shook off: a few grey blocks pop off its top, tumble to the
+ * grass and sink away. Then puffs of dust where it skids. Positions are in the shoe's
+ * place, before it dashes.
+ */
+export function ShedWeights({ id, top }: { id: string; top: number }) {
+  const weights = useRef<THREE.Mesh[]>([]);
+  const puffs = useRef<THREE.Mesh[]>([]);
+  const progress = useReaction(id, SHOE_SECONDS);
+  const throws = useMemo(
+    () =>
+      Array.from({ length: WEIGHTS }, (_, i) => {
+        const a = (i / WEIGHTS) * Math.PI * 2 + 0.4;
+        return { dx: Math.cos(a) * 0.9, dz: Math.sin(a) * 0.6, up: 1.6 + (i % 2) * 0.5 };
+      }),
+    [],
+  );
+  // Dust where it sets off and at each skid (its toe end, then back home).
+  const dust = useMemo(
+    () =>
+      [
+        [OUT[0], 0],
+        [SKID_1[0], -DASH],
+        [SKID_2[0], 0],
+      ].flatMap(([at, x]) =>
+        Array.from({ length: 4 }, (_, i) => ({
+          at: at!,
+          x: x! + (i - 1.5) * 0.15,
+          z: (i % 2) * 0.2 - 0.1,
+        })),
+      ),
+    [],
+  );
+  /** Each puff fades on its own, so each has its own copy of the material. */
+  const puffMaterials = useMemo(() => dust.map(() => puffMaterial.clone()), [dust]);
+  useFrame(({ clock }) => {
+    const p = progress(clock.elapsedTime);
+    const t = p === null ? -1 : p * SHOE_SECONDS;
+    throws.forEach((w, i) => {
+      const m = weights.current[i];
+      if (!m) return;
+      const k = t - 0.12 - i * 0.05;
+      m.visible = p !== null && k > 0 && k < 1.4;
+      if (!m.visible) return;
+      // Thrown up and out, falling onto the grass, then sinking away.
+      const fly = Math.min(k, 0.7);
+      m.position.set(w.dx * fly, Math.max(0.05, top + w.up * fly - 4.9 * fly * fly), w.dz * fly);
+      m.rotation.set(fly * 6 + i, fly * 4, 0);
+      m.scale.setScalar(k > 1 ? 1.4 - k : 1);
+    });
+    dust.forEach((d, i) => {
+      const m = puffs.current[i];
+      if (!m) return;
+      const k = p === null ? -1 : (t - d.at) / 0.6;
+      m.visible = k > 0 && k < 1;
+      if (!m.visible) return;
+      m.position.set(d.x, 0.08 + k * 0.25, d.z);
+      m.scale.setScalar(0.6 + k * 1.6);
+      (m.material as THREE.MeshBasicMaterial).opacity = (1 - k) * 0.8;
+    });
+  });
+  return (
+    <group>
+      {throws.map((_, i) => (
+        <mesh
+          key={`w${i}`}
+          ref={(el) => {
+            if (el) weights.current[i] = el;
+          }}
+          geometry={weightGeometry}
+          material={weightMaterial}
+          visible={false}
+          raycast={noHit}
+        />
+      ))}
+      {dust.map((_, i) => (
+        <mesh
+          key={`d${i}`}
+          ref={(el) => {
+            if (el) puffs.current[i] = el;
+          }}
+          geometry={puffGeometry}
+          material={puffMaterials[i]}
+          visible={false}
+          raycast={noHit}
+        />
+      ))}
+    </group>
   );
 }
 

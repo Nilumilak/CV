@@ -68,7 +68,8 @@ const MODELS = [
     // A white web stretched between the monitor and the gate: a few huge faces.
     removeFaces: [{ min: [0.194, 0.167, -0.167], max: [0.361, 0.444, -0.028], minArea: 100 }],
   },
-  { from: 'arena/parcel.glb', to: 'models/arena/parcel.glb', texture: 512 },
+  // A winged running shoe: lighter and faster (replaced the parcel box).
+  { from: 'arena/winged-shoe.glb', to: 'models/arena/winged-shoe.glb', texture: 512 },
   // Two team booths with a tin-can telephone between them (replaced the twin towers).
   {
     from: 'arena/team-booths.glb',
