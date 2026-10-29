@@ -6,7 +6,7 @@ import boardUrl from '@/assets/models/grove/noticeboard.glb?url';
 import binsUrl from '@/assets/models/grove/recycling-bins.glb?url';
 import saplingUrl from '@/assets/models/grove/sapling.glb?url';
 import shrineUrl from '@/assets/models/grove/shrine.glb?url';
-import treeUrl from '@/assets/models/grove/big-tree.glb?url';
+import treeUrl from '@/assets/models/grove/cherry-tree.glb?url';
 import rockUrl from '@/assets/models/shared/rock-cluster.glb?url';
 import { islandObject, type IslandObjectId } from '@/data/islandObjects';
 import { Interactable } from '@/objects/Interactable';
@@ -35,7 +35,7 @@ const interactive = (id: IslandObjectId) => {
 
 /**
  * Where everything stands (design: docs/plan/islands/grove.md, section 4), as "across the
- * view, towards the camera" (see ../layout.ts): the big tree at the back with the shrine at
+ * view, towards the camera" (see ../layout.ts): the cherry tree at the back with the shrine at
  * its foot, the noticeboard on the left, the collection box on the right, the recycling
  * bins front left, the saplings front right, and the waterfall off the right edge.
  */
@@ -107,7 +107,7 @@ export function GroveIsland() {
     <group ref={frame}>
       <GeneratedModel ref={base} url={baseUrl} length={11} anchor="top" />
 
-      {/* Back: the big tree (Home's tree, re-toned) with the shrine at its foot. */}
+      {/* Back: the Grove's own cherry tree, with the shrine at its foot. */}
       <GeneratedModel
         url={treeUrl}
         height={TREE_HEIGHT}

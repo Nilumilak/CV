@@ -83,8 +83,9 @@ const MODELS = [
 
   // Green Grove island
   { from: 'grove/island-base.glb', to: 'models/grove/island-base.glb', texture: 1024 },
-  // Landmark: Home's big tree re-toned (the willow came out flat twice; no new credits).
-  { from: 'home/big-tree.glb', to: 'models/grove/big-tree.glb', texture: 1024, grade: 'grove' },
+  // Landmark: the Grove's own cherry tree, made from three views (multi-view) so it is
+  // round, not flat (the willow came out flat twice; Home's tree stood in until 2026-10-29).
+  { from: 'grove/cherry-tree.glb', to: 'models/grove/cherry-tree.glb', texture: 1024 },
   { from: 'grove/shrine.glb', to: 'models/grove/shrine.glb', texture: 512 },
   { from: 'grove/recycling-bins.glb', to: 'models/grove/recycling-bins.glb', texture: 512 },
   { from: 'grove/sapling.glb', to: 'models/grove/sapling.glb', texture: 512 },

@@ -2,7 +2,7 @@
 
 [Back to Phase 4](../phase-4-island-art.md) · [AI model prompts](../phase-4-ai-prompts.md) · Previous: [Arena](arena.md)
 
-**Status:** built on 2026-10-29. Six models generated and placed; the landmark is Home's big tree re-toned (see the note in section 7). All four achievement objects interactive. First layout, to be tuned from screenshots.
+**Status:** built on 2026-10-29. Six models generated and placed; the landmark is its own blossoming cherry tree (since 2026-10-29, see section 7). All four achievement objects interactive. First layout, to be tuned from screenshots.
 
 ---
 
@@ -106,7 +106,7 @@ A wooden noticeboard on two legs with a little roof. The paper notes on it are c
 - **Big old tree:** the landmark, with a thick twisting trunk and a huge crown; it sways very slightly.
 - **Shrine:** a small mossy stone shrine with a little roof at the tree's foot (see question 4).
 - **Waterfall (code):** a soft white stream pouring from the rim, mist at the top, fading out into the clouds below.
-- **Falling leaves (code):** a few leaves drifting down slowly from the big tree.
+- **Falling petals (code):** a few pink cherry-blossom petals drifting down slowly from the tree.
 
 ---
 
@@ -142,3 +142,5 @@ All seven proposals accepted as written: the code-made waterfall, the recycling 
 **Landmark tree (2026-10-29).** The first big-tree concept came out looking like Home's tree, so it was redrawn as a weeping willow. The willow then came out flat twice, from one image and from three views: Meshy cannot build long hanging leaf curtains as volume. To spend no more credits on this island, the landmark is now Home's big tree re-toned to a deeper, cooler forest green (the `grove` grade in `scripts/art-grade.mjs`). The sapling's first model also had a flat crown; it was rebuilt from three views and is solid. The shape check now measures every horizontal slice, so a model with one flat part is refused too.
 
 Credits used for this island: about 333 (concepts and views 33, 3D models 300, including the two flat willows).
+
+**Own cherry tree (2026-10-29, later).** Home's re-toned tree read as the same tree twice in the overview. The Grove now has its own blossoming cherry tree: a concept chosen over an apple tree (whose shape was too close to Home's oak), drawn from three views (front, side, back), and built from all three with multi-view, so its crown is round, not flat (1.2 wide × 1.1 deep at height 1). Its falling leaves became pink petals. Cost: 6 for two concepts, 3 for the views, 30 for the model.

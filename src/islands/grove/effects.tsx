@@ -354,9 +354,10 @@ function mistTexture() {
   return t;
 }
 
-const LEAF_COLORS = ['#8fbf55', '#a9c95e', '#6f9e45', '#c7c76a'];
+/** Cherry-blossom petals, matching the Grove's cherry tree. */
+const LEAF_COLORS = ['#f6c3d2', '#f9d6e0', '#eeaec3', '#fbe6ec'];
 
-/** A few leaves drifting down from a tree's crown, swaying as they fall, in a loop. */
+/** A few petals drifting down from a tree's crown, swaying as they fall, in a loop. */
 export function FallingLeaves({
   centre,
   radius = 2,
