@@ -35,6 +35,72 @@ export async function gradeModel(input, output, grade) {
 }
 
 /**
+ * Removes stray faces: image-to-3D sometimes stretches a "web" of surface across the gap
+ * between two separate parts (behind Arena's gate) or adds a piece that shouldn't be
+ * there (a connector between the twin towers).
+ *
+ * Each region is a box in model-relative units: the model's height is 1, y runs from its
+ * bottom (0) to its top (1), and x/z are measured from the centre of its bounds. A face
+ * is removed when its centre is inside the box and, if `minArea` is given, it is at least
+ * that many times the model's median face area (webs are a few huge faces; real parts in
+ * the same box are many normal-sized ones).
+ */
+export async function removeFacesModel(input, output, regions) {
+  const io = new NodeIO().registerExtensions(ALL_EXTENSIONS);
+  const document = await io.read(input);
+  let removed = 0;
+  for (const mesh of document.getRoot().listMeshes()) {
+    for (const prim of mesh.listPrimitives()) {
+      const pos = prim.getAttribute('POSITION');
+      const idx = prim.getIndices();
+      const min = pos.getMin([]);
+      const max = pos.getMax([]);
+      const h = max[1] - min[1];
+      const cx = (min[0] + max[0]) / 2;
+      const cz = (min[2] + max[2]) / 2;
+      const rel = (v) => [(v[0] - cx) / h, (v[1] - min[1]) / h, (v[2] - cz) / h];
+
+      const faces = [];
+      const a = [],
+        b = [],
+        c = [];
+      for (let i = 0; i < idx.getCount(); i += 3) {
+        const ids = [idx.getScalar(i), idx.getScalar(i + 1), idx.getScalar(i + 2)];
+        pos.getElement(ids[0], a);
+        pos.getElement(ids[1], b);
+        pos.getElement(ids[2], c);
+        const [ra, rb, rc] = [a, b, c].map(rel);
+        const centre = [0, 1, 2].map((j) => (ra[j] + rb[j] + rc[j]) / 3);
+        const u = [rb[0] - ra[0], rb[1] - ra[1], rb[2] - ra[2]];
+        const v = [rc[0] - ra[0], rc[1] - ra[1], rc[2] - ra[2]];
+        const area =
+          Math.hypot(
+            u[1] * v[2] - u[2] * v[1],
+            u[2] * v[0] - u[0] * v[2],
+            u[0] * v[1] - u[1] * v[0],
+          ) / 2;
+        faces.push({ ids, centre, area });
+      }
+      const medianArea = faces.map((f) => f.area).sort((x, y) => x - y)[
+        Math.floor(faces.length / 2)
+      ];
+      const inside = (p, box) => p.every((x, j) => x >= box.min[j] && x <= box.max[j]);
+      const keep = faces.filter(
+        (f) =>
+          !regions.some(
+            (r) =>
+              inside(f.centre, r) && (r.minArea === undefined || f.area >= r.minArea * medianArea),
+          ),
+      );
+      removed += faces.length - keep.length;
+      idx.setArray(new Uint32Array(keep.flatMap((f) => f.ids)));
+    }
+  }
+  await io.write(output, document);
+  return removed;
+}
+
+/**
  * Island bases: repaints bare grey patches on the grass top in the island's own grass
  * colour. Only texture areas used by upward-facing triangles near the top are touched,
  * so the grey cliffs underneath stay rock. Each pixel keeps its own lightness variation,

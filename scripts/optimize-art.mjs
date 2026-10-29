@@ -9,7 +9,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, statSync } from 'node:fs';
 import { dirname } from 'node:path';
 import sharp from 'sharp';
-import { GRADES, gradeModel, grassTopModel } from './art-grade.mjs';
+import { GRADES, gradeModel, grassTopModel, removeFacesModel } from './art-grade.mjs';
 import { checkModelShape } from './model-shape.mjs';
 
 /** Only approved art is listed here. Source paths are relative to art-source/. */
@@ -58,9 +58,21 @@ const MODELS = [
   { from: 'arena/island-base.glb', to: 'models/arena/island-base.glb', texture: 1024 },
   { from: 'arena/stadium.glb', to: 'models/arena/stadium.glb', texture: 1024 },
   { from: 'arena/scoreboard.glb', to: 'models/arena/scoreboard.glb', texture: 512 },
-  { from: 'arena/display-stands.glb', to: 'models/arena/display-stands.glb', texture: 512 },
+  {
+    from: 'arena/display-stands.glb',
+    to: 'models/arena/display-stands.glb',
+    texture: 512,
+    // A white web stretched between the monitor and the gate: a few huge faces.
+    removeFaces: [{ min: [0.194, 0.167, -0.167], max: [0.361, 0.444, -0.028], minArea: 100 }],
+  },
   { from: 'arena/parcel.glb', to: 'models/arena/parcel.glb', texture: 512 },
-  { from: 'arena/twin-towers.glb', to: 'models/arena/twin-towers.glb', texture: 512 },
+  {
+    from: 'arena/twin-towers.glb',
+    to: 'models/arena/twin-towers.glb',
+    texture: 512,
+    // A broken white connector halfway up, in the gap between the towers.
+    removeFaces: [{ min: [-0.034, 0.343, -0.1], max: [0.034, 0.629, 0.1] }],
+  },
 
   // Shared kit, reused across islands
   { from: 'shared/rock-cluster.glb', to: 'models/shared/rock-cluster.glb', texture: 512 },
@@ -88,13 +100,25 @@ for (const m of MODELS) {
     process.exitCode = 1;
     continue;
   }
-  // Graded copies go next to the raw art (also ignored by git), never over it.
+  // Fixed copies go next to the raw art (also ignored by git), never over it. Each step
+  // reads the previous step's output.
   let input = src(m.from);
-  if (m.grade || m.grassTop) {
-    input = src(`.graded/${m.from}`);
-    mkdirSync(dirname(input), { recursive: true });
-    if (m.grassTop) await grassTopModel(src(m.from), input);
-    if (m.grade) await gradeModel(m.grassTop ? input : src(m.from), input, GRADES[m.grade]);
+  if (m.removeFaces || m.grassTop || m.grade) {
+    const fixed = src(`.graded/${m.from}`);
+    mkdirSync(dirname(fixed), { recursive: true });
+    if (m.removeFaces) {
+      const removed = await removeFacesModel(input, fixed, m.removeFaces);
+      console.log(`${m.from}: removed ${removed} stray faces`);
+      input = fixed;
+    }
+    if (m.grassTop) {
+      await grassTopModel(input, fixed);
+      input = fixed;
+    }
+    if (m.grade) {
+      await gradeModel(input, fixed, GRADES[m.grade]);
+      input = fixed;
+    }
   }
   mkdirSync(dirname(out(m.to)), { recursive: true });
   execFileSync(
