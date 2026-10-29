@@ -22,6 +22,9 @@ const MODELS = [
   { from: 'home/cottage.glb', to: 'models/home/cottage.glb', texture: 1024 },
   { from: 'home/big-tree.glb', to: 'models/home/big-tree.glb', texture: 1024, grade: 'foliage' },
   { from: 'home/cat.glb', to: 'models/home/cat.glb', texture: 1024 },
+  // The same cat in two more poses: on click it swaps between them (CatPoses.tsx).
+  { from: 'home/cat-stretch.glb', to: 'models/home/cat-stretch.glb', texture: 1024 },
+  { from: 'home/cat-sitting.glb', to: 'models/home/cat-sitting.glb', texture: 1024 },
   { from: 'home/lantern.glb', to: 'models/home/lantern.glb', texture: 512 },
   { from: 'home/mailbox.glb', to: 'models/home/mailbox.glb', texture: 512 },
   { from: 'home/bookshelf.glb', to: 'models/home/bookshelf.glb', texture: 1024 },
