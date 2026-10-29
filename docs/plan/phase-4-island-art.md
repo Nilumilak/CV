@@ -165,6 +165,8 @@ Full design description: [islands/grove.md](islands/grove.md).
 
 ### Workshop · JSC NPP Salyut
 
+Full design description: [islands/workshop.md](islands/workshop.md) (draft for review).
+
 - **Base:** rock patched with riveted metal plates and pipes sticking out, in the mood of reference 5.
 - **Landmark:** brick factory with two chimneys and giant gears on its side.
 - **Objects to model:** gear wall, workbench with an oscilloscope, circuit board on an easel, group of small worker figures, rolled scroll on a lectern.
