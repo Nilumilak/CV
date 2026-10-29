@@ -63,11 +63,13 @@ export const ISLANDS: IslandLayout[] = [
   },
   {
     id: 'market',
-    position: [30, 5, -8],
+    // Further out than Arena's camera line: at [30, 5, -8] the Arena focus camera ended up
+    // inside Market's crane once Market had its full-size art (see the world layout test).
+    position: [34, 5, -12],
     scale: 1.2,
     seed: 6,
     labelOffset: [0, 10, 0],
-    camera: islandCamera([30, 6, -8]),
+    camera: islandCamera([34, 6, -12]),
     accent: '#C9573E',
   },
   {

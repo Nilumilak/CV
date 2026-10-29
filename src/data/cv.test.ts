@@ -58,4 +58,27 @@ describe('world layout', () => {
   it('gives every chapter a layout', () => {
     for (const c of chapters) expect(() => layoutOf(c.id)).not.toThrow();
   });
+
+  it('keeps every focus camera and its view line clear of the other islands', () => {
+    // An island's top is about 5.6 units from its centre at scale 1, plus room for tall
+    // art and the bob. Checked along the line from the camera to its target, at heights
+    // where another island's art could be.
+    const clearance = (scale: number) => 5.6 * scale + 1.5;
+    for (const island of ISLANDS) {
+      const { position: cam, target } = island.camera;
+      for (const other of ISLANDS) {
+        if (other.id === island.id) continue;
+        for (let i = 0; i <= 40; i++) {
+          const k = i / 40;
+          const q = cam.map((c, j) => c + (target[j] - c) * k);
+          const dy = q[1] - other.position[1];
+          if (dy < -2 || dy > 9) continue;
+          const d = Math.hypot(q[0] - other.position[0], q[2] - other.position[2]);
+          expect(d, `${island.id} camera vs ${other.id}`).toBeGreaterThanOrEqual(
+            clearance(other.scale),
+          );
+        }
+      }
+    }
+  });
 });
