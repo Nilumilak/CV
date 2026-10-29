@@ -4,8 +4,6 @@ import baseUrl from '@/assets/models/home/island-base.glb?url';
 import benchUrl from '@/assets/models/home/bench.glb?url';
 import bookshelfUrl from '@/assets/models/home/bookshelf.glb?url';
 import catUrl from '@/assets/models/home/cat.glb?url';
-import catSittingUrl from '@/assets/models/home/cat-sitting.glb?url';
-import catStretchUrl from '@/assets/models/home/cat-stretch.glb?url';
 import cottageUrl from '@/assets/models/home/cottage.glb?url';
 import globeUrl from '@/assets/models/home/globe.glb?url';
 import lanternUrl from '@/assets/models/home/lantern.glb?url';
@@ -15,11 +13,10 @@ import stumpUrl from '@/assets/models/home/stump.glb?url';
 import treeUrl from '@/assets/models/home/big-tree.glb?url';
 import { homeObject, type HomeObjectId } from '@/data/homeObjects';
 import { Interactable } from '@/objects/Interactable';
-import { Spin, Wobble } from '@/objects/reactions';
-import { ChimneySmoke, Fireflies, LanternGlow, PoppingLetter, Sway } from '../ambient';
+import { Hop, Spin, Wobble } from '@/objects/reactions';
+import { Breathe, ChimneySmoke, Fireflies, LanternGlow, PoppingLetter, Sway } from '../ambient';
 import { GeneratedModel } from '../GeneratedModel';
 import { useGroundHeights } from '../useGroundHeights';
-import { type CatPose, CatPoses } from './CatPoses';
 
 const deg = (d: number) => (d * Math.PI) / 180;
 
@@ -59,18 +56,7 @@ const STONES = [
 
 /** Island-unit sizes that the cat and globe sit on. Tuned from screenshots. */
 const BENCH_SEAT_HEIGHT = 0.42;
-
 const STUMP_HEIGHT = 0.6;
-
-/**
- * The cat's three poses, sized so the head is the same width in each (measured on the
- * models), so they read as one cat. The long stretch is turned to lie along the bench seat.
- */
-const CAT_POSES: [CatPose, CatPose, CatPose] = [
-  { url: catUrl, height: 0.59 },
-  { url: catStretchUrl, height: 0.68, turn: deg(60) },
-  { url: catSittingUrl, height: 0.56 },
-];
 
 /**
  * Home island (design: docs/plan/islands/home.md). Every model is AI-generated;
@@ -110,8 +96,12 @@ export function HomeIsland() {
       <group position={at('bench')} rotation-y={deg(-30)}>
         <GeneratedModel url={benchUrl} length={1.6} />
         <group position={[0.15, BENCH_SEAT_HEIGHT, 0]} rotation-y={deg(30)}>
-          <Interactable {...interactive('home-cat')} lift={false}>
-            <CatPoses id="home-cat" poses={CAT_POSES} />
+          <Interactable {...interactive('home-cat')}>
+            <Hop id="home-cat">
+              <Breathe>
+                <GeneratedModel url={catUrl} length={0.9} />
+              </Breathe>
+            </Hop>
           </Interactable>
         </group>
       </group>

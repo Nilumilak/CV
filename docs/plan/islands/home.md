@@ -109,8 +109,8 @@ An old broad-leaf tree with a thick twisting trunk, visible roots and a wide rou
 
 A chubby orange tabby lying on the bench, eyes half closed. About 0.9 m long, oversized on purpose.
 
-- **Idle:** it breathes slowly.
-- **Click (since 2026-10-29), a little flipbook of three models of the same cat:** it wakes into a big yawning stretch along the bench, then sits up with a curious head-tilt hop, then curls back to sleep. Each switch hides inside a little cartoon puff of cloud that covers the cat as the model changes, then drifts apart. The poses (`cat-stretch.glb`, `cat-sitting.glb`) were drawn from the sleeping cat's concept and are sized by head width, so they read as one cat (`CatPoses.tsx`). A cat rigged as a quadruped on meshy.ai was tried first and rejected.
+- **Idle:** the tail tip flicks, and every few seconds the cat breathes slowly.
+- **Click:** the cat stretches, yawns, and a speech bubble opens with the summary's first line, while the panel highlights the summary.
 - **Why the cat:** the summary is "who I am", and the cat is the soul of the home, as in the lofi reference.
 
 ### Garden lantern → skills
