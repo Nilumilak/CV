@@ -107,7 +107,7 @@ const smoothstep = (a: number, b: number, x: number) => {
 - [x] Any key or a click also skips.
 - [x] Skipping jumps the camera to the end of the curve and sets the phase to `'world'`. No fade yet; the welcome overlay fading out covers most of it.
 - [x] If `prefers-reduced-motion: reduce` is set, skip automatically with a simple cross-fade.
-- [x] Returning visitors (`visited` is not empty) get a 2-second version: start the curve near the cloud layer.
+- [x] Returning visitors (`visited` is not empty) get a shorter version: the same dive from the welcome view in 3 seconds. (Revised 2026-10-29: it used to start the curve near the cloud layer, which made the camera jump from the welcome view straight into the clouds.)
 
 ### 7. Sound
 

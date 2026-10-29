@@ -8,9 +8,11 @@ import { setVeilOpacity } from './introEffects';
 
 /** Full dive length in seconds. */
 const DURATION = 5;
-/** Returning visitors start the curve just above the cloud band and take this long. */
-const RETURN_START = 0.42;
-const RETURN_DURATION = 2.2;
+/**
+ * Returning visitors take the same dive from the welcome view, only faster. (Starting them
+ * partway down the curve made the camera jump from the welcome view into the clouds.)
+ */
+const RETURN_DURATION = 3;
 
 const BASE_FOV = 45;
 /** Extra field of view at the fastest point of the dive, for a sense of speed. */
@@ -56,7 +58,6 @@ export function FlyIn() {
   );
 
   const progress = useRef(0);
-  const from = useRef(0);
   const duration = useRef(DURATION);
   const introSeen = useRef(false);
   /** The welcome float where it was when the dive began, faded out as the view tips down. */
@@ -93,7 +94,7 @@ export function FlyIn() {
     const distance = camera.position.distanceTo(cloudCenter);
     const inCloud = 1 - smoothstep(FLY_IN_CLOUD.radius * 0.35, FLY_IN_CLOUD.radius, distance);
     setVeilOpacity(inCloud * 0.85);
-    setFov(BASE_FOV + FOV_KICK * Math.sin(Math.PI * t) * (1 - from.current));
+    setFov(BASE_FOV + FOV_KICK * Math.sin(Math.PI * t));
   };
 
   // Layout effect: runs before CameraRig's mount effect reads the camera at handoff.
@@ -104,7 +105,6 @@ export function FlyIn() {
     } else if (phase === 'flyIn') {
       introSeen.current = true;
       const returning = useWorld.getState().visited.length > 0;
-      from.current = returning ? RETURN_START : 0;
       duration.current = returning ? RETURN_DURATION : DURATION;
       progress.current = 0;
     } else if (phase === 'world' && introSeen.current) {
@@ -137,9 +137,8 @@ export function FlyIn() {
     if (current !== 'flyIn') return;
 
     progress.current = Math.min(progress.current + delta / duration.current, 1);
-    const k = from.current + (1 - from.current) * easeInOutCubic(progress.current);
-    // A full dive starts from the welcome view; a returning visitor's short one does not.
-    const tip = from.current === 0 ? 1 - smoothstep(0, TIP_DOWN, progress.current) : 0;
+    const k = easeInOutCubic(progress.current);
+    const tip = 1 - smoothstep(0, TIP_DOWN, progress.current);
     placeAt(k, tip, float.current.drift * tip, float.current.rise * tip);
 
     applyCloudEffects(progress.current);

@@ -34,9 +34,17 @@ export function Welcome() {
       className={styles.screen}
       aria-labelledby="welcome-title"
       initial={{ opacity: 1 }}
-      exit={{ opacity: 0, transition: { duration: 0.6 } }}
+      // A slow fade while the camera starts to move, so the text melts away into the dive.
+      exit={{ opacity: 0, transition: { duration: 1.2, ease: 'easeInOut' } }}
     >
-      <div className={styles.content}>
+      <motion.div
+        className={styles.content}
+        exit={
+          reduceMotion
+            ? undefined
+            : { y: -28, scale: 0.97, transition: { duration: 1.2, ease: 'easeIn' } }
+        }
+      >
         <p className={styles.kicker}>
           {profile.name} · {profile.role}
         </p>
@@ -94,7 +102,7 @@ export function Welcome() {
             Just the CV, please
           </a>
         </div>
-      </div>
+      </motion.div>
     </motion.section>
   );
 }
