@@ -185,8 +185,10 @@ const SOUNDS = {
       'Whimsical and bouncy, not realistic, not harsh.',
   },
   'radio-ui': {
-    seconds: 1,
-    prompt: 'A soft switch click and a gentle flicker of an old screen changing.',
+    seconds: 0.6,
+    prompt:
+      'Cartoon sound from a hand-drawn animated film: one single short radio impulse, a quick ' +
+      'bwip blip of a radio signal. Very short, clean and light, not realistic, not harsh.',
   },
 
   // Workshop.
@@ -255,6 +257,7 @@ const PICKS = {
   'radio-backend': 'radio-backend-3',
   'radio-platform': 'radio-platform-1',
   'radio-services': 'radio-services-6',
+  'radio-ui': 'radio-ui-7',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
