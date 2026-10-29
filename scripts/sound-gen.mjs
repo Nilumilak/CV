@@ -100,15 +100,23 @@ const SOUNDS = {
   },
   'eco-build': {
     seconds: 3.2,
-    prompt: 'Little saplings sprouting and growing, leaves softly unfurling and rustling, a tiny sparkle.',
+    prompt:
+      'Cartoon sound effect from a hand-drawn animated film: four little saplings popping up out of ' +
+      'the ground one after another, each with a soft bubbly boop rising in pitch, then a tiny happy ' +
+      'leafy rustle. Playful and whimsical, not realistic.',
   },
   'eco-lead': {
     seconds: 2.6,
-    prompt: 'Bits of litter tumbling into recycling bins one after another, soft paper and plastic plops.',
+    prompt:
+      'Cartoon sound effect from a hand-drawn animated film: bits of litter flying through the air ' +
+      'with quick little swooshes, each landing in a bin with a soft bouncy plonk, one after another. ' +
+      'Playful and light, not realistic.',
   },
   'eco-payments': {
     seconds: 1.8,
-    prompt: 'Three coins dropping into a wooden collection box with a soft jingle, then a gentle ding.',
+    prompt:
+      'Cartoon sound effect from a hand-drawn animated film: three shiny coins dropping into a box ' +
+      'with a bright playful clink-clink-clink, then a cheerful little ding. Whimsical, not realistic.',
   },
 
   // Lighthouse.
@@ -217,6 +225,9 @@ const PICKS = {
   'home-mailbox': 'home-mailbox-1',
   'home-globe': 'home-globe-7',
   'home-lantern': 'home-lantern-4',
+  'eco-build': 'eco-build-4',
+  'eco-lead': 'eco-lead-5',
+  'eco-payments': 'eco-payments-6',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
