@@ -236,6 +236,8 @@
     max-width: none;
     margin: 0;
     padding: 11mm 13mm;
+    /* A touch smaller than on screen, so the CV fits on two A4 pages. */
+    font-size: 13.5px;
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
   }

@@ -173,7 +173,7 @@ export const chapters: Chapter[] = [
     id: 'grove',
     kind: 'job',
     company: 'Eco Activists',
-    role: 'Frontend Software Engineer',
+    role: 'Full Stack Engineer',
     start: '2020-12',
     end: '2022-12',
     summary: 'Environmental platform · trash-free.ru',
@@ -188,8 +188,18 @@ export const chapters: Chapter[] = [
         title: 'Built frontend and APIs, mentored',
         text: 'Built the frontend in React, JavaScript, and SCSS, and the APIs for core product features in Django REST Framework. Mentored junior developers on the team through code review and shared engineering practice.',
       },
+      {
+        id: 'eco-payments',
+        title: 'ЮKassa payments integration',
+        text: 'Connected the ЮKassa payment provider so the site could take online payments.',
+      },
+      {
+        id: 'eco-admin',
+        title: 'Admin-editable website content',
+        text: 'Made the website highly customizable, so administrators can change much of its content themselves.',
+      },
     ],
-    tech: ['React', 'JavaScript', 'SCSS', 'Django REST Framework'],
+    tech: ['React', 'JavaScript', 'SCSS', 'Django REST Framework', 'ЮKassa'],
     links: [{ label: 'trash-free.ru', href: 'https://trash-free.ru' }],
   },
   {

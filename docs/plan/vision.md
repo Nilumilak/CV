@@ -87,7 +87,7 @@ The Home island sits front and centre, nearest the overview camera. The Lighthou
 | ----------- | ------------ | ----------------------------------------------- | ------------ | ------------------------------------------------------- | -------------------------------- |
 | Home        | `home`       | Summary, skills, education, languages, contacts |              | Cozy cottage with a big tree and a glowing round window | Cottage and tree                 |
 | Workshop    | `workshop`   | JSC NPP Salyut, Design Engineer                 | 2015 to 2020 | Steampunk machine island in the mood of Howl's castle   | Brick factory with giant gears   |
-| Green Grove | `grove`      | Eco Activists, Frontend Software Engineer       | 2020 to 2022 | Mossy forest island with a waterfall                    | Huge old tree and recycling bins |
+| Green Grove | `grove`      | Eco Activists, Full Stack Engineer              | 2020 to 2022 | Mossy forest island with a waterfall                    | Huge old tree and recycling bins |
 | Radio Tower | `radio`      | Radio Gigabit, Senior Full Stack Engineer       | 2022 to now  | Rocky island with antennas, like the first reference    | Lattice tower and satellite dish |
 | Arena       | `arena`      | Olimpbet KZ, Frontend Software Engineer         | 2024 to 2025 | Small floating stadium with floodlights                 | Stadium and scoreboard           |
 | Market Town | `market`     | Monetech, Senior Frontend Developer             | 2025 to 2026 | Tall cliff town with stacked houses and a tram          | Domed bank and tram loop         |
