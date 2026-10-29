@@ -6,8 +6,11 @@
  * Browsers only allow audio after a user gesture, so setEnabled() and whoosh() must be
  * called from a click handler (or after the page has had one: activation is sticky).
  */
+import bookshelfUrl from '@/assets/audio/home-bookshelf.mp3?url';
 import catUrl from '@/assets/audio/home-cat.mp3?url';
 import musicUrl from '@/assets/audio/music.mp3?url';
+import rustleUrl from '@/assets/audio/rustle.mp3?url';
+import tapUrl from '@/assets/audio/tap.mp3?url';
 import whooshUrl from '@/assets/audio/whoosh.mp3?url';
 import windUrl from '@/assets/audio/wind.mp3?url';
 
@@ -24,10 +27,13 @@ const MUSIC_LEVEL = 0.45;
 const WIND_LEVEL = 0.35;
 const WHOOSH_LEVEL = 0.8;
 const OBJECT_LEVEL = 0.9;
+/** Interface sounds stay in the background: a page turning, a soft tap. */
+const UI_LEVEL = 0.5;
 
 /** Recorded object sounds, by object id, each with an optional level of its own. */
 const OBJECT_SOUNDS: Record<string, { url: string; level?: number }> = {
-  'home-cat': { url: catUrl, level: 0.65 },
+  'home-cat': { url: catUrl, level: 0.45 },
+  'home-bookshelf': { url: bookshelfUrl },
 };
 
 let ctx: AudioContext | null = null;
@@ -335,7 +341,8 @@ const CUES: Record<SoundCue, (ac: AudioContext, t: number) => void> = {
 export const sound = {
   /** Start downloading the sound files, so the first sounds don't wait on the network. */
   preload() {
-    for (const url of [musicUrl, windUrl, whooshUrl, ...Object.values(OBJECT_SOUNDS).map((s) => s.url)]) {
+    const objects = Object.values(OBJECT_SOUNDS).map((s) => s.url);
+    for (const url of [musicUrl, windUrl, whooshUrl, rustleUrl, tapUrl, ...objects]) {
       void fetchFile(url);
     }
   },
@@ -363,6 +370,16 @@ export const sound = {
   /** The airy swoosh of the dive through the clouds. Plays only when sound is on. */
   whoosh() {
     if (enabled) void play(whooshUrl, WHOOSH_LEVEL);
+  },
+
+  /** A page turning, when an island's panel opens. Plays only when sound is on. */
+  rustle() {
+    if (enabled) void play(rustleUrl, UI_LEVEL);
+  },
+
+  /** A soft tap for interface buttons and links. Plays only when sound is on. */
+  tap() {
+    if (enabled) void play(tapUrl, UI_LEVEL);
   },
 
   /**

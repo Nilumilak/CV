@@ -21,6 +21,7 @@ export function Overlay() {
   useHashSync();
   useReturnFocusToLabel(focused);
   useSoundSync();
+  useInterfaceSounds(focused);
 
   const announcement = focused
     ? `Now viewing ${chapterOf(focused)?.company ?? 'Home'}`
@@ -95,7 +96,25 @@ function useReturnFocusToLabel(focused: IslandId | null) {
   }, [focused]);
 }
 
-/** Turns the synthesized ambience on and off with the store's sound flag. */
+/**
+ * A page turns whenever an island's panel opens or moves to another island, and every
+ * interface button or link taps softly. One listener covers all of them.
+ */
+function useInterfaceSounds(focused: IslandId | null) {
+  useEffect(() => {
+    if (focused) sound.rustle();
+  }, [focused]);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if ((e.target as HTMLElement | null)?.closest('button, a')) sound.tap();
+    };
+    document.addEventListener('click', onClick, true);
+    return () => document.removeEventListener('click', onClick, true);
+  }, []);
+}
+
+/** Turns the ambience on and off with the store's sound flag. */
 function useSoundSync() {
   const on = useWorld((s) => s.sound);
   useEffect(() => {
