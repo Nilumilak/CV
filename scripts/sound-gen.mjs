@@ -5,6 +5,7 @@
 // Usage:
 //   node scripts/sound-gen.mjs home-cat           one sound, VERSIONS versions
 //   node scripts/sound-gen.mjs wind whoosh -n 1   several sounds, one version each
+//   node scripts/sound-gen.mjs home-lantern -p "..."   try a one-off prompt instead of the listed one
 //   node scripts/sound-gen.mjs --all              everything not generated yet
 //   node scripts/sound-gen.mjs --page             only re-level the files and rebuild the page
 //   node scripts/sound-gen.mjs --export           compress the PICKS into src/assets/audio/
@@ -251,7 +252,9 @@ const nAt = args.indexOf('-n');
 const versions = nAt >= 0 ? Number(args[nAt + 1]) : VERSIONS;
 const names = flag('--all')
   ? Object.keys(SOUNDS).filter((name) => !existsSync(file(name, 1)))
-  : args.filter((a, i) => !a.startsWith('-') && args[i - 1] !== '-n');
+  : args.filter((a, i) => !a.startsWith('-') && args[i - 1] !== '-n' && args[i - 1] !== '-p');
+const pAt = args.indexOf('-p');
+const promptOverride = pAt >= 0 ? args[pAt + 1] : undefined;
 
 function file(name, version) {
   return `${RAW}/${name}-${version}.mp3`;
@@ -269,12 +272,12 @@ async function generate(name) {
   const request = s.music
     ? {
         url: `${API}/music?output_format=mp3_44100_128`,
-        body: { prompt: s.prompt, music_length_ms: s.seconds * 1000 },
+        body: { prompt: promptOverride ?? s.prompt, music_length_ms: s.seconds * 1000 },
       }
     : {
         url: `${API}/sound-generation?output_format=mp3_44100_128`,
         body: {
-          text: `${s.prompt} ${STYLE}`,
+          text: `${promptOverride ?? s.prompt} ${STYLE}`,
           model_id: 'eleven_text_to_sound_v2',
           duration_seconds: s.seconds,
           prompt_influence: 0.5,
