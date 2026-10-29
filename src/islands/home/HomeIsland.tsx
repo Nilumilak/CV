@@ -3,8 +3,6 @@ import type * as THREE from 'three';
 import baseUrl from '@/assets/models/home/island-base.glb?url';
 import benchUrl from '@/assets/models/home/bench.glb?url';
 import bookshelfUrl from '@/assets/models/home/bookshelf.glb?url';
-import daisyBushUrl from '@/assets/models/home/bush-daisy.glb?url';
-import hydrangeaBushUrl from '@/assets/models/home/bush-hydrangea.glb?url';
 import catUrl from '@/assets/models/home/cat.glb?url';
 import cottageUrl from '@/assets/models/home/cottage.glb?url';
 import globeUrl from '@/assets/models/home/globe.glb?url';
@@ -55,8 +53,6 @@ const SPOTS = {
   stone2: [1.2, 1.4],
   stone3: [1.8, 1.85],
   stone4: [2, 2.6],
-  hydrangea: [-3.7, 1.6],
-  daisy: [0.2, 4.0],
 } as const satisfies Record<string, [number, number]>;
 
 const STONES = [
@@ -64,12 +60,6 @@ const STONES = [
   { spot: 'stone2', size: 0.65, turn: 75 },
   { spot: 'stone3', size: 0.8, turn: 140 },
   { spot: 'stone4', size: 0.7, turn: 220 },
-] as const;
-
-/** Flower bushes on the empty front-left grass, each swaying slightly out of step. */
-const BUSHES = [
-  { spot: 'hydrangea', url: hydrangeaBushUrl, length: 1.3, turn: 20, phase: 0 },
-  { spot: 'daisy', url: daisyBushUrl, length: 1.0, turn: 110, phase: 2.1 },
 ] as const;
 
 /** Island-unit sizes that the cat and globe sit on. The cat lies on the seat, not in it. */
@@ -153,14 +143,6 @@ export function HomeIsland() {
         </Interactable>
         <PoppingLetter id="home-mailbox" position={[0, 1.0, 0]} />
       </group>
-
-      {BUSHES.map((b) => (
-        <group key={b.spot} position={at(b.spot)} rotation-y={deg(b.turn)}>
-          <Sway amount={0.015} speed={0.7} phase={b.phase}>
-            <GeneratedModel url={b.url} length={b.length} />
-          </Sway>
-        </group>
-      ))}
 
       {STONES.map((s) => (
         <GeneratedModel

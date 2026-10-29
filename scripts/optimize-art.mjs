@@ -29,8 +29,6 @@ const MODELS = [
   { from: 'home/bench.glb', to: 'models/home/bench.glb', texture: 512 },
   { from: 'home/stump.glb', to: 'models/home/stump.glb', texture: 512 },
   { from: 'home/stepping-stone.glb', to: 'models/home/stepping-stone.glb', texture: 512 },
-  { from: 'home/bush-hydrangea.glb', to: 'models/home/bush-hydrangea.glb', texture: 512 },
-  { from: 'home/bush-daisy.glb', to: 'models/home/bush-daisy.glb', texture: 512 },
   // flower-bush: postponed, every try so far came out flat (docs/plan/islands/home.md).
 
   // Radio Tower island
