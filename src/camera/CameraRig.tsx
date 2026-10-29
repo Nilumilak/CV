@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { useThree } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { CameraControls, CameraControlsImpl } from '@react-three/drei';
+import { easing } from 'maath';
 import * as THREE from 'three';
 import type { Vec3 } from '@/data/types';
 import { layoutOf, OVERVIEW } from '@/data/world';
@@ -78,6 +79,13 @@ function ActiveCameraRig() {
   const { size, camera } = useThree();
   const fov = (camera as THREE.PerspectiveCamera).fov;
   const first = useRef(true);
+  /**
+   * The panel shift as a share of the camera's distance. Applied every frame at the
+   * current distance, so the island stays centred beside the panel at any zoom; a fixed
+   * shift would push it further aside the closer the visitor zooms in.
+   */
+  const shiftPerDistance = useRef(new THREE.Vector3());
+  const shift = useRef(new THREE.Vector3());
 
   // On mount: control settings, and take over the camera exactly where it is now.
   useEffect(() => {
@@ -115,9 +123,19 @@ function ActiveCameraRig() {
     c.minDistance = limits.min * k;
     c.maxDistance = limits.max * k;
 
-    const offset = focused ? panelOffset(pose, fov, size.width, size.height) : [0, 0, 0];
-    void c.setFocalOffset(offset[0], offset[1], offset[2], true);
+    const offset: Vec3 = focused ? panelOffset(pose, fov, size.width, size.height) : [0, 0, 0];
+    const distance = tmp.set(...pose.position).distanceTo(new THREE.Vector3(...pose.target));
+    shiftPerDistance.current.set(...offset).divideScalar(distance);
   }, [focused, fov, size.width, size.height]);
+
+  useFrame((_, delta) => {
+    const c = ref.current;
+    if (!c) return;
+    // Ease the share itself, so opening or closing a panel still slides smoothly.
+    easing.damp3(shift.current, shiftPerDistance.current, SMOOTH_TIME, delta);
+    const d = c.distance;
+    void c.setFocalOffset(shift.current.x * d, shift.current.y * d, shift.current.z * d, false);
+  });
 
   return (
     <CameraControls
