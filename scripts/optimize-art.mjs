@@ -51,7 +51,8 @@ const MODELS = [
   { from: 'market/bank.glb', to: 'models/market/bank.glb', texture: 1024 },
   { from: 'market/houses.glb', to: 'models/market/houses.glb', texture: 1024 },
   { from: 'market/fountain.glb', to: 'models/market/fountain.glb', texture: 512 },
-  { from: 'market/shack-glass.glb', to: 'models/market/shack-glass.glb', texture: 512 },
+  // A new little shop on moving day, a cart of parcels at its door (replaced the shack).
+  { from: 'market/moving-shop.glb', to: 'models/market/moving-shop.glb', texture: 1024 },
   { from: 'market/tram.glb', to: 'models/market/tram.glb', texture: 512 },
   { from: 'market/signpost.glb', to: 'models/market/signpost.glb', texture: 512 },
   { from: 'market/balloon.glb', to: 'models/market/balloon.glb', texture: 512 },

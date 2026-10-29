@@ -24,7 +24,7 @@ export const ISLAND_OBJECTS = [
   { id: 'radio-backend', label: 'Backend and tests', name: 'the containers', cue: 'knock' },
   // Market Town (design: docs/plan/islands/market.md)
   { id: 'mone-pdl', label: 'PDL app', name: 'the fountain', cue: 'coins' },
-  { id: 'mone-nextjs', label: 'Next.js migration', name: 'the old shack', cue: 'whirr' },
+  { id: 'mone-nextjs', label: 'Next.js migration', name: 'the new shop', cue: 'knock' },
   { id: 'mone-bnpl', label: 'BNPL flows', name: 'the tram', cue: 'bell' },
   { id: 'mone-account', label: 'Account areas', name: 'the signpost', cue: 'whirr' },
   { id: 'mone-fsd', label: 'FSD and releases', name: 'the balloon', cue: 'hum' },

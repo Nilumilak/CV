@@ -167,52 +167,6 @@ export function WaterSparkles({ position }: { position: Vec3 }) {
   );
 }
 
-const PUFFS = 7;
-const puffMaterial = new THREE.MeshBasicMaterial({
-  color: '#efe6d6',
-  transparent: true,
-  depthWrite: false,
-});
-
-/** A puff of dust clouds around an object, swelling and fading. */
-export function DustPuff({ id, position }: { id: string; position: Vec3 }) {
-  const puffs = useRef<THREE.Mesh[]>([]);
-  const materials = useMemo(() => Array.from({ length: PUFFS }, () => puffMaterial.clone()), []);
-  const geometry = useMemo(() => new THREE.SphereGeometry(0.35, 10, 8), []);
-  const progress = useReaction(id, 1.2);
-  useFrame(({ clock }) => {
-    const p = progress(clock.elapsedTime);
-    for (let i = 0; i < PUFFS; i++) {
-      const puff = puffs.current[i];
-      if (!puff) continue;
-      puff.visible = p !== null;
-      if (p === null) continue;
-      const a = (i / PUFFS) * TAU;
-      const r = 0.6 + p * 0.6;
-      puff.position.set(Math.cos(a) * r, 0.3 + (i % 3) * 0.35 + p * 0.4, Math.sin(a) * r);
-      puff.scale.setScalar(0.6 + p * 1.2);
-      (puff.material as THREE.MeshBasicMaterial).opacity = (1 - p) * 0.75;
-    }
-  });
-  return (
-    <group position={position}>
-      {materials.map((m, i) => (
-        <mesh
-          key={i}
-          ref={(el) => {
-            if (el) puffs.current[i] = el;
-          }}
-          geometry={geometry}
-          material={m}
-          visible={false}
-          renderOrder={2}
-          raycast={noHit}
-        />
-      ))}
-    </group>
-  );
-}
-
 /**
  * A tram that waits at its stop and, when activated, rides once around a circle and
  * stops where it started. Children are the tram, facing +X (its direction of travel at
@@ -280,6 +234,112 @@ export function LaunchPad({ position, radius = 0.9 }: { position: Vec3; radius?:
     <mesh position={position} material={palette.wood} raycast={noHit}>
       <cylinderGeometry args={[radius, radius * 1.05, 0.14, 24]} />
     </mesh>
+  );
+}
+
+// --- Moving day: pages carried into the new shop -------------------------------------------
+
+/** The reaction, in seconds: three parcels hop in one after another, then the lights come on. */
+export const MOVING_SECONDS = 3;
+const PARCELS = [
+  { setOff: 0.1, size: 0.16, color: '#d8b07a' }, // promo pages
+  { setOff: 0.55, size: 0.13, color: '#c99c66' }, // legal pages
+  { setOff: 1.0, size: 0.14, color: '#e1bf8c' }, // consent pages
+];
+const HOP = 0.6;
+const LIGHTS_ON = 1.7;
+const parcelGeometry = new THREE.BoxGeometry(1, 0.8, 1);
+const tapeMaterial = new THREE.MeshToonMaterial({
+  color: '#f3e7cf',
+  gradientMap: palette.wood.gradientMap,
+});
+
+/**
+ * Moving day: three parcels (the site's pages) hop off the cart one after another, each in
+ * a little arc, and pop in through the shop door; then the shop's lights come on, warm,
+ * as the new site goes live. `cart` is the top of the cart's load, `door` the doorway's
+ * middle at the threshold, `windows` where the warm lights sit.
+ */
+export function MovingDay({
+  id,
+  cart,
+  door,
+  windows,
+}: {
+  id: string;
+  cart: Vec3;
+  door: Vec3;
+  windows: Vec3[];
+}) {
+  const parcels = useRef<THREE.Group[]>([]);
+  const lights = useRef<THREE.PointLight[]>([]);
+  const materials = useMemo(
+    () =>
+      PARCELS.map(
+        (p) =>
+          new THREE.MeshToonMaterial({ color: p.color, gradientMap: palette.wood.gradientMap }),
+      ),
+    [],
+  );
+  const from = useMemo(() => new THREE.Vector3(...cart), [cart]);
+  const to = useMemo(() => new THREE.Vector3(...door), [door]);
+  const progress = useReaction(id, MOVING_SECONDS);
+  useFrame(({ clock }) => {
+    const p = progress(clock.elapsedTime);
+    const t = p === null ? -1 : p * MOVING_SECONDS;
+    PARCELS.forEach((parcel, i) => {
+      const g = parcels.current[i];
+      if (!g) return;
+      const k = (t - parcel.setOff) / HOP;
+      g.visible = p !== null && k > 0 && k < 1;
+      if (!g.visible) return;
+      g.position.lerpVectors(from, to, k);
+      g.position.y += Math.sin(k * Math.PI) * 0.5 + (i - 1) * 0.04 * (1 - k);
+      g.rotation.set(0, k * Math.PI, Math.sin(k * Math.PI) * 0.4);
+      // Lifts off the cart, then shrinks away through the doorway.
+      g.scale.setScalar(parcel.size * Math.min(1, k * 6) * (k > 0.75 ? (1 - k) / 0.25 : 1));
+    });
+    // Warm lights swell on and settle a little, then fade out at the end.
+    const on =
+      p === null
+        ? 0
+        : Math.max(0, Math.min(1, (t - LIGHTS_ON) / 0.25)) *
+          Math.max(0, Math.min(1, (MOVING_SECONDS - t) / 0.5));
+    lights.current.forEach((light) => {
+      light.intensity = 0.3 + 3 * on;
+    });
+  });
+  return (
+    <group>
+      {PARCELS.map((_, i) => (
+        <group
+          key={i}
+          ref={(el) => {
+            if (el) parcels.current[i] = el;
+          }}
+          visible={false}
+        >
+          <mesh geometry={parcelGeometry} material={materials[i]} raycast={noHit} />
+          {/* A strip of tape over the top. */}
+          <mesh material={tapeMaterial} position={[0, 0.41, 0]} raycast={noHit}>
+            <boxGeometry args={[0.25, 0.02, 1.02]} />
+          </mesh>
+        </group>
+      ))}
+      {windows.map((w, i) => (
+        <pointLight
+          key={i}
+          ref={(el) => {
+            if (el) lights.current[i] = el;
+          }}
+          position={w}
+          color={colors.accentGold}
+          intensity={0.3}
+          distance={2.2}
+          decay={2}
+        />
+      ))}
+    </group>
   );
 }
 

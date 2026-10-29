@@ -13,7 +13,7 @@ Monetech, Senior Frontend Developer, remote, September 2025 to October 2026. A l
 | Achievement                                 | Object on the island            |
 | ------------------------------------------- | ------------------------------- |
 | Owned the live PDL app (4 production flows) | Coin fountain in the square     |
-| WordPress to Next.js migration              | Old shack and glass building    |
+| WordPress to Next.js migration              | New shop on moving day          |
 | BNPL app and 7 user flows                   | Little tram on a loop           |
 | 6 account areas, Spanish i18n               | Signpost with 6 arms            |
 | FSD standard and CI/CD releases             | Hot-air balloon on a launch pad |
@@ -50,14 +50,14 @@ Market sits on the right of the world (`[30, 5, -8]`). From the overview it must
 **A ring around the town square (revised 2026-10-29).** The first layout used Radio's two rows, but it put the fountain off the base's cobbled square and the houses straight behind the bank, where their footprints overlapped. Market's base has a natural centre, so the layout is a ring instead:
 
 - **Middle:** the fountain with the tram loop, in the centre of the cobbled square (island centre).
-- **Around the edge, about 4 m out,** spaced so no footprints touch: houses and bank side by side at the back, windmill and balloon at the sides, signpost and shack at the front.
+- **Around the edge, about 4 m out,** spaced so no footprints touch: houses and bank side by side at the back, windmill and balloon at the sides, signpost and the new shop at the front.
 
 ```
                  [HOUSES]  ~bunting~  [BANK]   ~bunting~  |pole|
        [WINDMILL]                                       [BALLOON]
                           ( FOUNTAIN )
                          tram loop around
-          [SIGNPOST]                         [SHACK + GLASS]
+          [SIGNPOST]                         [NEW SHOP]
                      front (towards the camera)
 ```
 
@@ -69,7 +69,7 @@ Market sits on the right of the world (`[30, 5, -8]`). From the overview it must
 | Windmill               | −4.0, 0.3       | 2.4 tall | Left side, sails facing the camera          |
 | Balloon                | 3.8, −1.0       | 3.2 tall | Right side, floating a little above its pad |
 | Signpost               | −2.6, 2.8       | 2 tall   | Front left                                  |
-| Shack and glass        | 2.6, 2.8        | 2.2 long | Front right                                 |
+| New shop               | 2.6, 2.8        | 2 tall   | Front right, door and cart facing camera    |
 
 ---
 
@@ -84,11 +84,11 @@ A round stone fountain with a little figure or spout in the middle, gold coins a
 - **Idle:** a few water sparkles.
 - **Click:** a water show (revised 2026-10-29; the coin burst was too plain): four jets shoot up from the lower basin one after another, one per shipped production flow; then all four lean in together and meet in a crown over the upper bowl, stop, and the water settles in ripples. A gold tag "4 flows · live" pops up. Drops are code-made beads along each jet's arc.
 
-### Old shack and glass building · WordPress to Next.js
+### New shop on moving day · WordPress to Next.js
 
-An old wooden shack leaning against a small modern glass building, as one model (question 2).
+Replaced the old shack and glass building on 2026-10-29: their grey, patchy look did not belong in the terracotta town. A small new shop in the town's own style (`moving-shop.glb`: cream plaster, terracotta roof, a striped awning over the side window, a green door), with a little hand cart of parcels parked at its door.
 
-- **Click:** a puff of dust clouds around the shack, and the glass building lights up from inside.
+- **Click:** moving day: three parcels (the promo, legal and consent pages) hop off the cart one after another and pop in through the door; then the shop's lights come on, warm, as the new site goes live; a gold tag "WordPress → Next.js" pops up.
 
 ### Little tram · BNPL app and 7 user flows
 
@@ -116,7 +116,7 @@ A striped balloon with a basket, tethered just above a round wooden launch pad.
 Replaced the crane on 2026-10-29: its thin lattice came out broken from image-to-3D. A cosy market windmill (`windmill.glb`: stone base, cream plaster, a terracotta-tiled cap matching the roofs) that powers the whole town, like a shared core every app runs on. Its four sails are made in code (flat canvas sails would come out paper-thin) and turn on the axle's end, facing the camera.
 
 - **Idle:** the sails turn slowly.
-- **Click:** the sails whirl up, and small coloured blocks (pieces of the UI kit) fly out from the hub in high arcs to the houses, the bank, the fountain and the shack, popping as they land; a gold tag "shared UI kit · API core" pops up.
+- **Click:** the sails whirl up, and small coloured blocks (pieces of the UI kit) fly out from the hub in high arcs to the houses, the bank, the fountain and the new shop, popping as they land; a gold tag "shared UI kit · API core" pops up.
 
 ### Not interactive
 
@@ -128,17 +128,17 @@ Replaced the crane on 2026-10-29: its thin lattice came out broken from image-to
 
 ## 6. Models and cost
 
-| #   | File              | Object                            | Budget      |
-| --- | ----------------- | --------------------------------- | ----------- |
-| 1   | `island-base.glb` | Island with a cobbled square      | 15,000 tris |
-| 2   | `bank.glb`        | Domed bank                        | 6,000       |
-| 3   | `houses.glb`      | Cluster of stacked town houses    | 6,000       |
-| 4   | `fountain.glb`    | Round coin fountain               | 3,000       |
-| 5   | `shack-glass.glb` | Old shack beside a glass building | 4,000       |
-| 6   | `tram.glb`        | One small tram car                | 3,000       |
-| 7   | `signpost.glb`    | Signpost with 6 arms              | 2,000       |
-| 8   | `balloon.glb`     | Hot-air balloon with basket       | 3,000       |
-| 9   | `windmill.glb`    | Windmill body (was the crane)     | 5,000       |
+| #   | File              | Object                           | Budget      |
+| --- | ----------------- | -------------------------------- | ----------- |
+| 1   | `island-base.glb` | Island with a cobbled square     | 15,000 tris |
+| 2   | `bank.glb`        | Domed bank                       | 6,000       |
+| 3   | `houses.glb`      | Cluster of stacked town houses   | 6,000       |
+| 4   | `fountain.glb`    | Round coin fountain              | 3,000       |
+| 5   | `moving-shop.glb` | New shop with a cart (was shack) | 5,000       |
+| 6   | `tram.glb`        | One small tram car               | 3,000       |
+| 7   | `signpost.glb`    | Signpost with 6 arms             | 2,000       |
+| 8   | `balloon.glb`     | Hot-air balloon with basket      | 3,000       |
+| 9   | `windmill.glb`    | Windmill body (was the crane)    | 5,000       |
 
 | Step                | Items | Credits  |
 | ------------------- | ----- | -------- |

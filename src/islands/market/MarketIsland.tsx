@@ -6,7 +6,7 @@ import bankUrl from '@/assets/models/market/bank.glb?url';
 import fountainUrl from '@/assets/models/market/fountain.glb?url';
 import housesUrl from '@/assets/models/market/houses.glb?url';
 import baseUrl from '@/assets/models/market/island-base.glb?url';
-import shackUrl from '@/assets/models/market/shack-glass.glb?url';
+import shopUrl from '@/assets/models/market/moving-shop.glb?url';
 import signpostUrl from '@/assets/models/market/signpost.glb?url';
 import tramUrl from '@/assets/models/market/tram.glb?url';
 import windmillUrl from '@/assets/models/market/windmill.glb?url';
@@ -16,12 +16,13 @@ import { Spin } from '@/objects/reactions';
 import { GeneratedModel } from '../GeneratedModel';
 import { deg, FACE_CAMERA, view } from '../layout';
 import { PercentTag } from '../arena/effects';
-import { DoorGlow, Hover } from '../radio/effects';
+import { Hover } from '../radio/effects';
 import { useGroundHeights } from '../useGroundHeights';
 import {
   KitDelivery,
   Bunting,
-  DustPuff,
+  MOVING_SECONDS,
+  MovingDay,
   FloatUp,
   LaunchPad,
   Pole,
@@ -44,7 +45,7 @@ const interactive = (id: IslandObjectId) => {
  * A ring around the town square: the fountain with the tram loop sits in the middle of
  * the base's cobbled square, at the island's centre. Everything else stands about 4 m
  * out, spaced so no footprints touch: houses and bank side by side at the back, windmill
- * and balloon at the sides, signpost and shack at the front. Ring spots are written as
+ * and balloon at the sides, signpost and the new shop at the front. Ring spots are written as
  * "across the view, towards the camera" (see ../layout.ts), so the back is away from
  * the focus camera.
  */
@@ -55,7 +56,7 @@ const SPOTS = {
   windmill: view(-4.0, 0.3),
   balloon: view(3.8, -1.0),
   signpost: view(-2.6, 2.8),
-  shack: view(2.6, 2.8),
+  shop: view(2.6, 2.8),
   housesFront: view(-0.7, -2.3),
   pole: view(3.0, -2.0),
 } satisfies Record<string, [number, number]>;
@@ -65,6 +66,7 @@ const POLE_HEIGHT = 2.6;
 const HOUSES_HEIGHT = 4.2;
 const BANK_HEIGHT = 3.6;
 
+const SHOP_HEIGHT = 2;
 const WINDMILL_HEIGHT = 2.4;
 /**
  * The end of the windmill's axle, where the sails turn, measured on the model at this
@@ -73,7 +75,7 @@ const WINDMILL_HEIGHT = 2.4;
 const WINDMILL_HUB: [number, number, number] = [0, 1.9, 1.28];
 /**
  * Where the UI-kit pieces land, relative to the windmill (across, up, towards): the
- * houses, the bank, the fountain and the shack, every part of town built on the kit.
+ * houses, the bank, the fountain and the new shop, every part of town built on the kit.
  */
 const KIT_TARGETS: [number, number, number][] = [
   [2.1, 1.2, -3.6],
@@ -190,12 +192,28 @@ export function MarketIsland() {
         </Interactable>
       </group>
 
-      <group position={at('shack')} rotation-y={deg(FACE_CAMERA - 20)}>
+      {/* Door and cart face the camera; the awning window is on the shop's left side. */}
+      <group position={at('shop')} rotation-y={deg(FACE_CAMERA - 20)}>
         <Interactable {...interactive('mone-nextjs')}>
-          <GeneratedModel url={shackUrl} length={2.2} />
+          <GeneratedModel url={shopUrl} height={SHOP_HEIGHT} />
         </Interactable>
-        <DustPuff id="mone-nextjs" position={[-0.4, 0, 0]} />
-        <DoorGlow id="mone-nextjs" position={[0.5, 1.0, 0.4]} />
+        {/* Measured on the model at this size: the door's middle (front face z 0.48), the
+            top of the cart's crates, and spots just outside the door and the side window. */}
+        <MovingDay
+          id="mone-nextjs"
+          cart={[0.55, 0.62, 0.73]}
+          door={[0.06, 0.4, 0.46]}
+          windows={[
+            [0.06, 0.9, 0.85],
+            [-1.15, 0.8, 0],
+          ]}
+        />
+        <PercentTag
+          id="mone-nextjs"
+          position={[0, SHOP_HEIGHT + 0.6, 0]}
+          text="WordPress → Next.js"
+          delay={MOVING_SECONDS * 0.45}
+        />
       </group>
     </group>
   );
