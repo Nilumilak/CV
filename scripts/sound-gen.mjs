@@ -76,7 +76,10 @@ const SOUNDS = {
   },
   'home-globe': {
     seconds: 1.6,
-    prompt: 'An old wooden desk globe spun by hand, a smooth soft whirring spin slowing to a stop.',
+    prompt:
+      'Whimsical sound from a hand-drawn animated film: a small globe given a playful spin, a ' +
+      'light airy whirr with soft wooden ticking that slows down, ending in a tiny magical shimmer. ' +
+      'Cartoonish and charming, not realistic.',
   },
   'home-lantern': {
     seconds: 2.4,
