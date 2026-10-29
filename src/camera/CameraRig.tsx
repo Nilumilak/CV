@@ -20,8 +20,6 @@ const DISTANCE = {
   focus: { min: 9, max: 30 },
 };
 
-const tmp = new THREE.Vector3();
-
 /** Screens narrower than this aspect ratio see less width, so the camera backs off. */
 const REFERENCE_ASPECT = 1.2;
 const MAX_BACKOFF = 2.2;
@@ -43,24 +41,13 @@ function scalePose(pose: { position: Vec3; target: Vec3 }, k: number) {
 }
 
 /**
- * Shift the view so the focused island sits beside the panel (desktop) or above the
- * bottom sheet (phone). Returns a focal offset in world units at the target distance.
+ * How far to shift the picture, in screen pixels, so the focused island sits in the
+ * middle of the free space beside the panel (desktop) or above the bottom sheet (phone).
+ * Positive X moves the picture left, positive Y moves it up.
  */
-function panelOffset(
-  pose: { position: Vec3; target: Vec3 },
-  fov: number,
-  width: number,
-  height: number,
-): Vec3 {
-  const distance = tmp.set(...pose.position).distanceTo(new THREE.Vector3(...pose.target));
-  const visibleHeight = 2 * distance * Math.tan(THREE.MathUtils.degToRad(fov) / 2);
-  const visibleWidth = visibleHeight * (width / height);
-  if (isMobileWidth(width)) {
-    // Positive Y lifts the island into the space above the sheet.
-    const sheetPx = height * SHEET_SHARE;
-    return [0, (sheetPx / 2 / height) * visibleHeight, 0];
-  }
-  return [(PANEL_WIDTH / 2 / width) * visibleWidth, 0, 0];
+function panelShift(width: number, height: number): [number, number] {
+  if (isMobileWidth(width)) return [0, (height * SHEET_SHARE) / 2];
+  return [PANEL_WIDTH / 2, 0];
 }
 
 /**
@@ -77,15 +64,15 @@ function ActiveCameraRig() {
   const ref = useRef<CameraControlsImpl>(null);
   const focused = useWorld((s) => s.focused);
   const { size, camera } = useThree();
-  const fov = (camera as THREE.PerspectiveCamera).fov;
   const first = useRef(true);
   /**
-   * The panel shift as a share of the camera's distance. Applied every frame at the
-   * current distance, so the island stays centred beside the panel at any zoom; a fixed
-   * shift would push it further aside the closer the visitor zooms in.
+   * The panel shift is applied to the picture (the camera's view offset), not by moving
+   * the camera. A pixel shift stays the same at every zoom, so the island stays centred
+   * beside the panel however close the visitor zooms, and nothing has to follow the
+   * controls frame by frame (that made the view shake while zooming).
    */
-  const shiftPerDistance = useRef(new THREE.Vector3());
-  const shift = useRef(new THREE.Vector3());
+  const shiftTarget = useRef(new THREE.Vector2());
+  const shift = useRef(new THREE.Vector2());
 
   // On mount: control settings, and take over the camera exactly where it is now.
   useEffect(() => {
@@ -123,19 +110,25 @@ function ActiveCameraRig() {
     c.minDistance = limits.min * k;
     c.maxDistance = limits.max * k;
 
-    const offset: Vec3 = focused ? panelOffset(pose, fov, size.width, size.height) : [0, 0, 0];
-    const distance = tmp.set(...pose.position).distanceTo(new THREE.Vector3(...pose.target));
-    shiftPerDistance.current.set(...offset).divideScalar(distance);
-  }, [focused, fov, size.width, size.height]);
+    const [sx, sy] = focused ? panelShift(size.width, size.height) : [0, 0];
+    shiftTarget.current.set(sx, sy);
+  }, [focused, size.width, size.height]);
 
+  // Slide the picture towards its target shift; it eases like the camera flights.
   useFrame((_, delta) => {
-    const c = ref.current;
-    if (!c) return;
-    // Ease the share itself, so opening or closing a panel still slides smoothly.
-    easing.damp3(shift.current, shiftPerDistance.current, SMOOTH_TIME, delta);
-    const d = c.distance;
-    void c.setFocalOffset(shift.current.x * d, shift.current.y * d, shift.current.z * d, false);
+    const cam = camera as THREE.PerspectiveCamera;
+    easing.damp2(shift.current, shiftTarget.current, SMOOTH_TIME, delta);
+    const { x, y } = shift.current;
+    if (Math.abs(x) < 0.05 && Math.abs(y) < 0.05) {
+      if (cam.view?.enabled) cam.clearViewOffset();
+      return;
+    }
+    // Re-applied every frame with the current size, so resizing never leaves it stale.
+    cam.setViewOffset(size.width, size.height, x, y, size.width, size.height);
   });
+
+  // Leave the camera unshifted when the rig unmounts.
+  useEffect(() => () => (camera as THREE.PerspectiveCamera).clearViewOffset(), [camera]);
 
   return (
     <CameraControls
