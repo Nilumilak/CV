@@ -88,7 +88,7 @@ export function ArenaIsland() {
       <group position={at('scoreboard')} rotation-y={deg(FACE_CAMERA)}>
         <Interactable {...interactive('olimp-virtual')}>
           <GeneratedModel url={scoreboardUrl} height={SCOREBOARD_HEIGHT} />
-          <ScoreboardRows id="olimp-virtual" position={[0, 1.92, 0.22]} width={1.7} height={1.5} />
+          <ScoreboardRows id="olimp-virtual" position={[0, 1.7, 0.22]} width={1.9} height={1.25} />
         </Interactable>
       </group>
 
