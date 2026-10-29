@@ -10,10 +10,10 @@ import { layoutOf } from '@/data/world';
  */
 const ANCHORS: Partial<Record<IslandId, Partial<Record<IslandId, Vec3>>>> = {
   workshop: { grove: [3.04, -0.74, -2.03] },
-  grove: { workshop: [-3.12, -0.64, 2.08], radio: [3.65, -0.68, -1.22] },
-  radio: { grove: [-5.03, -0.59, 1.67], arena: [5.03, -0.64, 1.67] },
-  arena: { radio: [-4.93, -0.51, -1.64], market: [5.14, -0.5, 1.29] },
-  market: { arena: [-5.14, -0.53, -1.29] },
+  grove: { workshop: [-4.0, -0.64, 2.08], radio: [4.0, -0.68, -1.22] },
+  radio: { grove: [-5.03, -0.59, 1.67], arena: [5.03, -0.64, 0.67] },
+  arena: { radio: [-4.93, -0.31, -0.64], market: [4.14, -1.0, 1.29] },
+  market: { arena: [-5.14, -0.33, -1.29] },
 };
 
 /** One rope between neighbouring career islands, with its two tie points. */
