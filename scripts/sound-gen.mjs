@@ -85,9 +85,9 @@ const SOUNDS = {
   'home-lantern': {
     seconds: 2.4,
     prompt:
-      'Classic exaggerated cartoon zap, like in an old animated cartoon: a springy, wobbly zzzap ' +
-      'with a comical bouncy twang and a cute little sparkle as a lantern flicks on. Very cartoony, ' +
-      'goofy and playful, not realistic, not harsh.',
+      'Cartoon sound from a hand-drawn animated film: a soft cosy fwoomp as a little lantern lights ' +
+      'up, a warm glow swelling gently like a breath, then a few tiny glassy twinkles like fireflies ' +
+      'waking up. Whimsical and warm, not realistic, no crackle.',
   },
   'home-mailbox': {
     seconds: 1.3,
@@ -224,7 +224,7 @@ const PICKS = {
   'home-cat': 'home-cat-6',
   'home-bookshelf': 'home-bookshelf-1',
   'home-mailbox': 'home-mailbox-1',
-  'home-lantern': 'home-lantern-4',
+  'home-lantern': 'home-lantern-14',
   'eco-build': 'eco-build-4',
   'eco-lead': 'eco-lead-5',
   'eco-payments': 'eco-payments-6',
