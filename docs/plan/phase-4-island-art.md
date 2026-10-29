@@ -175,6 +175,8 @@ Full design description: [islands/workshop.md](islands/workshop.md).
 
 ### Lighthouse · Kafka UI
 
+Full design description: [islands/lighthouse.md](islands/lighthouse.md) (draft for review).
+
 - **Base:** tiny rock with a small wooden dock.
 - **Landmark:** white and red lighthouse.
 - **Objects to model:** the lamp room, a mailbox on the dock.
