@@ -159,7 +159,9 @@ const SOUNDS = {
   },
   'mone-pdl': {
     seconds: 3.4,
-    prompt: 'A small stone fountain, four water jets rising and splashing gently, soft trickling water.',
+    prompt:
+      'Cartoon sound from a hand-drawn animated film: a gentle water stream flowing and burbling, ' +
+      'clear soft trickling and bubbling water. Fresh, cosy and calm, not harsh.',
   },
 
   // Radio Tower.
@@ -243,6 +245,7 @@ const PICKS = {
   'mone-account': 'mone-account-7',
   'mone-fsd': 'mone-fsd-1',
   'mone-nextjs': 'mone-nextjs-5',
+  'mone-pdl': 'mone-pdl-6',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
