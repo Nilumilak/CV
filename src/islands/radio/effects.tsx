@@ -184,31 +184,223 @@ export function SlowTurn({ children, speed = 0.12 }: { children: ReactNode; spee
   return <group ref={ref}>{children}</group>;
 }
 
-/** A sheet of generated test code that pops out of the robot, floats up and shrinks away. */
-export function PoppingScroll({ id, position }: { id: string; position: Vec3 }) {
+// --- Robot: thinks, then delivers tests -------------------------------------------------
+
+/**
+ * The robot's reaction, in seconds: it thinks (a chat bubble with typing dots, a glowing
+ * eye, a rocking head) until THINK, then hops and sends test cards fluttering out.
+ */
+export const THINK = 1.4;
+export const ROBOT_SECONDS = 3.2;
+
+/** Seconds into the robot's reaction, or null when it is not playing. */
+const robotTime = (p: number | null) => (p === null ? null : p * ROBOT_SECONDS);
+
+/** Rocks side to side while thinking, then a happy hop as the tests come out. */
+export function ThinkAndHop({ id, children }: { id: string; children: ReactNode }) {
   const ref = useRef<THREE.Group>(null!);
-  const progress = useReaction(id, 1.6);
-  const texture = useMemo(() => codeSheetTexture(), []);
+  const progress = useReaction(id, ROBOT_SECONDS);
   useFrame(({ clock }) => {
-    const t = progress(clock.elapsedTime);
+    const t = robotTime(progress(clock.elapsedTime));
     const g = ref.current;
-    g.visible = t !== null;
-    if (t === null) return;
-    g.position.set(
-      position[0],
-      position[1] + Math.sin(t * Math.PI * 0.6) * 0.8,
-      position[2] + 0.15,
-    );
-    g.rotation.set(0, Math.sin(t * 3) * 0.3, Math.sin(t * 5) * 0.08);
-    // Unrolls on the way up, shrinks away at the end.
-    g.scale.set(Math.min(1, t * 5, (1 - t) * 4), Math.min(1, t * 3, (1 - t) * 4), 1);
+    const thinking = t !== null && t < THINK;
+    g.rotation.z = thinking ? Math.sin(t * 9) * 0.08 * Math.min(1, t * 4) : 0;
+    const hop = t === null ? -1 : (t - THINK) / 0.6;
+    g.position.y = hop > 0 && hop < 1 ? Math.sin(hop * Math.PI) * 0.3 : 0;
+  });
+  return <group ref={ref}>{children}</group>;
+}
+
+/** A soft glow from the robot's eye: pulsing while it thinks, a flash as it delivers. */
+export function EyeGlow({ id, position }: { id: string; position: Vec3 }) {
+  const light = useRef<THREE.PointLight>(null!);
+  const progress = useReaction(id, ROBOT_SECONDS);
+  useFrame(({ clock }) => {
+    const t = robotTime(progress(clock.elapsedTime));
+    light.current.intensity =
+      t === null
+        ? 0
+        : t < THINK
+          ? 0.8 + 0.6 * Math.sin(t * 10)
+          : 3 * Math.max(0, 1 - (t - THINK) / 0.5);
   });
   return (
-    <group ref={ref} visible={false}>
-      <mesh raycast={() => null}>
-        <planeGeometry args={[0.32, 0.46]} />
-        <meshBasicMaterial map={texture} side={THREE.DoubleSide} toneMapped={false} />
-      </mesh>
+    <pointLight ref={light} position={position} color="#9fe3ff" intensity={0} distance={1.4} />
+  );
+}
+
+/** A white chat bubble with three dots; `raised` lifts one of them (−1: none). */
+function bubbleTexture(raised: number) {
+  return canvasTexture(256, 180, (g) => {
+    g.fillStyle = '#fffdf6';
+    g.strokeStyle = 'rgba(43, 36, 34, 0.35)';
+    g.lineWidth = 6;
+    g.beginPath();
+    g.roundRect(10, 10, 236, 130, 60);
+    g.moveTo(70, 136);
+    g.lineTo(52, 172);
+    g.lineTo(104, 138);
+    g.fill();
+    g.stroke();
+    g.fillStyle = '#fffdf6';
+    g.fillRect(64, 128, 44, 12);
+    g.fillStyle = '#5a5250';
+    for (let i = 0; i < 3; i++) {
+      g.beginPath();
+      g.arc(78 + i * 50, i === raised ? 62 : 76, 15, 0, Math.PI * 2);
+      g.fill();
+    }
+  });
+}
+
+/**
+ * A chat bubble over the robot with "typing" dots while it thinks; it pops at THINK.
+ * Swaps between a few drawings to make the dots bounce.
+ */
+export function ThinkingBubble({ id, position }: { id: string; position: Vec3 }) {
+  const sprite = useRef<THREE.Sprite>(null!);
+  const frames = useMemo(() => [0, 1, 2, -1].map((raised) => bubbleTexture(raised)), []);
+  const progress = useReaction(id, ROBOT_SECONDS);
+  useFrame(({ clock }) => {
+    const t = robotTime(progress(clock.elapsedTime));
+    const s = sprite.current;
+    s.visible = t !== null && t < THINK + 0.2;
+    if (!s.visible || t === null) return;
+    const material = s.material as THREE.SpriteMaterial;
+    const frame = frames[Math.floor(t * 6) % frames.length]!;
+    if (material.map !== frame) {
+      material.map = frame;
+      material.needsUpdate = true;
+    }
+    // Pops in, holds, then a quick swell and gone as the answer comes out.
+    const size =
+      t < 0.18
+        ? Math.sin((t / 0.18) * Math.PI * 0.75) * 1.15
+        : t < THINK
+          ? 1
+          : 1.2 * (1 - (t - THINK) / 0.2);
+    s.scale.set(0.5 * size, 0.35 * size, 1);
+  });
+  return (
+    <sprite ref={sprite} position={position} visible={false} raycast={() => null}>
+      <spriteMaterial map={frames[0]} transparent depthWrite={false} toneMapped={false} />
+    </sprite>
+  );
+}
+
+const CARDS = 4;
+
+/**
+ * Little cards of generated test code shoot out of the robot after it has thought, arc out
+ * to the sides and flutter down to the grass, fading as they land.
+ */
+export function TestCards({ id, position }: { id: string; position: Vec3 }) {
+  const cards = useRef<THREE.Group[]>([]);
+  const texture = useMemo(() => codeSheetTexture(), []);
+  const progress = useReaction(id, ROBOT_SECONDS);
+  useFrame(({ clock }) => {
+    const t = robotTime(progress(clock.elapsedTime));
+    cards.current.forEach((card, i) => {
+      const k = t === null ? -1 : (t - THINK - 0.1 - i * 0.12) / 1.5;
+      card.visible = k > 0 && k < 1;
+      if (!card.visible) return;
+      // Out to its side and up, then a slow, swaying fall to the grass.
+      const side = (i - (CARDS - 1) / 2) * 0.45;
+      const up = Math.sin(Math.min(1, k * 2.2) * Math.PI * 0.5) * 0.7;
+      const fall = Math.max(0, k - 0.45) / 0.55;
+      card.position.set(
+        position[0] + side * Math.min(1, k * 2) + Math.sin(k * 9 + i) * 0.06 * fall,
+        position[1] + up - (position[1] + 0.7) * fall * fall,
+        position[2] + 0.25 * Math.min(1, k * 3),
+      );
+      card.rotation.set(Math.sin(k * 7 + i) * 0.5, Math.sin(k * 5 + i * 2) * 0.6, side * 0.4);
+      card.scale.setScalar(Math.min(1, k * 8) * (k > 0.85 ? (1 - k) / 0.15 : 1));
+    });
+  });
+  return (
+    <group>
+      {Array.from({ length: CARDS }, (_, i) => (
+        <group
+          key={i}
+          ref={(el) => {
+            if (el) cards.current[i] = el;
+          }}
+          visible={false}
+        >
+          <mesh raycast={() => null}>
+            <planeGeometry args={[0.2, 0.28]} />
+            <meshBasicMaterial map={texture} side={THREE.DoubleSide} toneMapped={false} />
+          </mesh>
+        </group>
+      ))}
+    </group>
+  );
+}
+
+// --- Containers: a test run that passes --------------------------------------------------
+
+/** A green round badge with a white tick. */
+function tickTexture() {
+  return canvasTexture(128, 128, (g) => {
+    g.fillStyle = '#5fbf5a';
+    g.beginPath();
+    g.arc(64, 64, 58, 0, Math.PI * 2);
+    g.fill();
+    g.strokeStyle = '#ffffff';
+    g.lineWidth = 16;
+    g.lineCap = 'round';
+    g.lineJoin = 'round';
+    g.beginPath();
+    g.moveTo(36, 66);
+    g.lineTo(56, 86);
+    g.lineTo(92, 44);
+    g.stroke();
+  });
+}
+
+const TICKS = 5;
+export const TEST_RUN_SECONDS = 2.6;
+
+/**
+ * A test run passing: green ticks pop up in a row one after another, hold, then rise a
+ * little and fade together. Put it in a group facing the camera, so the row runs across
+ * the screen.
+ */
+export function TestRun({ id, position }: { id: string; position: Vec3 }) {
+  const ticks = useRef<THREE.Sprite[]>([]);
+  const texture = useMemo(() => tickTexture(), []);
+  const progress = useReaction(id, TEST_RUN_SECONDS);
+  useFrame(({ clock }) => {
+    const p = progress(clock.elapsedTime);
+    const t = p === null ? null : p * TEST_RUN_SECONDS;
+    ticks.current.forEach((tick, i) => {
+      const k = t === null ? -1 : (t - 0.25 - i * 0.2) / 0.25;
+      tick.visible = k > 0 && p !== null;
+      if (!tick.visible || p === null) return;
+      const pop = k < 1 ? Math.sin(k * Math.PI * 0.75) * 1.2 : 1;
+      const out = p > 0.8 ? (1 - p) / 0.2 : 1;
+      tick.scale.setScalar(0.32 * pop * out);
+      tick.position.set(
+        position[0] + (i - (TICKS - 1) / 2) * 0.4,
+        position[1] + Math.max(0, p - 0.8) * 1.5,
+        position[2],
+      );
+    });
+  });
+  return (
+    <group>
+      {Array.from({ length: TICKS }, (_, i) => (
+        <sprite
+          key={i}
+          ref={(el) => {
+            if (el) ticks.current[i] = el;
+          }}
+          visible={false}
+          raycast={() => null}
+        >
+          <spriteMaterial map={texture} transparent depthWrite={false} toneMapped={false} />
+        </sprite>
+      ))}
     </group>
   );
 }

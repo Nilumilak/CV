@@ -89,7 +89,7 @@ All five follow the Home pattern: hover glows gold with a hint, click plays a sh
 A small round tin robot with one antenna and a friendly screen face, hovering a little above the ground.
 
 - **Idle:** floats up and down slowly, its antenna tip blinks.
-- **Click:** a happy hop, and a small paper scroll pops out of its chest and unrolls a little (code-made, like the mailbox letter).
+- **Click:** it thinks, then delivers: a chat bubble with bouncing "typing" dots appears above it, its eye glows and it rocks its head; then the bubble pops, it hops, four little cards of test code shoot out and flutter down to the grass, and a gold tag "prompt → tests" pops up. (Revised 2026-10-29: the first version was a hop and a code scroll.)
 
 ### Bunker lab · Architected the test platform
 
@@ -119,7 +119,7 @@ The whole dish turns, post included. The post is round, so its turning is invisi
 Two small shipping containers stacked, one yellow and one blue, with a whale-like curve painted on the side as a nod to Docker (not the real logo).
 
 - **Idle:** still.
-- **Click:** a short wobble, and a green check mark pops up above them and fades (code-made).
+- **Click:** a test run that passes: the stack gives a small thump, five green ticks pop up in a row above it one after another, and a gold tag "all tests pass" follows. (Revised 2026-10-29: the first version was a wobble and one check mark.)
 
 ---
 

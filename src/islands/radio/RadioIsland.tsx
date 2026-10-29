@@ -10,20 +10,26 @@ import towerUrl from '@/assets/models/radio/tower.glb?url';
 import rockUrl from '@/assets/models/shared/rock-cluster.glb?url';
 import { islandObject, type IslandObjectId } from '@/data/islandObjects';
 import { Interactable } from '@/objects/Interactable';
-import { Hop, Spin, Wobble } from '@/objects/reactions';
+import { Spin, Squash } from '@/objects/reactions';
+import { PercentTag } from '../arena/effects';
 import { GeneratedModel } from '../GeneratedModel';
 import { deg, FACE_CAMERA, view } from '../layout';
 import { useGroundHeights } from '../useGroundHeights';
 import {
   Beacon,
-  CheckMarkPop,
   DoorGlow,
+  EyeGlow,
   Hover,
-  PoppingScroll,
   ScreenPicture,
   SignalBurst,
   SignalRings,
   SlowTurn,
+  TEST_RUN_SECONDS,
+  TestCards,
+  TestRun,
+  THINK,
+  ThinkAndHop,
+  ThinkingBubble,
 } from './effects';
 
 /** Props for an object's Interactable, from the shared list in data/islandObjects.ts. */
@@ -43,7 +49,7 @@ const SPOTS = {
   dish: view(2.5, -3),
   screen: view(-2.2, 2.3),
   robot: view(0, 2.3),
-  containers: view(2.2, 2.3),
+  containers: view(2.6, 2.3),
   rocks1: view(-4, 0),
   rocks2: view(4, 0),
   rocks3: view(-0.9, 3.8),
@@ -114,22 +120,40 @@ export function RadioIsland() {
         <Interactable {...interactive('radio-llm')}>
           <Hover>
             <group position-y={0.25}>
-              <Hop id="radio-llm">
+              <ThinkAndHop id="radio-llm">
                 <GeneratedModel url={robotUrl} length={0.9} />
-              </Hop>
+              </ThinkAndHop>
             </group>
           </Hover>
         </Interactable>
-        <PoppingScroll id="radio-llm" position={[0, 0.8, 0.2]} />
+        {/* It thinks (bubble, eye glow), then sends test cards out: prompt in, tests out. */}
+        <EyeGlow id="radio-llm" position={[0, 0.7, 0.45]} />
+        <ThinkingBubble id="radio-llm" position={[0.3, 1.45, 0]} />
+        <TestCards id="radio-llm" position={[0, 0.7, 0.2]} />
+        <PercentTag
+          id="radio-llm"
+          position={[0, 1.6, 0]}
+          text="prompt → tests"
+          delay={THINK + 0.3}
+        />
       </group>
 
-      <group position={at('containers')} rotation-y={deg(FACE_CAMERA - 15)}>
+      <group position={at('containers')} rotation-y={deg(FACE_CAMERA + 120)}>
         <Interactable {...interactive('radio-backend')}>
-          <Wobble id="radio-backend" angle={0.04} shakes={3}>
+          <Squash id="radio-backend" to={0.92} seconds={0.5}>
             <GeneratedModel url={containersUrl} height={2} />
-          </Wobble>
+          </Squash>
         </Interactable>
-        <CheckMarkPop id="radio-backend" position={[0, 2.3, 0]} />
+        {/* Turned back to face the camera, so the row of ticks runs across the screen. */}
+        <group rotation-y={deg(-120)}>
+          <TestRun id="radio-backend" position={[0, 2.35, 0]} />
+        </group>
+        <PercentTag
+          id="radio-backend"
+          position={[0, 2.95, 0]}
+          text="all tests pass"
+          delay={TEST_RUN_SECONDS * 0.45}
+        />
       </group>
 
       {ROCKS.map((r) => {
