@@ -15,6 +15,12 @@ interface InteractableProps {
   /** Hover hint, e.g. "Skills". */
   label: string;
   cue: SoundCue;
+  /**
+   * Whether hovering lifts (slightly enlarges) the object. Turn it off for a group spread
+   * across the island, such as a row of saplings: the lift grows around the group origin,
+   * which would slide every member sideways instead of lifting it.
+   */
+  lift?: boolean;
   children: ReactNode;
 }
 
@@ -36,7 +42,7 @@ const canGlow = (m: THREE.Material): m is Glowing => 'emissive' in m;
  * Click: activates the object in the store. Reactions and the panel listen for that,
  * so the panel's "Show me" buttons play exactly the same thing.
  */
-export function Interactable({ id, island, label, cue, children }: InteractableProps) {
+export function Interactable({ id, island, label, cue, lift = true, children }: InteractableProps) {
   const ref = useRef<THREE.Group>(null!);
   const glow = useRef(0);
   const glowingMeshes = useRef<THREE.Mesh[]>([]);
@@ -88,7 +94,7 @@ export function Interactable({ id, island, label, cue, children }: InteractableP
     for (let i = 0; i < meshes.length; i++) {
       (meshes[i].material as Glowing).emissiveIntensity = glow.current;
     }
-    easing.damp3(ref.current.scale, active ? 1.05 : 1, HOVER_EASE, delta);
+    easing.damp3(ref.current.scale, active && lift ? 1.05 : 1, HOVER_EASE, delta);
   });
 
   return (

@@ -149,7 +149,7 @@ export function GroveIsland() {
         <PercentTag id="eco-lead" position={[0, BINS_HEIGHT + 0.6, 0]} text="trash-free.ru" />
       </group>
 
-      <Interactable {...interactive('eco-build')}>
+      <Interactable {...interactive('eco-build')} lift={false}>
         {SAPLINGS.map((s, i) => (
           <group key={s.spot} position={at(s.spot)} rotation-y={deg(s.turn)}>
             <Grow id="eco-build" delay={i * 0.12}>
