@@ -13,6 +13,7 @@ import { useWorld } from '@/store/useWorld';
 import { CloudLayers } from '@/world/CloudLayers';
 import { Lighting } from '@/world/Lighting';
 import { Route } from '@/world/Route';
+import { WindParticles } from '@/world/WindParticles';
 import { SkyDome } from '@/world/SkyDome';
 
 const Debug = lazy(() => import('@/debug/Debug'));
@@ -49,6 +50,7 @@ export default function WorldCanvas() {
           <Islands />
           <Route />
         </Suspense>
+        <WindParticles />
         <WelcomeSun />
         <FlyIn />
         <CameraRig />
