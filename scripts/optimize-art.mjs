@@ -4,7 +4,10 @@
 // Flat models (paper-thin image-to-3D results) are refused; see model-shape.mjs.
 // Models with a `grade` get their texture colour-corrected first, and island bases with
 // `grassTop` get bare grey patches on their top repainted as grass; see art-grade.mjs.
-// Usage: npm run art
+// Usage:
+//   npm run art                        all models and textures
+//   npm run art -- arena/twin-towers   only entries whose source path contains a filter
+//   npm run art -- arena radio/dish    several filters: anything matching any of them
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, statSync } from 'node:fs';
 import { dirname } from 'node:path';
@@ -66,9 +69,13 @@ const MODELS = [
     removeFaces: [{ min: [0.194, 0.167, -0.167], max: [0.361, 0.444, -0.028], minArea: 100 }],
   },
   { from: 'arena/parcel.glb', to: 'models/arena/parcel.glb', texture: 512 },
-  // The white connector halfway up is part of the design; it only looked broken while
-  // models were drawn one-sided, so no face removal here.
-  { from: 'arena/twin-towers.glb', to: 'models/arena/twin-towers.glb', texture: 512 },
+  {
+    from: 'arena/twin-towers.glb',
+    to: 'models/arena/twin-towers.glb',
+    texture: 512,
+    // A broken white connector halfway up, in the gap between the towers.
+    removeFaces: [{ min: [-0.034, 0.343, 0.0], max: [0.034, 0.629, 0.1] }],
+  },
 
   // Shared kit, reused across islands
   { from: 'shared/rock-cluster.glb', to: 'models/shared/rock-cluster.glb', texture: 512 },
@@ -85,7 +92,19 @@ const kb = (p) => `${Math.round(statSync(p).size / 1024)} KB`;
 // Run the CLI's own entry with Node: no shell, so paths work the same on Windows and Linux.
 const cli = 'node_modules/@gltf-transform/cli/bin/cli.js';
 
-for (const m of MODELS) {
+// Optional filters from the command line; with none, everything is processed.
+const filters = process.argv.slice(2);
+const wanted = (entry) => !filters.length || filters.some((f) => entry.from.includes(f));
+const models = MODELS.filter(wanted);
+const textures = TEXTURES.filter(wanted);
+if (filters.length && !models.length && !textures.length) {
+  console.error(
+    `Nothing matches ${filters.join(', ')}. Source paths look like "arena/twin-towers.glb".`,
+  );
+  process.exit(1);
+}
+
+for (const m of models) {
   if (!existsSync(src(m.from))) {
     console.warn(`skip ${m.from}: not found`);
     continue;
@@ -138,7 +157,7 @@ for (const m of MODELS) {
   console.log(`${m.from} (${kb(src(m.from))}) -> ${m.to} (${kb(out(m.to))})`);
 }
 
-for (const t of TEXTURES) {
+for (const t of textures) {
   if (!existsSync(src(t.from))) {
     console.warn(`skip ${t.from}: not found`);
     continue;
