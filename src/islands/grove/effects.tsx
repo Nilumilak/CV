@@ -203,6 +203,17 @@ export function Notes({
     });
   }, [centre, width, height]);
   const count = 5;
+  /**
+   * Note i's slot in a round. Multiplying by 5 (which shares no factor with the 6 slots)
+   * gives every note its own slot; ×2 put two pairs of notes in the same place, where they
+   * flickered as both tried to show. Each note also sits on its own thin layer, so they
+   * never flicker while sliding past each other either.
+   */
+  const slotOf = (i: number, r: number) =>
+    slots[(i * 5 + r * 2) % slots.length]!.clone().setZ(centre[2] + i * 0.004);
+  // Made once: a fresh position on every render would snap the notes back to these.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const starts = useMemo(() => Array.from({ length: count }, (_, i) => slotOf(i, 0)), [slots]);
   const noteW = (width / 3) * 0.78;
   const noteH = (height / 2) * 0.72;
 
@@ -215,13 +226,13 @@ export function Notes({
   );
 
   const target = useMemo(() => new THREE.Color(), []);
+  const goal = useMemo(() => new THREE.Vector3(), []);
   useFrame((_, delta) => {
     for (let i = 0; i < count; i++) {
       const n = notes.current[i];
       if (!n) continue;
       // Each round shifts every note to another slot and another colour.
-      const slot = slots[(i * 2 + round * 3) % slots.length];
-      easing.damp3(n.position, slot, 0.25, delta);
+      easing.damp3(n.position, goal.copy(slotOf(i, round)), 0.25, delta);
       target.set(NOTE_COLORS[(i + round * 2) % NOTE_COLORS.length]);
       easing.dampC((n.material as THREE.MeshBasicMaterial).color, target, 0.3, delta);
       n.rotation.z = Math.sin(i * 2.3 + round) * 0.08;
@@ -236,7 +247,7 @@ export function Notes({
           ref={(el) => {
             if (el) notes.current[i] = el;
           }}
-          position={slots[(i * 2) % slots.length]}
+          position={starts[i]}
           raycast={noHit}
         >
           <planeGeometry args={[noteW, noteH]} />
