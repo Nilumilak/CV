@@ -77,13 +77,16 @@ const SOUNDS = {
   'home-globe': {
     seconds: 1.6,
     prompt:
-      'Whimsical sound from a hand-drawn animated film: a small globe given a playful spin, a ' +
-      'light airy whirr with soft wooden ticking that slows down, ending in a tiny magical shimmer. ' +
-      'Cartoonish and charming, not realistic.',
+      'Cartoon spin sound effect from a hand-drawn animated film: a quick, bouncy swish-swish-swish ' +
+      'of a little globe spinning around on its stand, light and playful, slowing down to a soft stop. ' +
+      'Simple and charming, not realistic, no sparkle, no music.',
   },
   'home-lantern': {
     seconds: 2.4,
-    prompt: 'A warm lantern flame flaring up with a gentle whoomp and a faint crackle, then settling.',
+    prompt:
+      'Cartoon light turning on, from a hand-drawn animated film: a playful soft pling as a lantern ' +
+      'lights up, then a warm magical glow swelling gently and settling. Whimsical and cosy, not ' +
+      'realistic, no fire, no crackle, no electric buzz.',
   },
   'home-mailbox': {
     seconds: 1.3,
@@ -209,6 +212,9 @@ const PICKS = {
   whoosh: 'whoosh-6',
   rustle: 'rustle-1',
   tap: 'tap-1',
+  'home-cat': 'home-cat-6',
+  'home-bookshelf': 'home-bookshelf-1',
+  'home-mailbox': 'home-mailbox-1',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
