@@ -104,8 +104,87 @@ export function LighthouseBeam({ id, position }: { id: string; position: Vec3 })
 // --- Seagull ---------------------------------------------------------------------------
 
 const gullWhite = new THREE.MeshToonMaterial({ color: '#fbfaf6', gradientMap });
-const gullGrey = new THREE.MeshToonMaterial({ color: '#9aa4ad', gradientMap });
 const gullBeak = new THREE.MeshToonMaterial({ color: '#f0a63a', gradientMap });
+/** Wings and tail are coloured per vertex: grey, with dark tips on the wings. */
+const gullFeathers = new THREE.MeshToonMaterial({ vertexColors: true, gradientMap });
+
+const FEATHER_GREY = new THREE.Color('#aab3bb');
+const WING_TIP = new THREE.Color('#3f454b');
+
+/**
+ * A thin, soft-edged plate from an outline drawn in "outwards, forwards" coordinates,
+ * laid flat with forwards along −Z (the way the gull flies). Vertices past `tipFrom`
+ * (outwards) fade to the dark wingtip colour.
+ */
+function featherPlate(outline: [number, number][][], tipFrom = Infinity) {
+  const shape = new THREE.Shape();
+  shape.moveTo(...outline[0]![0]!);
+  for (const [control, end] of outline.slice(1)) shape.quadraticCurveTo(...control!, ...end!);
+  const geometry = new THREE.ExtrudeGeometry(shape, {
+    depth: 0.012,
+    bevelEnabled: true,
+    bevelThickness: 0.006,
+    bevelSize: 0.01,
+    bevelSegments: 1,
+    curveSegments: 8,
+  });
+  geometry.translate(0, 0, -0.006);
+  geometry.rotateX(-Math.PI / 2);
+  const pos = geometry.getAttribute('position');
+  const colour = new Float32Array(pos.count * 3);
+  const c = new THREE.Color();
+  for (let i = 0; i < pos.count; i++) {
+    const tip = THREE.MathUtils.clamp((Math.abs(pos.getX(i)) - tipFrom) / 0.1, 0, 1);
+    c.copy(FEATHER_GREY)
+      .lerp(WING_TIP, tip)
+      .toArray(colour, i * 3);
+  }
+  geometry.setAttribute('color', new THREE.BufferAttribute(colour, 3));
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
+/**
+ * A gull's wing, from the body outwards: broad at the root, a slight forward bend at the
+ * elbow, then swept back to a pointed tip. `side` is +1 for the left wing (+X), −1 for the
+ * right.
+ */
+function wingGeometry(side: 1 | -1) {
+  const p = (x: number, y: number): [number, number] => [side * x, y];
+  return featherPlate(
+    [
+      [p(0, 0.09)],
+      [p(0.24, 0.17), p(0.42, 0.1)], // leading edge, out to the elbow
+      [p(0.6, 0.03), p(0.76, -0.15)], // swept back to the tip
+      [p(0.52, -0.1), p(0.38, -0.05)], // trailing edge, back in to the elbow
+      [p(0.18, -0.15), p(0, -0.11)], // and to the body
+    ],
+    0.56,
+  );
+}
+
+const leftWing = wingGeometry(1);
+const rightWing = wingGeometry(-1);
+/** A small fan-shaped tail, spreading backwards. */
+const tail = featherPlate([
+  [[-0.05, 0]],
+  [
+    [0, 0.02],
+    [0.05, 0],
+  ],
+  [
+    [0.09, -0.08],
+    [0.07, -0.15],
+  ],
+  [
+    [0, -0.12],
+    [-0.07, -0.15],
+  ],
+  [
+    [-0.09, -0.08],
+    [-0.05, 0],
+  ],
+]);
 
 /**
  * A seagull made of a few simple shapes, gliding in slow circles round a point and
@@ -158,34 +237,13 @@ export function Seagull({
           >
             <coneGeometry args={[0.03, 0.1, 6]} />
           </mesh>
-          <mesh
-            material={gullGrey}
-            position={[0, 0.02, 0.38]}
-            scale={[0.12, 0.02, 0.1]}
-            raycast={noHit}
-          >
-            <boxGeometry args={[1, 1, 1]} />
-          </mesh>
+          <mesh geometry={tail} material={gullFeathers} position={[0, 0.03, 0.3]} raycast={noHit} />
           {/* Wings hinge at the body's sides. */}
           <group ref={left} position={[0.08, 0.04, 0]}>
-            <mesh
-              material={gullGrey}
-              position={[0.32, 0, 0.02]}
-              scale={[0.64, 0.025, 0.2]}
-              raycast={noHit}
-            >
-              <boxGeometry args={[1, 1, 1]} />
-            </mesh>
+            <mesh geometry={leftWing} material={gullFeathers} raycast={noHit} />
           </group>
           <group ref={right} position={[-0.08, 0.04, 0]}>
-            <mesh
-              material={gullGrey}
-              position={[-0.32, 0, 0.02]}
-              scale={[0.64, 0.025, 0.2]}
-              raycast={noHit}
-            >
-              <boxGeometry args={[1, 1, 1]} />
-            </mesh>
+            <mesh geometry={rightWing} material={gullFeathers} raycast={noHit} />
           </group>
         </group>
       </group>
