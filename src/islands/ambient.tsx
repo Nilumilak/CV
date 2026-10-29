@@ -127,9 +127,9 @@ export function LanternGlow({
     // Swell: brightens over the first third, then eases back over the rest.
     const p = swell(t);
     const f = p === null ? 0 : p < 1 / 3 ? smoothstep(p * 3) : smoothstep((1 - p) * 1.5);
-    light.current.intensity = 0.9 * flicker * (1 + 2 * f);
-    light.current.distance = 3 + 1.5 * f; // the warm pool on the grass grows a little too
-    glow.current.scale.setScalar(flicker * (1 + 0.25 * f));
+    light.current.intensity = 0.9 * flicker * (1 + 3 * f);
+    light.current.distance = 3 + 2 * f; // the warm pool on the grass grows a little too
+    glow.current.scale.setScalar(flicker * (1 + 0.35 * f));
   });
 
   return (
