@@ -42,7 +42,9 @@ export default function WorldCanvas() {
           <CloudLayers />
         </Suspense>
         <Islands />
-        <Route />
+        <Suspense fallback={null}>
+          <Route />
+        </Suspense>
         <FlyIn />
         <CameraRig />
         <LoadingReporter />
