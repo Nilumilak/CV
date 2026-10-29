@@ -1,65 +1,159 @@
 import { useMemo, useRef, type ReactNode } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Cloud, Clouds } from '@react-three/drei';
+import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
+import bankUrl from '@/assets/textures/clouds/bank.webp?url';
+import puffUrl from '@/assets/textures/clouds/puff.webp?url';
+import smallUrl from '@/assets/textures/clouds/small.webp?url';
+import towerUrl from '@/assets/textures/clouds/tower.webp?url';
 import type { Vec3 } from '@/data/types';
 import { FLY_IN_CLOUD, FLY_IN_CLOUD_BAND } from '@/data/world';
-import { colors } from '@/materials/toon';
-import { createCloudTextureUrl } from './cloudTexture';
+
+/**
+ * The four painted clouds (AI-made, soft-edged by scripts/cloud-sprite.mjs). All share one
+ * light: a warm, sunlit top over cool blue-grey shading. So a puff must never rotate, or
+ * its shading would turn upside down; sprites stay upright.
+ */
+const KINDS = { puff: puffUrl, bank: bankUrl, small: smallUrl, tower: towerUrl } as const;
+type Kind = keyof typeof KINDS;
 
 /** Clouds drift along +X and wrap around past this distance, where fog hides the jump. */
 const WRAP_X = 230;
 
+const noHit = () => null;
+
+/** Small deterministic random, so the sky looks the same on every load. */
+function random(seed: number) {
+  let s = (seed * 9301 + 49297) % 233280 || 1;
+  return () => {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+interface Puff {
+  kind: Kind;
+  /** Where the bottom middle of the painted cloud sits, relative to its cluster. */
+  position: Vec3;
+  width: number;
+  /** Multiplies the painting's colours: white keeps them, bluish makes far layers recede. */
+  tint?: string;
+}
+
 interface CumulusProps {
   seed: number;
+  /** The middle of the cluster's base. */
   position: Vec3;
   /** Overall size: width, height, depth. */
   size: Vec3;
-  segments?: number;
   /** Units per second along +X. */
   drift?: number;
+  /** The kinds to draw from: the first one makes the big middle cloud. */
+  kinds?: Kind[];
+  tint?: string;
 }
 
 /**
- * One Ghibli-style cumulus: a bright, puffy top over a flatter, cool-blue base.
- * Cloud puffs always face the camera, so lighting cannot shade them top to bottom.
- * Two stacked layers with different colours give that look instead.
+ * A cluster of painted clouds: one big one in the middle, smaller ones beside it, all
+ * standing on roughly the same base, a little in front of and behind each other.
  */
-function Cumulus({ seed, position, size, segments = 8, drift = 0.25 }: CumulusProps) {
-  const [w, h, d] = size;
-  // drei spreads puffs over ±bounds, so bounds are half-sizes.
-  // Puff diameter is about 0.7 × volume, so volume ≈ height makes neighbours overlap.
-  const volume = h * 1.15;
-  return (
-    <Drifting position={position} speed={drift}>
-      {/* Cool base: narrower, flatter, lower and a little behind, so only its bottom edge shows. */}
-      <Cloud
-        seed={seed}
-        segments={Math.max(3, Math.round(segments * 0.45))}
-        bounds={[w * 0.3, h * 0.06, d * 0.2]}
-        volume={volume * 0.95}
-        smallestVolume={0.75}
-        position={[0, -h * 0.32, -d * 0.12]}
-        color={colors.cloudShadow}
-        speed={0.03}
-        growth={1}
-        fade={30}
-      />
-      {/* Bright, puffy top. */}
-      <Cloud
-        seed={seed + 100}
-        segments={segments}
-        bounds={[w * 0.36, h * 0.22, d * 0.25]}
-        volume={volume}
-        smallestVolume={0.6}
-        position={[0, h * 0.05, 0]}
-        color={colors.cloudLight}
-        speed={0.05}
-        growth={1.5}
-        fade={30}
-      />
-    </Drifting>
-  );
+function cumulus({ seed, size, kinds = ['puff', 'small', 'puff'], tint }: CumulusProps) {
+  const [w, , d] = size;
+  const rand = random(seed);
+  const [main, ...rest] = kinds;
+  const puffs: Puff[] = [{ kind: main!, position: [0, 0, 0], width: w * 0.62, tint }];
+  const sides = 2 + Math.floor(rand() * 2);
+  for (let i = 0; i < sides; i++) {
+    const side = i % 2 === 0 ? -1 : 1;
+    puffs.push({
+      kind: rest[i % rest.length] ?? main!,
+      position: [
+        side * w * (0.22 + rand() * 0.16),
+        -size[1] * 0.04 * rand(),
+        (rand() - 0.5) * d * 0.6,
+      ],
+      width: w * (0.3 + rand() * 0.18),
+      tint,
+    });
+  }
+  return puffs;
+}
+
+/** A wide layer of flat cloud banks, scattered over an area. */
+function cloudField(
+  seed: number,
+  centre: Vec3,
+  half: [number, number],
+  count: number,
+  width: number,
+  tint?: string,
+) {
+  const rand = random(seed);
+  return Array.from({ length: count }, (): Puff => ({
+    kind: rand() < 0.7 ? 'bank' : 'puff',
+    position: [
+      centre[0] + (rand() * 2 - 1) * half[0],
+      centre[1] + (rand() - 0.5) * 4,
+      centre[2] + (rand() * 2 - 1) * half[1],
+    ],
+    width: width * (0.7 + rand() * 0.6),
+    tint,
+  }));
+}
+
+/** Mid-level clouds between and behind the islands. */
+const MID_CLOUDS: CumulusProps[] = [
+  { seed: 11, position: [-62, -2, -48], size: [52, 18, 24] },
+  { seed: 12, position: [58, 2, -58], size: [60, 22, 28], kinds: ['tower', 'puff', 'small'] },
+  { seed: 13, position: [4, 8, -82], size: [72, 24, 32], kinds: ['puff', 'bank', 'small'] },
+  // Low in front, under the islands' level, so they never cover one.
+  { seed: 14, position: [-34, -30, 0], size: [30, 10, 16], kinds: ['small', 'small'] },
+  { seed: 15, position: [34, -28, 4], size: [32, 11, 16], kinds: ['small', 'bank'] },
+  { seed: 16, position: [-95, -8, -20], size: [56, 20, 28], kinds: ['tower', 'puff'] },
+  { seed: 17, position: [100, -6, -24], size: [56, 20, 28] },
+];
+
+/** Big clouds near the horizon for depth. Fog softens them into the sky. */
+const HORIZON_CLOUDS = (
+  [
+    { seed: 21, position: [-160, 0, -150], size: [140, 52, 60], kinds: ['tower', 'bank', 'puff'] },
+    { seed: 22, position: [-20, 6, -210], size: [180, 60, 68], kinds: ['puff', 'tower', 'bank'] },
+    { seed: 23, position: [150, -2, -170], size: [140, 48, 60], kinds: ['tower', 'puff', 'bank'] },
+    { seed: 24, position: [-210, -8, -40], size: [120, 44, 60], kinds: ['bank', 'puff'] },
+    { seed: 25, position: [215, -6, -60], size: [120, 44, 60], kinds: ['puff', 'bank'] },
+  ] satisfies CumulusProps[]
+).map((c): CumulusProps => ({ ...c, drift: 0.15 }));
+
+/** The sea of clouds under the welcome view, beside the dense cloud on the dive path. */
+const FLY_IN_BAND: CumulusProps[] = [
+  {
+    seed: 32,
+    position: [-75, FLY_IN_CLOUD_BAND.y - 10, FLY_IN_CLOUD_BAND.z + 20],
+    size: [90, 14, 50],
+    kinds: ['bank', 'puff', 'bank'],
+    drift: 0.1,
+  },
+  {
+    seed: 33,
+    position: [75, FLY_IN_CLOUD_BAND.y - 8, FLY_IN_CLOUD_BAND.z - 10],
+    size: [90, 14, 50],
+    kinds: ['bank', 'small', 'bank'],
+    drift: 0.1,
+  },
+];
+
+/**
+ * The dense cloud on the dive path, which hides the islands until the camera bursts out:
+ * many big puffs filling its volume, so the camera flies in among them.
+ */
+function diveCloud(): Puff[] {
+  const rand = random(31);
+  const [w, h, d] = FLY_IN_CLOUD.size;
+  return Array.from({ length: 14 }, (_, i): Puff => ({
+    kind: (['puff', 'bank', 'puff', 'small'] as const)[i % 4],
+    position: [(rand() - 0.5) * w, (rand() - 0.7) * h * 0.8, (rand() - 0.5) * d],
+    width: w * (0.45 + rand() * 0.35),
+  }));
 }
 
 function Drifting({
@@ -84,95 +178,79 @@ function Drifting({
   );
 }
 
-/** Mid-level clouds between and behind the islands. */
-const MID_CLOUDS: CumulusProps[] = [
-  { seed: 11, position: [-62, 6, -48], size: [52, 18, 24] },
-  { seed: 12, position: [58, 12, -58], size: [60, 22, 28] },
-  { seed: 13, position: [4, 20, -82], size: [72, 24, 32] },
-  { seed: 14, position: [-30, -14, 2], size: [36, 12, 20], segments: 6 },
-  { seed: 15, position: [30, -12, 8], size: [40, 14, 20], segments: 6 },
-  { seed: 16, position: [-95, 2, -20], size: [56, 20, 28] },
-  { seed: 17, position: [100, 4, -24], size: [56, 20, 28] },
-];
-
-/** A sea of clouds under the welcome view, which the camera dives through. */
-const FLY_IN_BAND: CumulusProps[] = [
-  // The dense cloud on the dive path: hides the islands until the camera bursts out.
-  { seed: 31, position: FLY_IN_CLOUD.position, size: FLY_IN_CLOUD.size, segments: 22, drift: 0 },
-  {
-    seed: 32,
-    position: [-75, FLY_IN_CLOUD_BAND.y - 4, FLY_IN_CLOUD_BAND.z + 20],
-    size: [90, 14, 50],
-    segments: 10,
-    drift: 0.1,
-  },
-  {
-    seed: 33,
-    position: [75, FLY_IN_CLOUD_BAND.y - 2, FLY_IN_CLOUD_BAND.z - 10],
-    size: [90, 14, 50],
-    segments: 10,
-    drift: 0.1,
-  },
-];
-
-/** Big clouds near the horizon for depth. Fog softens them into the sky. */
-const HORIZON_CLOUDS: CumulusProps[] = [
-  { seed: 21, position: [-160, 24, -150], size: [140, 52, 60], segments: 11, drift: 0.15 },
-  { seed: 22, position: [-20, 34, -210], size: [180, 60, 68], segments: 12, drift: 0.15 },
-  { seed: 23, position: [150, 20, -170], size: [140, 48, 60], segments: 11, drift: 0.15 },
-  { seed: 24, position: [-210, 14, -40], size: [120, 44, 60], segments: 10, drift: 0.15 },
-  { seed: 25, position: [215, 16, -60], size: [120, 44, 60], segments: 10, drift: 0.15 },
-];
+/** Sky-blue haze for the lowest layer, so it recedes behind the islands. */
+const FLOOR_TINT = '#dce8f6';
 
 /**
- * All clouds share one <Clouds> parent, so they render as a single instanced draw call.
- * Overdraw is the main cost: every puff is a large transparent quad. Keep visible puffs under ~220; the fly-in band is behind the overview camera.
- * Layers: 1. floor far below the islands, 2. mid clouds, 3. horizon clouds.
- * Fly-in wisps are added in Phase 3.
+ * Painted cloud layers: 1. a floor of cloud banks far below the islands, 2. mid clouds
+ * between them, 3. big clouds near the horizon, 4. the sea the welcome view looks over and
+ * the dive falls through. Every cloud is an upright sprite with one of four paintings;
+ * fog softens the far ones into the sky.
  */
 export function CloudLayers() {
-  const texture = useMemo(() => createCloudTextureUrl(), []);
+  const textures = useTexture(KINDS, (loaded) => {
+    for (const t of Object.values(loaded)) t.colorSpace = THREE.SRGBColorSpace;
+  });
+  const aspect = (kind: Kind) => {
+    const image = textures[kind].image as { width: number; height: number };
+    return image.height / image.width;
+  };
+
+  const layers = useMemo(
+    () => ({
+      // Only behind the islands (z ≤ −20): painted clouds stand upright, so in front they
+      // would rise between the overview camera and the islands as walls.
+      floor: [
+        ...cloudField(1, [0, -58, -110], [210, 90], 26, 80, FLOOR_TINT),
+        ...cloudField(2, [0, -66, -120], [230, 100], 10, 110, FLOOR_TINT),
+      ],
+      dive: diveCloud(),
+    }),
+    [],
+  );
+
+  const draw = (puffs: Puff[]) =>
+    puffs.map((p, i) => {
+      const width = p.width;
+      return (
+        <sprite
+          key={i}
+          position={p.position}
+          center={[0.5, 0]}
+          scale={[width, width * aspect(p.kind), 1]}
+          raycast={noHit}
+        >
+          <spriteMaterial
+            map={textures[p.kind]}
+            color={p.tint ?? '#ffffff'}
+            transparent
+            depthWrite={false}
+          />
+        </sprite>
+      );
+    });
+
   return (
-    <Clouds texture={texture} material={THREE.MeshBasicMaterial} limit={300} frustumCulled={false}>
+    <group>
       {/* 1. Cloud floor: hides the void under the floating islands. */}
-      <Cloud
-        seed={1}
-        position={[0, -46, -30]}
-        bounds={[200, 4, 150]}
-        segments={30}
-        volume={80}
-        smallestVolume={0.75}
-        color={colors.cloudLight}
-        speed={0.02}
-        growth={4}
-        fade={60}
-      />
-      <Cloud
-        seed={2}
-        position={[0, -54, -30]}
-        bounds={[220, 3, 160]}
-        segments={12}
-        volume={90}
-        smallestVolume={0.8}
-        color={colors.cloudShadow}
-        speed={0.02}
-        fade={60}
-      />
+      <Drifting position={[0, 0, 0]} speed={0.02}>
+        {draw(layers.floor)}
+      </Drifting>
 
-      {/* 2. Mid clouds */}
-      {MID_CLOUDS.map((c) => (
-        <Cumulus key={c.seed} {...c} />
+      {/* 2. Mid clouds and 3. horizon clouds */}
+      {[...MID_CLOUDS, ...HORIZON_CLOUDS].map((c) => (
+        <Drifting key={c.seed} position={c.position} speed={c.drift ?? 0.25}>
+          {draw(cumulus(c))}
+        </Drifting>
       ))}
 
-      {/* 3. Horizon clouds */}
-      {HORIZON_CLOUDS.map((c) => (
-        <Cumulus key={c.seed} {...c} />
-      ))}
-
-      {/* 4. The band the fly-in dives through. Behind the overview camera, so only the intro sees it. */}
+      {/* 4. The sea the fly-in dives through. Behind the overview camera, so only the intro sees it. */}
+      <group position={FLY_IN_CLOUD.position}>{draw(layers.dive)}</group>
       {FLY_IN_BAND.map((c) => (
-        <Cumulus key={c.seed} {...c} />
+        <Drifting key={c.seed} position={c.position} speed={c.drift ?? 0.1}>
+          {draw(cumulus(c))}
+        </Drifting>
       ))}
-    </Clouds>
+    </group>
   );
 }

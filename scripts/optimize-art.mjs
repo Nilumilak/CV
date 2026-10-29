@@ -1,6 +1,6 @@
 // Turns raw AI-generated art (art-source/, not in git) into small web assets (src/assets/, in git).
 //   Models:   meshopt-compressed geometry, WebP textures (1024 px, or 512 for small props).
-//   Textures: resized WebP.
+//   Textures: resized WebP; painted cloud sprites are trimmed and soft-edged (cloud-sprite.mjs).
 // Flat models (paper-thin image-to-3D results) are refused; see model-shape.mjs.
 // Models with a `grade` get their texture colour-corrected first, and island bases with
 // `grassTop` get bare grey patches on their top repainted as grass; see art-grade.mjs.
@@ -13,6 +13,7 @@ import { existsSync, mkdirSync, statSync } from 'node:fs';
 import { dirname } from 'node:path';
 import sharp from 'sharp';
 import { GRADES, gradeModel, grassTopModel, removeFacesModel } from './art-grade.mjs';
+import { cloudSprite } from './cloud-sprite.mjs';
 import { checkModelShape } from './model-shape.mjs';
 
 /** Only approved art is listed here. Source paths are relative to art-source/. */
@@ -107,6 +108,33 @@ const MODELS = [
 
 const TEXTURES = [
   // desk-window: removed 2026-10-28, the plain glowing window reads better (home.md).
+
+  // Painted cloud sprites (src/world/CloudLayers.tsx): trimmed, soft-edged, see cloud-sprite.mjs.
+  {
+    from: 'clouds/concepts/cloud-puff-v1.png',
+    to: 'textures/clouds/puff.webp',
+    size: 1024,
+    cloud: {},
+  },
+  {
+    from: 'clouds/concepts/cloud-bank-v1.png',
+    to: 'textures/clouds/bank.webp',
+    size: 1024,
+    cloud: {},
+  },
+  {
+    from: 'clouds/concepts/cloud-small-v1.png',
+    to: 'textures/clouds/small.webp',
+    size: 512,
+    cloud: {},
+  },
+  // Its lower shading came out olive-grey; pulled towards the shared blue-grey.
+  {
+    from: 'clouds/concepts/cloud-tower-v1.png',
+    to: 'textures/clouds/tower.webp',
+    size: 1024,
+    cloud: { coolShadows: 0.7 },
+  },
 ];
 
 const src = (p) => `art-source/${p}`;
@@ -188,9 +216,13 @@ for (const t of textures) {
     continue;
   }
   mkdirSync(dirname(out(t.to)), { recursive: true });
-  await sharp(src(t.from))
-    .resize(t.size, t.size, { fit: 'inside' })
-    .webp({ quality: 85 })
-    .toFile(out(t.to));
+  if (t.cloud) {
+    await cloudSprite(src(t.from), out(t.to), { size: t.size, ...t.cloud });
+  } else {
+    await sharp(src(t.from))
+      .resize(t.size, t.size, { fit: 'inside' })
+      .webp({ quality: 85 })
+      .toFile(out(t.to));
+  }
   console.log(`${t.from} (${kb(src(t.from))}) -> ${t.to} (${kb(out(t.to))})`);
 }
