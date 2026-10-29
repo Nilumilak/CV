@@ -149,7 +149,9 @@ const SOUNDS = {
   },
   'mone-nextjs': {
     seconds: 3,
-    prompt: 'A little wooden hand cart rolling a short way with boxes softly bumping, then a shop door bell.',
+    prompt:
+      'Cartoon sound from a hand-drawn animated film: a few cardboard boxes tumbling and falling ' +
+      'one after another, soft hollow cardboard thumps and bumps. Playful and cosy, not harsh.',
   },
   'mone-packages': {
     seconds: 3.2,
@@ -240,6 +242,7 @@ const PICKS = {
   'kafka-auth': 'kafka-auth-11',
   'mone-account': 'mone-account-7',
   'mone-fsd': 'mone-fsd-1',
+  'mone-nextjs': 'mone-nextjs-5',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
