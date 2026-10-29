@@ -42,8 +42,8 @@ const OBJECT_SOUNDS: Record<string, { url: string; level?: number }> = {
   'home-bookshelf': { url: bookshelfUrl, level: 0.4 },
   'home-mailbox': { url: mailboxUrl, level: 0.4 },
   'home-lantern': { url: lanternUrl },
-  'eco-admin': { url: noticeboardUrl },
-  'eco-build': { url: saplingsUrl },
+  'eco-admin': { url: noticeboardUrl, level: 0.2 },
+  'eco-build': { url: saplingsUrl, level: 0.4 },
   // Its sharp thumps capped the levelling, so this file is about 5 dB quieter than the rest.
   'eco-lead': { url: binsUrl, level: 0.4 },
   'eco-payments': { url: collectionBoxUrl },

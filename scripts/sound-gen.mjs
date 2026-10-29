@@ -105,9 +105,9 @@ const SOUNDS = {
   'eco-build': {
     seconds: 3.2,
     prompt:
-      'Cartoon sound effect from a hand-drawn animated film: four little saplings popping up out of ' +
-      'the ground one after another, each with a soft bubbly boop rising in pitch, then a tiny happy ' +
-      'leafy rustle. Playful and whimsical, not realistic.',
+      'Cartoon sound from a hand-drawn animated film: little trees growing up, leaves rustling and ' +
+      'moving, with a soft woody creak and crunch as the young trunks stretch upwards. Cosy and ' +
+      'natural, gently whimsical, not harsh.',
   },
   'eco-lead': {
     seconds: 2.6,
@@ -229,7 +229,7 @@ const PICKS = {
   'home-mailbox': 'home-mailbox-1',
   'home-lantern': 'home-lantern-14',
   'eco-admin': 'eco-admin-4',
-  'eco-build': 'eco-build-4',
+  'eco-build': 'eco-build-7',
   'eco-lead': 'eco-lead-9',
   'eco-payments': 'eco-payments-6',
 };
