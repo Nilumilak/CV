@@ -3,38 +3,15 @@ import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useReducedMotion } from 'motion/react';
 import * as THREE from 'three';
-import postUrl from '@/assets/models/route/anchor-post.glb?url';
 import gondolaUrl from '@/assets/models/route/gondola.glb?url';
-import { chapters } from '@/data/cv';
-import type { IslandId, Vec3 } from '@/data/types';
-import { layoutOf } from '@/data/world';
-import { applyBob } from '@/islands/bob';
 import { GeneratedModel } from '@/islands/GeneratedModel';
-import { glareTexture } from '@/islands/lightMaterials';
 import { gradientMap } from '@/materials/toon';
+import { postKey, pulleys, restPosition, SPANS } from './routeSpans';
 
 // Start loading when this file loads, not mid-render: a load that starts during a render
 // updates drei's progress store from inside it (a React warning).
-useGLTF.preload(postUrl);
 useGLTF.preload(gondolaUrl);
 
-/**
- * Where each cable post stands on an island, towards each neighbour on the route, in that
- * island's units. Measured on the base models: about 0.7 in from the grass edge, on the
- * grass height there, turned along the rim where an object stood in the way.
- */
-const POSTS: Partial<Record<IslandId, Partial<Record<IslandId, Vec3>>>> = {
-  workshop: { grove: [2.34, -0.39, -1.88] },
-  grove: { workshop: [-3.01, -0.29, 0.73], radio: [1.94, -0.28, -2.61] },
-  radio: { grove: [-4.13, -0.28, 2.24], arena: [4.51, -0.29, 1.5] },
-  arena: { radio: [-4.57, -0.11, -1.09], market: [4.44, -0.18, 1.54] },
-  market: { arena: [-4.15, -0.18, -2.31] },
-};
-
-/** Post height in island units; the cable leaves from the pulley on its top. */
-const POST_HEIGHT = 2.4;
-/** The post's lantern, measured on the model at this height (its arm points along −X). */
-const LANTERN: Vec3 = [-0.62, 1.42, 0];
 /** How far each cable sags, as a share of its length. */
 const SAG = 0.07;
 const CABLE_RADIUS = 0.07;
@@ -42,6 +19,11 @@ const CABLE_SEGMENTS = 48;
 const CABLE_SIDES = 6;
 
 const GONDOLA_HEIGHT = 1.3;
+/**
+ * How far the bottom of the gondola's pulley wheels is below its top, at this height
+ * (measured). The cable runs in the wheels' grooves there, so the wheels ride on it.
+ */
+const WHEEL_DROP = 0.28;
 /** Seconds to cross a span, and to wait at each end. */
 const TRAVEL = 16;
 const PAUSE = 3;
@@ -139,67 +121,23 @@ function bendRope(geometry: THREE.BufferGeometry, curve: THREE.QuadraticBezierCu
   geometry.computeBoundingSphere();
 }
 
-/** Where a post stands in the world when the islands are at rest. */
-function restPosition(island: IslandId, post: Vec3) {
-  const layout = layoutOf(island);
-  return new THREE.Vector3(...post)
-    .multiplyScalar(layout.scale)
-    .add(new THREE.Vector3(...layout.position));
-}
-
 /**
- * The cable route linking the career islands in timeline order: a wooden post with a
- * pulley and a lantern on each island's rim, a sagging rope between neighbours, and a
- * little gondola on each span gliding across and back. The posts float with their
- * islands (the same bob as Island.tsx), so the cables stay tied on.
- * The open-source Lighthouse sits off the route on purpose.
+ * The cables linking the career islands in timeline order: a sagging rope from post to
+ * post (the posts stand on the islands, see RoutePosts), and a little gondola on each span
+ * gliding across and back. The rope follows the posts every frame, so it stays tied on as
+ * the islands float and grow on hover.
  */
 export function Route() {
   const reduceMotion = useReducedMotion();
-
-  const { islands, spans } = useMemo(() => {
-    const stops = chapters.filter((c) => c.kind === 'job').map((c) => c.id as IslandId);
-    const spans = stops.slice(1).map((to, i) => {
-      const from = stops[i]!;
-      const a = POSTS[from]?.[to];
-      const b = POSTS[to]?.[from];
-      if (!a || !b) throw new Error(`No cable posts measured between ${from} and ${to}`);
-      return { from, to, a, b };
-    });
-    // Each post is turned so its pulley (and the rope) faces the post across the gap.
-    const islands = stops.map((id) => ({
-      id,
-      layout: layoutOf(id),
-      posts: spans.flatMap((s) => {
-        const [here, there, mine, theirs] =
-          s.from === id ? [s.from, s.to, s.a, s.b] : s.to === id ? [s.to, s.from, s.b, s.a] : [];
-        if (!here || !there || !mine || !theirs) return [];
-        const d = restPosition(there, theirs).sub(restPosition(here, mine));
-        return [{ key: `${here}>${there}`, position: mine, yaw: Math.atan2(-d.z, d.x) }];
-      }),
-    }));
-    return { islands, spans };
-  }, []);
-
-  const rope = useMemo(() => {
-    const map = ropeTexture();
-    return new THREE.MeshToonMaterial({ map, gradientMap });
-  }, []);
-  const glare = useMemo(() => glareTexture(), []);
+  const rope = useMemo(() => new THREE.MeshToonMaterial({ map: ropeTexture(), gradientMap }), []);
   const geometries = useMemo(
     () =>
-      spans.map((s) => ropeGeometry(restPosition(s.from, s.a).distanceTo(restPosition(s.to, s.b)))),
-    [spans],
+      SPANS.map((s) => ropeGeometry(restPosition(s.from, s.a).distanceTo(restPosition(s.to, s.b)))),
+    [],
   );
-
-  const bobs = useRef<Record<string, THREE.Group>>({});
-  /** The top of each post's pulley, by "island>neighbour". */
-  const pulleys = useRef<Record<string, THREE.Object3D>>({});
-  const gondolas = useRef<THREE.Group[]>([]);
-  const swings = useRef<THREE.Group[]>([]);
   const curves = useMemo(
     () =>
-      spans.map(
+      SPANS.map(
         () =>
           new THREE.QuadraticBezierCurve3(
             new THREE.Vector3(),
@@ -207,20 +145,27 @@ export function Route() {
             new THREE.Vector3(),
           ),
       ),
-    [spans],
+    [],
   );
+  const cables = useRef<THREE.Mesh[]>([]);
+  const gondolas = useRef<THREE.Group[]>([]);
+  const swings = useRef<THREE.Group[]>([]);
 
   useFrame(({ clock }) => {
     const time = clock.elapsedTime;
-    for (const { id, layout } of islands) {
-      const bob = bobs.current[id];
-      if (bob && !reduceMotion) applyBob(bob, layout.seed, time);
-    }
-    spans.forEach((s, i) => {
-      const a = pulleys.current[`${s.from}>${s.to}`];
-      const b = pulleys.current[`${s.to}>${s.from}`];
+    SPANS.forEach((s, i) => {
+      const a = pulleys.get(postKey(s.from, s.to));
+      const b = pulleys.get(postKey(s.to, s.from));
+      const cable = cables.current[i];
+      const gondola = gondolas.current[i];
+      const swing = swings.current[i];
+      // Hidden until both islands (and their posts) have loaded.
+      const ready = !!a && !!b;
+      if (cable) cable.visible = ready;
+      if (gondola) gondola.visible = ready;
+      if (!a || !b || !gondola || !swing) return;
+
       const curve = curves[i]!;
-      if (!a || !b) return;
       a.getWorldPosition(curve.v0);
       b.getWorldPosition(curve.v2);
       curve.v1.lerpVectors(curve.v0, curve.v2, 0.5);
@@ -240,9 +185,6 @@ export function Route() {
               ? 1
               : 1 - smoothstep((t - 2 * PAUSE - TRAVEL) / TRAVEL);
       const along = END + (1 - 2 * END) * k;
-      const gondola = gondolas.current[i];
-      const swing = swings.current[i];
-      if (!gondola || !swing) return;
       curve.getPoint(along, gondola.position);
       curve.getTangent(along, tangent);
       // Wheels along the cable (the model's X); the cabin hangs straight down.
@@ -253,56 +195,35 @@ export function Route() {
 
   return (
     <group>
-      {islands.map(({ id, layout, posts }) => (
-        <group key={id} position={layout.position} scale={layout.scale}>
-          <group
+      {SPANS.map((s, i) => (
+        <group key={postKey(s.from, s.to)}>
+          <mesh
             ref={(el) => {
-              if (el) bobs.current[id] = el;
+              if (el) cables.current[i] = el;
             }}
-          >
-            {posts.map((p) => (
-              <group key={p.key} position={p.position} rotation-y={p.yaw}>
-                <GeneratedModel url={postUrl} height={POST_HEIGHT} centre="base" />
-                <object3D
-                  position={[0, POST_HEIGHT - 0.06, 0]}
-                  ref={(el) => {
-                    if (el) pulleys.current[p.key] = el;
-                  }}
-                />
-                <sprite position={LANTERN} scale={0.7} raycast={noHit}>
-                  <spriteMaterial
-                    map={glare}
-                    transparent
-                    depthWrite={false}
-                    blending={THREE.AdditiveBlending}
-                    toneMapped={false}
-                  />
-                </sprite>
-              </group>
-            ))}
-          </group>
-        </group>
-      ))}
-
-      {spans.map((s, i) => (
-        <group key={`${s.from}>${s.to}`}>
-          <mesh geometry={geometries[i]} material={rope} frustumCulled={false} raycast={noHit} />
+            geometry={geometries[i]}
+            material={rope}
+            visible={false}
+            frustumCulled={false}
+            raycast={noHit}
+          />
           <group
             ref={(el) => {
               if (el) gondolas.current[i] = el;
             }}
+            visible={false}
           >
             <group
               ref={(el) => {
                 if (el) swings.current[i] = el;
               }}
             >
-              {/* Hung by the top of its pulley wheels, just on the cable. */}
+              {/* Its top sits above the cable by the wheels' depth, so the cable runs in their grooves. */}
               <GeneratedModel
                 url={gondolaUrl}
                 height={GONDOLA_HEIGHT}
                 anchor="top"
-                position-y={0.04}
+                position-y={WHEEL_DROP - CABLE_RADIUS * 0.5}
               />
             </group>
           </group>

@@ -1,6 +1,7 @@
 import { Suspense, type ReactNode } from 'react';
 import type { IslandId } from '@/data/types';
 import { ISLANDS } from '@/data/world';
+import { RoutePosts } from '@/world/RoutePosts';
 import { HomeIsland } from './home/HomeIsland';
 import { ArenaIsland } from './arena/ArenaIsland';
 import { GroveIsland } from './grove/GroveIsland';
@@ -34,6 +35,8 @@ export function Islands() {
             {art ? (
               <Suspense fallback={<PlaceholderIsland id={layout.id} seed={layout.seed} />}>
                 {art(layout.seed)}
+                {/* The cable posts belong to the island: they float and grow on hover with it. */}
+                <RoutePosts island={layout.id} />
               </Suspense>
             ) : undefined}
           </Island>

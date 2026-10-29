@@ -102,7 +102,7 @@ For vertex-coloured models, use one shared `MeshToonMaterial` with `vertexColors
 
 ## 7. Replace the route
 
-- [x] Replace the dashed line from Phase 2 with a cable route (decided 2026-10-29, `src/world/Route.tsx`): a twisted rope sagging from rim to rim between neighbouring career islands, each end on a wooden post with a pulley and a lantern (`route/anchor-post.glb`, one Meshy model reused at all 8 ends). The posts float with their islands (shared bob in `src/islands/bob.ts`), so the cables stay tied on. Post spots are measured on each base, turned along the rim where an object stood in the way.
+- [x] Replace the dashed line from Phase 2 with a cable route (decided 2026-10-29, `src/world/Route.tsx`): a twisted rope sagging from rim to rim between neighbouring career islands, each end on a wooden post with a pulley and a lantern (`route/anchor-post.glb`, one Meshy model reused at all 8 ends). The posts float with their islands and grow on hover with them (they are rendered inside each island, `src/world/RoutePosts.tsx`); the cables follow the posts every frame, so they stay tied on. The gondola rides with the cable in its wheels' grooves. Post spots are measured on each base, turned along the rim where an object stood in the way.
 - [x] A small wooden gondola with a green roof (`route/gondola.glb`) on each span glides across, waits, and comes back, each span on its own schedule. One per span rather than one for the whole route, because a single gondola would have to cross each island through its buildings.
 
 Cost: 6 credits for two concepts, 60 for two models.
