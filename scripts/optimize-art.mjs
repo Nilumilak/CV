@@ -72,9 +72,9 @@ const MODELS = [
   {
     from: 'arena/twin-towers.glb',
     to: 'models/arena/twin-towers.glb',
-    texture: 512,
+    texture: 1024,
     // A broken white connector halfway up, in the gap between the towers.
-    removeFaces: [{ min: [-0.034, 0.343, 0.0], max: [0.034, 0.629, 0.1] }],
+    removeFaces: [{ min: [-0.034, 0.343, 0.04], max: [0.034, 0.629, 0.1] }],
   },
 
   // Shared kit, reused across islands

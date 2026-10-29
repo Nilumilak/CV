@@ -13,14 +13,7 @@ import { Squash } from '@/objects/reactions';
 import { GeneratedModel } from '../GeneratedModel';
 import { deg, FACE_CAMERA, view } from '../layout';
 import { useGroundHeights } from '../useGroundHeights';
-import {
-  FloodlightGlows,
-  MessageBall,
-  PercentTag,
-  ScoreboardRows,
-  StandScreen,
-  TeamFlags,
-} from './effects';
+import { MessageBall, PercentTag, ScoreboardRows, StandScreen, TeamFlags } from './effects';
 
 /** Props for an object's Interactable, from the shared list in data/islandObjects.ts. */
 const interactive = (id: IslandObjectId) => {
@@ -51,20 +44,8 @@ const STANDS_HEIGHT = 1.8;
 const TOWERS_HEIGHT = 3.5;
 
 /**
- * Positions found on the models themselves (colour and facing of their surfaces), in each
- * model's own space after scaling, so code-made parts land exactly on the right spot.
- */
-const FLOODLIGHT_LAMPS: [number, number, number][] = [
-  [-1.61, 1.6, 1.4],
-  [1.66, 1.6, -1.31],
-  [1.96, 1.6, 0.95],
-  [-1.48, 1.6, -1.35],
-];
-
-/**
  * Arena island (design: docs/plan/islands/arena.md). Every model is AI-generated; code
- * places them, adds the floodlight glow and gives the four achievement objects their
- * reactions.
+ * places them and gives the four achievement objects their reactions.
  */
 export function ArenaIsland() {
   const frame = useRef<THREE.Group>(null);
@@ -81,10 +62,12 @@ export function ArenaIsland() {
       <GeneratedModel ref={base} url={baseUrl} length={11} anchor="top" />
 
       {/* Centre: the stadium landmark (not interactive), long side across the view. */}
-      <group position={at('stadium')} rotation-y={deg(FACE_CAMERA)}>
-        <GeneratedModel url={stadiumUrl} height={STADIUM_HEIGHT} />
-        <FloodlightGlows positions={FLOODLIGHT_LAMPS} />
-      </group>
+      <GeneratedModel
+        url={stadiumUrl}
+        height={STADIUM_HEIGHT}
+        position={at('stadium')}
+        rotation-y={deg(FACE_CAMERA)}
+      />
 
       <group position={at('scoreboard')} rotation-y={deg(FACE_CAMERA)}>
         <Interactable {...interactive('olimp-virtual')}>
@@ -93,7 +76,7 @@ export function ArenaIsland() {
         </Interactable>
       </group>
 
-      <group position={at('towers')} rotation-y={deg(FACE_CAMERA)}>
+      <group position={at('towers')} rotation-y={deg(FACE_CAMERA + 160)}>
         <Interactable {...interactive('olimp-iframe')}>
           <GeneratedModel url={towersUrl} height={TOWERS_HEIGHT} />
         </Interactable>

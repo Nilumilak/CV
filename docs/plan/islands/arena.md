@@ -2,7 +2,7 @@
 
 [Back to Phase 4](../phase-4-island-art.md) · [AI model prompts](../phase-4-ai-prompts.md) · Previous: [Market Town](market.md)
 
-**Status:** built on 2026-10-29. All 6 models generated and placed; all four achievement objects interactive. Screen, scoreboard, window and floodlight positions were measured on the models themselves. First layout, to be tuned from screenshots.
+**Status:** built on 2026-10-29. All 6 models generated and placed; all four achievement objects interactive. Screen, scoreboard and window positions were measured on the models themselves. First layout, to be tuned from screenshots.
 
 ---
 
@@ -57,7 +57,7 @@ Like Market Town, a ring: the stadium is the centre, and the four objects stand 
 
 | Object         | Across, towards | Size       | Notes                                          |
 | -------------- | --------------- | ---------- | ---------------------------------------------- |
-| Stadium        | island centre   | 5.5 wide   | Landmark, not interactive; floodlights glow    |
+| Stadium        | island centre   | 5.5 wide   | Landmark, not interactive                      |
 | Scoreboard     | 0, −4.0         | 3 tall     | Back, facing the camera, above the stands      |
 | Twin towers    | −3.8, −1.2      | 3.5 tall   | Left side; their windows face each other       |
 | Display stands | 3.8, −1.0       | 2 tall     | Right side, three screens turned to the camera |
@@ -99,7 +99,7 @@ One model: two slim towers side by side with windows facing each other, like two
 
 ### Not interactive
 
-- **Stadium:** the landmark, with four floodlight towers. The floodlights glow softly all the time (code-made light at each lamp).
+- **Stadium:** the landmark, with four floodlight towers (part of the model; the code-made lamp glow was removed on 2026-10-29).
 - **Flags:** a few pennants on the stadium rim fluttering (code-made, like Market's bunting).
 
 ---

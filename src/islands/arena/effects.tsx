@@ -201,33 +201,6 @@ export function MessageBall({ id, from, to }: { id: string; from: Vec3; to: Vec3
   );
 }
 
-/** Soft glowing lamps on the stadium's floodlight towers (no real lights: cheap and calm). */
-export function FloodlightGlows({ positions }: { positions: Vec3[] }) {
-  const lamps = useRef<THREE.Mesh[]>([]);
-  useFrame(({ clock }) => {
-    lamps.current.forEach((lamp, i) => {
-      lamp.scale.setScalar(1 + 0.06 * Math.sin(clock.elapsedTime * 1.1 + i));
-    });
-  });
-  return (
-    <>
-      {positions.map((p, i) => (
-        <mesh
-          key={i}
-          ref={(el) => {
-            if (el) lamps.current[i] = el;
-          }}
-          position={p}
-          raycast={noHit}
-        >
-          <sphereGeometry args={[0.13, 12, 10]} />
-          <meshBasicMaterial color="#fff6d8" />
-        </mesh>
-      ))}
-    </>
-  );
-}
-
 // --- Canvas drawings -------------------------------------------------------------
 
 function canvasTexture(w: number, h: number, draw: (g: CanvasRenderingContext2D) => void) {
