@@ -189,50 +189,127 @@ export function LaunchPad({ position, radius = 0.9 }: { position: Vec3; radius?:
   );
 }
 
-const BLOCKS = [
-  { color: '#8aa0b8', size: 0.42 }, // core
-  { color: colors.roofRed, size: 0.34 }, // tokens
-  { color: colors.accentGold, size: 0.3 }, // icons
-  { color: '#6fb3d9', size: 0.26 }, // components
-];
+// --- Windmill: the shared core that powers the town --------------------------------------
 
-/** Toy blocks drop one by one onto a "core" block, hold, then shrink away. */
-export function BlockStack({ id, position }: { id: string; position: Vec3 }) {
-  const blocks = useRef<THREE.Mesh[]>([]);
-  const progress = useReaction(id, 2.6);
-  useFrame(({ clock }) => {
+/** The windmill's reaction, in seconds: the sails whirl, the blocks fly out to the town. */
+export const WINDMILL_SECONDS = 3.2;
+const IDLE_SAILS = 0.35; // radians per second
+const WHIRL_SAILS = 7;
+
+const sailWood = new THREE.MeshToonMaterial({
+  color: '#9c6b43',
+  gradientMap: palette.wood.gradientMap,
+});
+const sailCloth = new THREE.MeshToonMaterial({
+  color: '#f6ecd6',
+  side: THREE.DoubleSide,
+  gradientMap: palette.wood.gradientMap,
+});
+
+/**
+ * Four windmill sails on a hub, made in code (flat canvas sails would come out paper-thin
+ * from image-to-3D). They turn slowly all the time; when the windmill is activated they
+ * whirl up and wind down again. The axle runs along the group's Z.
+ */
+export function Sails({ id, length = 1.3 }: { id: string; length?: number }) {
+  const rotor = useRef<THREE.Group>(null!);
+  const progress = useReaction(id, WINDMILL_SECONDS);
+  useFrame(({ clock }, delta) => {
     const p = progress(clock.elapsedTime);
-    let base = 0;
-    for (let i = 0; i < BLOCKS.length; i++) {
-      const block = blocks.current[i];
-      const { size } = BLOCKS[i];
-      if (!block) continue;
-      block.visible = p !== null;
-      if (p === null) continue;
-      // Each block falls in its own slot of the first 60%, then all hold, then shrink.
-      const k = Math.min(1, Math.max(0, (p - i * 0.13) / 0.15));
-      const rest = base + size / 2;
-      block.position.y = rest + (1 - k * k) * 1.6;
-      block.visible = k > 0;
-      block.scale.setScalar(p > 0.85 ? (1 - p) / 0.15 : 1);
-      block.rotation.y = i * 0.35;
-      base += size;
-    }
+    // Spins up fast, holds, then eases back to its idle turn.
+    const whirl = p === null ? 0 : Math.sin(Math.min(1, p * 1.4) * Math.PI) ** 0.6;
+    rotor.current.rotation.z -= delta * (IDLE_SAILS + (WHIRL_SAILS - IDLE_SAILS) * whirl);
   });
   return (
-    <group position={position}>
-      {BLOCKS.map((b, i) => (
+    <group ref={rotor}>
+      <mesh material={sailWood} rotation-x={Math.PI / 2} raycast={noHit}>
+        <cylinderGeometry args={[0.13, 0.13, 0.16, 14]} />
+      </mesh>
+      {[0, 1, 2, 3].map((i) => (
+        <group key={i} rotation-z={(i * Math.PI) / 2}>
+          {/* The arm, and the canvas on one side of it, set a little back from the hub. */}
+          <mesh material={sailWood} position={[0, length / 2, 0]} raycast={noHit}>
+            <boxGeometry args={[0.07, length, 0.06]} />
+          </mesh>
+          <mesh material={sailCloth} position={[0.15, length * 0.58, -0.02]} raycast={noHit}>
+            <planeGeometry args={[0.28, length * 0.78]} />
+          </mesh>
+          {/* A couple of cross slats over the canvas. */}
+          {[0.35, 0.6, 0.85].map((at) => (
+            <mesh key={at} material={sailWood} position={[0.15, length * at, 0.01]} raycast={noHit}>
+              <boxGeometry args={[0.3, 0.025, 0.02]} />
+            </mesh>
+          ))}
+        </group>
+      ))}
+    </group>
+  );
+}
+
+/** UI-kit pieces: a few colours, one per kind of shared part. */
+const KIT_COLORS = [colors.accentGold, '#6fb3d9', colors.roofRed, '#7cc45a'];
+const KIT = 9;
+const kitGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+
+/**
+ * Small coloured blocks (pieces of the shared UI kit) fly out from the windmill's hub in
+ * high arcs, a few to each of the town's buildings, and pop as they arrive: one shared
+ * core, used everywhere. `targets` are where they land, relative to the windmill.
+ */
+export function KitDelivery({ id, from, targets }: { id: string; from: Vec3; targets: Vec3[] }) {
+  const blocks = useRef<THREE.Mesh[]>([]);
+  const materials = useMemo(
+    () =>
+      KIT_COLORS.map(
+        (color) => new THREE.MeshToonMaterial({ color, gradientMap: palette.wood.gradientMap }),
+      ),
+    [],
+  );
+  const flights = useMemo(() => {
+    const start = new THREE.Vector3(...from);
+    return Array.from({ length: KIT }, (_, i) => ({
+      start,
+      end: new THREE.Vector3(...targets[i % targets.length]!).add(
+        new THREE.Vector3(((i % 3) - 1) * 0.3, 0, ((i % 2) - 0.5) * 0.3),
+      ),
+      setOff: 0.45 + i * 0.13,
+      spin: 3 + (i % 4),
+    }));
+  }, [from, targets]);
+  const progress = useReaction(id, WINDMILL_SECONDS);
+  useFrame(({ clock }) => {
+    const p = progress(clock.elapsedTime);
+    const t = p === null ? -1 : p * WINDMILL_SECONDS;
+    flights.forEach((f, i) => {
+      const block = blocks.current[i];
+      if (!block) return;
+      const k = (t - f.setOff) / 1.1;
+      block.visible = p !== null && k > 0 && k < 1.15;
+      if (!block.visible) return;
+      const e = Math.min(1, k);
+      // A high arc, spinning as it goes; a quick pop as it arrives.
+      block.position.lerpVectors(f.start, f.end, e);
+      block.position.y += Math.sin(e * Math.PI) * 2.2;
+      block.rotation.set(e * f.spin, e * f.spin * 0.7, 0);
+      block.scale.setScalar(
+        k < 0.1 ? k / 0.1 : k <= 1 ? 1 : 1 + (k - 1) * 6 * (1 - (k - 1) / 0.15),
+      );
+      if (k > 1) block.scale.multiplyScalar(1 - (k - 1) / 0.15);
+    });
+  });
+  return (
+    <group>
+      {flights.map((_, i) => (
         <mesh
           key={i}
           ref={(el) => {
             if (el) blocks.current[i] = el;
           }}
+          geometry={kitGeometry}
+          material={materials[i % materials.length]}
           visible={false}
           raycast={noHit}
-        >
-          <boxGeometry args={[b.size, b.size, b.size]} />
-          <meshToonMaterial color={b.color} gradientMap={palette.wood.gradientMap} />
-        </mesh>
+        />
       ))}
     </group>
   );

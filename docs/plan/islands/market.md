@@ -17,7 +17,7 @@ Monetech, Senior Frontend Developer, remote, September 2025 to October 2026. A l
 | BNPL app and 7 user flows                   | Little tram on a loop           |
 | 6 account areas, Spanish i18n               | Signpost with 6 arms            |
 | FSD standard and CI/CD releases             | Hot-air balloon on a launch pad |
-| Shared UI kit and API core (2 packages)     | Small building crane            |
+| Shared UI kit and API core (2 packages)     | Windmill that powers the town   |
 
 The panel lists all six achievements and the tech chips. Each achievement gets a "Show me" button, like Radio.
 
@@ -54,22 +54,22 @@ Market sits on the right of the world (`[30, 5, -8]`). From the overview it must
 
 ```
                  [HOUSES]  ~bunting~  [BANK]   ~bunting~  |pole|
-       [CRANE]                                          [BALLOON]
+       [WINDMILL]                                       [BALLOON]
                           ( FOUNTAIN )
                          tram loop around
           [SIGNPOST]                         [SHACK + GLASS]
                      front (towards the camera)
 ```
 
-| Object                 | Across, towards | Size     | Notes                                                          |
-| ---------------------- | --------------- | -------- | -------------------------------------------------------------- |
-| Fountain and tram loop | island centre   | 1.6 wide | Tram loop 1.4 m from the fountain's centre                     |
-| Stacked houses         | −1.9, −3.3      | 4.2 tall | Back left                                                      |
-| Domed bank             | 1.6, −3.3       | 3.6 tall | Back right of the houses; landmark                             |
-| Crane                  | −4.8, 0.5       | 4 tall   | Left edge, clear of the houses; blocks stack 1.5 m to its side |
-| Balloon                | 3.8, −1.0       | 3.2 tall | Right side, floating a little above its pad                    |
-| Signpost               | −2.6, 2.8       | 2 tall   | Front left                                                     |
-| Shack and glass        | 2.6, 2.8        | 2.2 long | Front right                                                    |
+| Object                 | Across, towards | Size     | Notes                                       |
+| ---------------------- | --------------- | -------- | ------------------------------------------- |
+| Fountain and tram loop | island centre   | 1.6 wide | Tram loop 1.4 m from the fountain's centre  |
+| Stacked houses         | −1.9, −3.3      | 4.2 tall | Back left                                   |
+| Domed bank             | 1.6, −3.3       | 3.6 tall | Back right of the houses; landmark          |
+| Windmill               | −4.0, 0.3       | 3.2 tall | Left side, sails facing the camera          |
+| Balloon                | 3.8, −1.0       | 3.2 tall | Right side, floating a little above its pad |
+| Signpost               | −2.6, 2.8       | 2 tall   | Front left                                  |
+| Shack and glass        | 2.6, 2.8        | 2.2 long | Front right                                 |
 
 ---
 
@@ -111,11 +111,12 @@ A striped balloon with a basket, tethered just above a round wooden launch pad.
 - **Idle:** bobs gently on its rope.
 - **Click:** "released": floats up a few metres, then drifts slowly back down to its pad.
 
-### Building crane · Shared UI kit and API core
+### Windmill · Shared UI kit and API core
 
-A small yellow tower crane, like a toy.
+Replaced the crane on 2026-10-29: its thin lattice came out broken from image-to-3D. A cosy market windmill (`windmill.glb`: stone base, cream plaster, a terracotta-tiled cap matching the roofs) that powers the whole town, like a shared core every app runs on. Its four sails are made in code (flat canvas sails would come out paper-thin) and turn on the axle's end, facing the camera.
 
-- **Click:** three coloured blocks (tokens, icons, components) pop up and stack onto a "core" block beside it, then fade (code-made).
+- **Idle:** the sails turn slowly.
+- **Click:** the sails whirl up, and small coloured blocks (pieces of the UI kit) fly out from the hub in high arcs to the houses, the bank, the fountain and the shack, popping as they land; a gold tag "shared UI kit · API core" pops up.
 
 ### Not interactive
 
@@ -137,7 +138,7 @@ A small yellow tower crane, like a toy.
 | 6   | `tram.glb`        | One small tram car                | 3,000       |
 | 7   | `signpost.glb`    | Signpost with 6 arms              | 2,000       |
 | 8   | `balloon.glb`     | Hot-air balloon with basket       | 3,000       |
-| 9   | `crane.glb`       | Small toy-like tower crane        | 3,000       |
+| 9   | `windmill.glb`    | Windmill body (was the crane)     | 5,000       |
 
 | Step                | Items | Credits  |
 | ------------------- | ----- | -------- |

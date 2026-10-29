@@ -55,7 +55,8 @@ const MODELS = [
   { from: 'market/tram.glb', to: 'models/market/tram.glb', texture: 512 },
   { from: 'market/signpost.glb', to: 'models/market/signpost.glb', texture: 512 },
   { from: 'market/balloon.glb', to: 'models/market/balloon.glb', texture: 512 },
-  { from: 'market/crane.glb', to: 'models/market/crane.glb', texture: 512 },
+  // A windmill that powers the town (replaced the crane, whose thin lattice came out broken).
+  { from: 'market/windmill.glb', to: 'models/market/windmill.glb', texture: 1024 },
 
   // Arena island
   { from: 'arena/island-base.glb', to: 'models/arena/island-base.glb', texture: 1024 },
