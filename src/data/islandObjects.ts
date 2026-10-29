@@ -33,7 +33,7 @@ export const ISLAND_OBJECTS = [
   { id: 'olimp-apps', label: '3 apps, team of 6', name: 'the display stands', cue: 'chime' },
   { id: 'olimp-preact', label: 'Bundle −40%', name: 'the parcel', cue: 'knock' },
   { id: 'olimp-virtual', label: 'Virtual scrolling', name: 'the scoreboard', cue: 'whirr' },
-  { id: 'olimp-iframe', label: 'iframe messages', name: 'the twin towers', cue: 'beep' },
+  { id: 'olimp-iframe', label: 'iframe messages', name: 'the team booths', cue: 'beep' },
   // Green Grove (design: docs/plan/islands/grove.md)
   { id: 'eco-lead', label: 'Led the team', name: 'the recycling bins', cue: 'knock' },
   { id: 'eco-build', label: 'Frontend, APIs, mentoring', name: 'the saplings', cue: 'chime' },

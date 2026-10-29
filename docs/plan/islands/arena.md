@@ -10,12 +10,12 @@
 
 Olimpbet KZ, Frontend Software Engineer, May 2024 to September 2025. A betting product, built in a frontend team of six across three applications. The island is a little floating stadium on match day: lights on, flags up, a big scoreboard.
 
-| Achievement                       | Object on the island         |
-| --------------------------------- | ---------------------------- |
-| 3 apps, team of 6                 | Three display stands         |
-| Auth service rebuilt, bundle −40% | Parcel box                   |
-| Virtual scrolling for big data    | Big scoreboard               |
-| Cross-team iframe integration     | Two towers facing each other |
+| Achievement                       | Object on the island                     |
+| --------------------------------- | ---------------------------------------- |
+| 3 apps, team of 6                 | Three display stands                     |
+| Auth service rebuilt, bundle −40% | Parcel box                               |
+| Virtual scrolling for big data    | Big scoreboard                           |
+| Cross-team iframe integration     | Two team booths with a tin-can telephone |
 
 The panel lists all four achievements and the tech chips, each with a "Show me" button, like Radio and Market.
 
@@ -48,7 +48,7 @@ Like Market Town, a ring: the stadium is the centre, and the four objects stand 
 
 ```
                          [ SCOREBOARD ]
-       [TWIN TOWERS]                          [DISPLAY STANDS]
+       [TEAM BOOTHS]                          [DISPLAY STANDS]
                        ( STADIUM, pitch )
                         floodlights x 4
                [PARCEL BOX]
@@ -59,7 +59,7 @@ Like Market Town, a ring: the stadium is the centre, and the four objects stand 
 | -------------- | --------------- | ---------- | ---------------------------------------------- |
 | Stadium        | island centre   | 5.5 wide   | Landmark, not interactive                      |
 | Scoreboard     | 0, −4.0         | 3 tall     | Back, facing the camera, above the stands      |
-| Twin towers    | −3.8, −1.2      | 3.5 tall   | Left side; their windows face each other       |
+| Team booths    | −4.0, −1.2      | 1.45 tall  | Left side; their windows face each other       |
 | Display stands | 3.8, −1.0       | 2 tall     | Right side, three screens turned to the camera |
 | Parcel box     | −1.8, 3.6       | 1 tall     | Front left, low, in front of the stadium       |
 | Rocks          | at the edges    | shared kit | A few, to fill gaps (free, already generated)  |
@@ -90,12 +90,12 @@ A tall old-fashioned stadium scoreboard on two legs, with a plain face; the rows
 - **Idle:** a few rows of scores, still.
 - **Click:** thousands of rows whizz past smoothly, then slow down and stop, like a virtual list scrolling.
 
-### Twin towers · Cross-team iframe integration
+### Team booths · Cross-team iframe integration
 
-One model: two slim towers side by side with windows facing each other, like two neighbouring buildings.
+Replaced the twin towers on 2026-10-29 (`team-booths.glb`, the third concept; a stray web between the blue booth and the deck is removed in the art pipeline). One model: two little round booths on a wooden deck, a blue team's and a red team's, with striped domes and pennants, their windows facing each other across a gap. Two teams' apps talking through a frame.
 
-- **Idle:** windows lit.
-- **Click:** a little glowing ball (a message) flies from one tower's window to the other's and back.
+- **Idle:** two tin cans sit in the facing windows, joined by a gently sagging string (code-made).
+- **Click:** an envelope rides the string over to the red booth (the string dips under it), that can gives a little jump, and a reply rides back to the blue one; a gold tag "postMessage" pops up.
 
 ### Not interactive
 
@@ -113,7 +113,7 @@ One model: two slim towers side by side with windows facing each other, like two
 | 3   | `scoreboard.glb`     | Tall scoreboard on two legs                 | 3,000       |
 | 4   | `display-stands.glb` | Three display stands (phone, desktop, gate) | 4,000       |
 | 5   | `parcel.glb`         | Big taped cardboard parcel box              | 1,500       |
-| 6   | `twin-towers.glb`    | Two slim towers facing each other           | 4,000       |
+| 6   | `team-booths.glb`    | Two team booths on a deck (was twin towers) | 6,000       |
 
 | Step               | Items | Credits  |
 | ------------------ | ----- | -------- |

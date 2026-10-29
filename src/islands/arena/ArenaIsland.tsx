@@ -5,7 +5,7 @@ import baseUrl from '@/assets/models/arena/island-base.glb?url';
 import parcelUrl from '@/assets/models/arena/parcel.glb?url';
 import scoreboardUrl from '@/assets/models/arena/scoreboard.glb?url';
 import stadiumUrl from '@/assets/models/arena/stadium.glb?url';
-import towersUrl from '@/assets/models/arena/twin-towers.glb?url';
+import boothsUrl from '@/assets/models/arena/team-booths.glb?url';
 import rockUrl from '@/assets/models/shared/rock-cluster.glb?url';
 import { islandObject, type IslandObjectId } from '@/data/islandObjects';
 import { Interactable } from '@/objects/Interactable';
@@ -15,11 +15,12 @@ import { deg, FACE_CAMERA, view } from '../layout';
 import { useGroundHeights } from '../useGroundHeights';
 import {
   Floodlights,
-  MessageBall,
   PercentTag,
+  PHONE_SECONDS,
   ScoreboardRows,
   StandScreen,
   TeamFlags,
+  TinCanPhone,
 } from './effects';
 
 /** Props for an object's Interactable, from the shared list in data/islandObjects.ts. */
@@ -31,13 +32,13 @@ const interactive = (id: IslandObjectId) => {
 /**
  * Where everything stands (design: docs/plan/islands/arena.md, section 4).
  * A ring around the stadium: the stadium is the centre; the scoreboard stands behind it,
- * the twin towers on the left, the display stands and the parcel in front. Ring spots are
+ * the team booths on the left, the display stands and the parcel in front. Ring spots are
  * "across the view, towards the camera" (see ../layout.ts).
  */
 const SPOTS = {
   stadium: [0, 0],
   scoreboard: view(0, -4.1),
-  towers: view(-4.0, -1.2),
+  booths: view(-4.0, -1.2),
   stands: view(2.6, 3.0),
   parcel: view(-2.5, 3.3),
   rocks1: view(4.2, -1.0),
@@ -48,7 +49,16 @@ const SPOTS = {
 const STADIUM_HEIGHT = 1.7;
 const SCOREBOARD_HEIGHT = 3;
 const STANDS_HEIGHT = 1.8;
-const TOWERS_HEIGHT = 3.5;
+/** At this size the deck is about 2.4 long: it fits between the stadium and the rim. */
+const BOOTHS_HEIGHT = 1.45;
+/**
+ * The tin cans, at the windows of the two booths that face each other, measured on the
+ * model at this size: the blue booth stands back left on the deck, the red one front right.
+ */
+const CANS: [[number, number, number], [number, number, number]] = [
+  [-0.42, 0.56, -0.14],
+  [0.4, 0.56, 0.11],
+];
 
 /** The stadium's four lamp heads, measured on the model (its highest points), at this size. */
 const FLOODLIGHT_LAMPS: [number, number, number][] = [
@@ -92,11 +102,18 @@ export function ArenaIsland() {
         </Interactable>
       </group>
 
-      <group position={at('towers')} rotation-y={deg(FACE_CAMERA + 160)}>
+      {/* Turned a little, so the deck runs partly into the view and stays off the rim. */}
+      <group position={at('booths')} rotation-y={deg(FACE_CAMERA + 25)}>
         <Interactable {...interactive('olimp-iframe')}>
-          <GeneratedModel url={towersUrl} height={TOWERS_HEIGHT} />
+          <GeneratedModel url={boothsUrl} height={BOOTHS_HEIGHT} />
         </Interactable>
-        <MessageBall id="olimp-iframe" from={[-0.42, 2.2, 0]} to={[0.42, 2.2, 0]} />
+        <TinCanPhone id="olimp-iframe" from={CANS[0]} to={CANS[1]} />
+        <PercentTag
+          id="olimp-iframe"
+          position={[0, BOOTHS_HEIGHT + 0.5, 0]}
+          text="postMessage"
+          delay={PHONE_SECONDS * 0.35}
+        />
       </group>
 
       <group position={at('stands')} rotation-y={deg(FACE_CAMERA - 120)}>

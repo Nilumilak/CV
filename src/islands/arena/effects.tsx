@@ -6,7 +6,7 @@
 import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { colors, palette } from '@/materials/toon';
+import { colors, gradientMap, palette } from '@/materials/toon';
 import { useReaction } from '@/objects/useReaction';
 import { beamShader, glareTexture } from '../lightMaterials';
 
@@ -185,29 +185,132 @@ export function ScoreboardRows({
   );
 }
 
-/** A glowing ball (a message) that flies in an arc from one window to the other and back. */
-export function MessageBall({ id, from, to }: { id: string; from: Vec3; to: Vec3 }) {
-  const ball = useRef<THREE.Group>(null!);
-  const progress = useReaction(id, 2.4);
+// --- Team booths: a tin-can telephone ------------------------------------------------------
+
+const STRING_POINTS = 24;
+/** The reaction: a message goes over (0–1.2 s), a pause, the reply comes back (1.5–2.6 s). */
+export const PHONE_SECONDS = 2.8;
+const OVER = [0, 1.2] as const;
+const BACK = [1.5, 2.6] as const;
+
+const tin = new THREE.MeshToonMaterial({ color: '#b9c2c9', gradientMap });
+
+/** A small cream envelope with a gold seal. */
+function envelopeTexture() {
+  return canvasTexture(128, 88, (g) => {
+    g.fillStyle = '#fffaf0';
+    box(g, 4, 4, 120, 80, 8);
+    g.strokeStyle = 'rgba(120, 100, 80, 0.55)';
+    g.lineWidth = 4;
+    g.beginPath();
+    g.moveTo(10, 12);
+    g.lineTo(64, 50);
+    g.lineTo(118, 12);
+    g.stroke();
+    g.fillStyle = colors.accentGold;
+    g.beginPath();
+    g.arc(64, 50, 9, 0, Math.PI * 2);
+    g.fill();
+  });
+}
+
+/** 0 → 1 → 0 over `width` seconds after `at`: a quick pop. */
+const popAt = (t: number | null, at: number, width = 0.3) =>
+  t === null || t < at || t > at + width ? 0 : Math.sin(((t - at) / width) * Math.PI);
+
+const stringPoint = new THREE.Vector3();
+
+/**
+ * Two tin cans at the booths' windows, joined by a sagging string: two teams' apps talking
+ * across the frame. On click an envelope rides the string over to the other booth, that
+ * can gives a little jump, and a reply rides back. The string dips under the envelope's
+ * weight as it goes.
+ */
+export function TinCanPhone({ id, from, to }: { id: string; from: Vec3; to: Vec3 }) {
   const a = useMemo(() => new THREE.Vector3(...from), [from]);
   const b = useMemo(() => new THREE.Vector3(...to), [to]);
+  const envelope = useRef<THREE.Sprite>(null!);
+  const cans = useRef<THREE.Group[]>([]);
+  const texture = useMemo(() => envelopeTexture(), []);
+  const string = useMemo(() => {
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute(
+      'position',
+      new THREE.BufferAttribute(new Float32Array(STRING_POINTS * 3), 3),
+    );
+    const line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: '#efe6d2' }));
+    line.raycast = noHit;
+    return line;
+  }, []);
+  // Each can's axis runs along the string, open end towards the other can.
+  const turn = useMemo(
+    () =>
+      new THREE.Quaternion().setFromUnitVectors(
+        new THREE.Vector3(0, 1, 0),
+        b.clone().sub(a).normalize(),
+      ),
+    [a, b],
+  );
+  const progress = useReaction(id, PHONE_SECONDS);
+
   useFrame(({ clock }) => {
     const p = progress(clock.elapsedTime);
-    const g = ball.current;
-    g.visible = p !== null;
-    if (p === null) return;
-    // There and back: 0 → 0.5 goes a → b, 0.5 → 1 comes back.
-    const k = smoothstep(p < 0.5 ? p * 2 : (1 - p) * 2);
-    g.position.lerpVectors(a, b, k);
-    g.position.y += Math.sin(k * Math.PI) * 0.35;
+    const t = p === null ? null : p * PHONE_SECONDS;
+    const going =
+      t !== null && t < OVER[1] ? smoothstep((t - OVER[0]) / (OVER[1] - OVER[0])) : null;
+    const coming =
+      t !== null && t >= BACK[0] && t < BACK[1]
+        ? 1 - smoothstep((t - BACK[0]) / (BACK[1] - BACK[0]))
+        : null;
+    const along = going ?? coming;
+
+    const length = a.distanceTo(b);
+    const pos = string.geometry.getAttribute('position') as THREE.BufferAttribute;
+    for (let i = 0; i < STRING_POINTS; i++) {
+      const s = i / (STRING_POINTS - 1);
+      stringPoint.lerpVectors(a, b, s);
+      stringPoint.y -= 0.06 * length * 4 * s * (1 - s);
+      if (along !== null) stringPoint.y -= 0.05 * Math.exp(-(((s - along) / 0.12) ** 2));
+      pos.setXYZ(i, stringPoint.x, stringPoint.y, stringPoint.z);
+    }
+    pos.needsUpdate = true;
+    string.geometry.computeBoundingSphere();
+
+    const e = envelope.current;
+    e.visible = along !== null;
+    if (along !== null) {
+      // Rides on top of the string, rocking a little.
+      const i = Math.round(along * (STRING_POINTS - 1));
+      e.position.set(pos.getX(i), pos.getY(i) + 0.07, pos.getZ(i));
+      e.material.rotation = Math.sin((t ?? 0) * 12) * 0.15;
+      e.scale.set(0.16, 0.11, 1);
+    }
+    // The can that receives gives a little jump.
+    cans.current[1]?.scale.setScalar(1 + 0.3 * popAt(t, OVER[1]));
+    cans.current[0]?.scale.setScalar(1 + 0.3 * popAt(t, BACK[1]));
   });
+
   return (
-    <group ref={ball} visible={false}>
-      <mesh raycast={noHit}>
-        <sphereGeometry args={[0.09, 12, 10]} />
-        <meshBasicMaterial color="#fff1c4" />
-      </mesh>
-      <pointLight color={colors.accentGold} intensity={1.5} distance={2} decay={2} />
+    <group>
+      {[a, b].map((at, i) => (
+        <group
+          key={i}
+          ref={(el) => {
+            if (el) cans.current[i] = el;
+          }}
+          position={at}
+          quaternion={turn}
+        >
+          {/* The can sits behind its end of the string, inside its own booth's window. */}
+          <mesh material={tin} position-y={i === 0 ? -0.045 : 0.045} raycast={noHit}>
+            <cylinderGeometry args={[0.045, 0.045, 0.09, 12]} />
+          </mesh>
+        </group>
+      ))}
+      <primitive object={string} />
+      <sprite ref={envelope} visible={false} raycast={noHit}>
+        <spriteMaterial map={texture} transparent depthWrite={false} toneMapped={false} />
+      </sprite>
     </group>
   );
 }

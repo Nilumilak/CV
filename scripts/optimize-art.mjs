@@ -6,7 +6,7 @@
 // `grassTop` get bare grey patches on their top repainted as grass; see art-grade.mjs.
 // Usage:
 //   npm run art                        all models and textures
-//   npm run art -- arena/twin-towers   only entries whose source path contains a filter
+//   npm run art -- arena/team-booths   only entries whose source path contains a filter
 //   npm run art -- arena radio/dish    several filters: anything matching any of them
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, statSync } from 'node:fs';
@@ -69,12 +69,14 @@ const MODELS = [
     removeFaces: [{ min: [0.194, 0.167, -0.167], max: [0.361, 0.444, -0.028], minArea: 100 }],
   },
   { from: 'arena/parcel.glb', to: 'models/arena/parcel.glb', texture: 512 },
+  // Two team booths with a tin-can telephone between them (replaced the twin towers).
   {
-    from: 'arena/twin-towers.glb',
-    to: 'models/arena/twin-towers.glb',
+    from: 'arena/team-booths.glb',
+    to: 'models/arena/team-booths.glb',
     texture: 1024,
-    // A broken white connector halfway up, in the gap between the towers.
-    removeFaces: [{ min: [-0.034, 0.343, 0.04], max: [0.034, 0.629, 0.1] }],
+    // A grey web from the blue booth's right post down to the deck: a few huge faces.
+    // The box starts just above the deck (its top is at 0.098), whose big faces must stay.
+    removeFaces: [{ min: [-0.34, 0.11, -0.5], max: [-0.14, 0.56, 0.5], minArea: 5 }],
   },
 
   // Green Grove island
@@ -123,7 +125,7 @@ const models = MODELS.filter(wanted);
 const textures = TEXTURES.filter(wanted);
 if (filters.length && !models.length && !textures.length) {
   console.error(
-    `Nothing matches ${filters.join(', ')}. Source paths look like "arena/twin-towers.glb".`,
+    `Nothing matches ${filters.join(', ')}. Source paths look like "arena/team-booths.glb".`,
   );
   process.exit(1);
 }
