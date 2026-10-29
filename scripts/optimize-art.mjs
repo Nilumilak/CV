@@ -77,6 +77,15 @@ const MODELS = [
     removeFaces: [{ min: [-0.034, 0.343, 0.04], max: [0.034, 0.629, 0.1] }],
   },
 
+  // Green Grove island
+  { from: 'grove/island-base.glb', to: 'models/grove/island-base.glb', texture: 1024 },
+  { from: 'grove/willow.glb', to: 'models/grove/willow.glb', texture: 1024 },
+  { from: 'grove/shrine.glb', to: 'models/grove/shrine.glb', texture: 512 },
+  { from: 'grove/recycling-bins.glb', to: 'models/grove/recycling-bins.glb', texture: 512 },
+  { from: 'grove/sapling.glb', to: 'models/grove/sapling.glb', texture: 512 },
+  { from: 'grove/noticeboard.glb', to: 'models/grove/noticeboard.glb', texture: 512 },
+  { from: 'grove/collection-box.glb', to: 'models/grove/collection-box.glb', texture: 512 },
+
   // Shared kit, reused across islands
   { from: 'shared/rock-cluster.glb', to: 'models/shared/rock-cluster.glb', texture: 512 },
 ];

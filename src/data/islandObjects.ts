@@ -34,6 +34,11 @@ export const ISLAND_OBJECTS = [
   { id: 'olimp-preact', label: 'Bundle −40%', name: 'the parcel', cue: 'knock' },
   { id: 'olimp-virtual', label: 'Virtual scrolling', name: 'the scoreboard', cue: 'whirr' },
   { id: 'olimp-iframe', label: 'iframe messages', name: 'the twin towers', cue: 'beep' },
+  // Green Grove (design: docs/plan/islands/grove.md)
+  { id: 'eco-lead', label: 'Led the team', name: 'the recycling bins', cue: 'knock' },
+  { id: 'eco-build', label: 'Frontend, APIs, mentoring', name: 'the saplings', cue: 'chime' },
+  { id: 'eco-payments', label: 'ЮKassa payments', name: 'the collection box', cue: 'coins' },
+  { id: 'eco-admin', label: 'Admin-editable content', name: 'the noticeboard', cue: 'paper' },
 ] as const satisfies readonly IslandObject[];
 
 export type IslandObjectId = (typeof ISLAND_OBJECTS)[number]['id'];

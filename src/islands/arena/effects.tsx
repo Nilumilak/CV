@@ -114,7 +114,10 @@ export function TeamFlags({
   );
 }
 
-/** A "−40%" tag that pops up above an object, rises a little and fades. Always faces the camera. */
+/**
+ * A gold tag (e.g. "−40%") that pops up above an object, rises a little and fades. Always
+ * faces the camera. Its width follows the text, at a constant height.
+ */
 export function PercentTag({
   id,
   position,
@@ -126,14 +129,14 @@ export function PercentTag({
 }) {
   const sprite = useRef<THREE.Sprite>(null!);
   const progress = useReaction(id, 1.6);
-  const texture = useMemo(() => tagTexture(text), [text]);
+  const { texture, aspect } = useMemo(() => tagTexture(text), [text]);
   useFrame(({ clock }) => {
     const p = progress(clock.elapsedTime);
     const s = sprite.current;
     s.visible = p !== null;
     if (p === null) return;
     const pop = p < 0.15 ? Math.sin((p / 0.15) * Math.PI * 0.75) * 1.2 : 1;
-    s.scale.set(0.9 * pop, 0.45 * pop, 1);
+    s.scale.set(0.45 * aspect * pop, 0.45 * pop, 1);
     s.position.set(position[0], position[1] + p * 0.5, position[2]);
     (s.material as THREE.SpriteMaterial).opacity = p > 0.75 ? (1 - p) / 0.25 : 1;
   });
@@ -286,16 +289,22 @@ function rowsTexture() {
 }
 
 /** A gold rounded tag with the text in dark ink. */
+/** A gold rounded tag sized to its text; returns the texture and its width ÷ height. */
 function tagTexture(text: string) {
-  return canvasTexture(256, 128, (g) => {
+  const font = 'bold 64px Fredoka, Nunito, system-ui, sans-serif';
+  const measure = document.createElement('canvas').getContext('2d')!;
+  measure.font = font;
+  const w = Math.max(256, Math.ceil(measure.measureText(text).width) + 90);
+  const texture = canvasTexture(w, 128, (g) => {
     g.fillStyle = colors.accentGold;
-    box(g, 6, 6, 244, 116, 40);
+    box(g, 6, 6, w - 12, 116, 40);
     g.fillStyle = '#2b2422';
-    g.font = 'bold 64px Fredoka, Nunito, system-ui, sans-serif';
+    g.font = font;
     g.textAlign = 'center';
     g.textBaseline = 'middle';
-    g.fillText(text, 128, 68);
+    g.fillText(text, w / 2, 68);
   });
+  return { texture, aspect: w / 128 };
 }
 
 /**
