@@ -12,7 +12,13 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, statSync } from 'node:fs';
 import { dirname } from 'node:path';
 import sharp from 'sharp';
-import { GRADES, gradeModel, grassTopModel, removeFacesModel } from './art-grade.mjs';
+import {
+  GRADES,
+  gradeModel,
+  grassTopModel,
+  removeFacesModel,
+  textureFromModel,
+} from './art-grade.mjs';
 import { checkModelShape } from './model-shape.mjs';
 
 /** Only approved art is listed here. Source paths are relative to art-source/. */
@@ -21,7 +27,14 @@ const MODELS = [
   { from: 'home/island-base.glb', to: 'models/home/island-base.glb', texture: 1024 },
   { from: 'home/cottage.glb', to: 'models/home/cottage.glb', texture: 1024 },
   { from: 'home/big-tree.glb', to: 'models/home/big-tree.glb', texture: 1024, grade: 'foliage' },
-  { from: 'home/cat.glb', to: 'models/home/cat.glb', texture: 1024 },
+  // The same cat standing, rigged as a quadruped with a walk on meshy.ai; it comes back
+  // untextured, so the painting is copied from the model it was rigged from.
+  {
+    from: 'home/cat-animated.glb',
+    to: 'models/home/cat-animated.glb',
+    texture: 1024,
+    textureFrom: 'home/cat-standing.glb',
+  },
   { from: 'home/lantern.glb', to: 'models/home/lantern.glb', texture: 512 },
   { from: 'home/mailbox.glb', to: 'models/home/mailbox.glb', texture: 512 },
   { from: 'home/bookshelf.glb', to: 'models/home/bookshelf.glb', texture: 1024 },
@@ -146,10 +159,14 @@ for (const m of models) {
   // Fixed copies go next to the raw art (also ignored by git), never over it. Each step
   // reads the previous step's output.
   let input = src(m.from);
-  if (m.removeFaces || m.grassTop || m.grade) {
+  if (m.removeFaces || m.grassTop || m.grade || m.textureFrom) {
     // Keyed by output, so two re-toned copies of one source never overwrite each other.
     const fixed = src(`.graded/${m.to}`);
     mkdirSync(dirname(fixed), { recursive: true });
+    if (m.textureFrom) {
+      await textureFromModel(input, fixed, src(m.textureFrom));
+      input = fixed;
+    }
     if (m.removeFaces) {
       const removed = await removeFacesModel(input, fixed, m.removeFaces);
       console.log(`${m.from}: removed ${removed} stray faces`);

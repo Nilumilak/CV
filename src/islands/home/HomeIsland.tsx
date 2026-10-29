@@ -3,7 +3,7 @@ import type * as THREE from 'three';
 import baseUrl from '@/assets/models/home/island-base.glb?url';
 import benchUrl from '@/assets/models/home/bench.glb?url';
 import bookshelfUrl from '@/assets/models/home/bookshelf.glb?url';
-import catUrl from '@/assets/models/home/cat.glb?url';
+import catUrl from '@/assets/models/home/cat-animated.glb?url';
 import cottageUrl from '@/assets/models/home/cottage.glb?url';
 import globeUrl from '@/assets/models/home/globe.glb?url';
 import lanternUrl from '@/assets/models/home/lantern.glb?url';
@@ -13,10 +13,12 @@ import stumpUrl from '@/assets/models/home/stump.glb?url';
 import treeUrl from '@/assets/models/home/big-tree.glb?url';
 import { homeObject, type HomeObjectId } from '@/data/homeObjects';
 import { Interactable } from '@/objects/Interactable';
-import { Hop, Spin, Wobble } from '@/objects/reactions';
-import { Breathe, ChimneySmoke, Fireflies, LanternGlow, PoppingLetter, Sway } from '../ambient';
+import { Spin, Wobble } from '@/objects/reactions';
+import { ChimneySmoke, Fireflies, LanternGlow, PoppingLetter, Sway } from '../ambient';
 import { GeneratedModel } from '../GeneratedModel';
+import { FACE_CAMERA } from '../layout';
 import { useGroundHeights } from '../useGroundHeights';
+import { AnimatedCat } from './AnimatedCat';
 
 const deg = (d: number) => (d * Math.PI) / 180;
 
@@ -38,6 +40,8 @@ const SPOTS = {
   bookshelf: [-1.4, 1],
   stump: [-1.6, 2.6],
   bench: [2.6, -1.0],
+  // Beside the cottage's door path, clear of the mailbox in the camera's view.
+  cat: [1.3, -0.3],
   lantern: [1, 2.8],
   mailbox: [3, 2.1],
   stone1: [0.8, 0.7],
@@ -54,8 +58,8 @@ const STONES = [
   { spot: 'stone4', size: 0.7, turn: 220 },
 ] as const;
 
-/** Island-unit sizes that the cat and globe sit on. Tuned from screenshots. */
-const BENCH_SEAT_HEIGHT = 0.42;
+/** Island-unit sizes: the cat standing, and the stump the globe sits on. */
+const CAT_HEIGHT = 0.85;
 const STUMP_HEIGHT = 0.6;
 
 /**
@@ -95,15 +99,13 @@ export function HomeIsland() {
 
       <group position={at('bench')} rotation-y={deg(-30)}>
         <GeneratedModel url={benchUrl} length={1.6} />
-        <group position={[0.15, BENCH_SEAT_HEIGHT, 0]} rotation-y={deg(30)}>
-          <Interactable {...interactive('home-cat')}>
-            <Hop id="home-cat">
-              <Breathe>
-                <GeneratedModel url={catUrl} length={0.9} />
-              </Breathe>
-            </Hop>
-          </Interactable>
-        </group>
+      </group>
+
+      {/* On the grass by the door path, facing the camera; it strolls a loop when clicked. */}
+      <group position={at('cat')} rotation-y={deg(FACE_CAMERA - 20)}>
+        <Interactable {...interactive('home-cat')} lift={false}>
+          <AnimatedCat url={catUrl} id="home-cat" height={CAT_HEIGHT} />
+        </Interactable>
       </group>
 
       <group position={at('stump')}>
