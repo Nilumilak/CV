@@ -25,9 +25,9 @@ const WIND_LEVEL = 0.35;
 const WHOOSH_LEVEL = 0.8;
 const OBJECT_LEVEL = 0.9;
 
-/** Recorded object sounds, by object id. */
-const OBJECT_SOUNDS: Record<string, string> = {
-  'home-cat': catUrl,
+/** Recorded object sounds, by object id, each with an optional level of its own. */
+const OBJECT_SOUNDS: Record<string, { url: string; level?: number }> = {
+  'home-cat': { url: catUrl, level: 0.65 },
 };
 
 let ctx: AudioContext | null = null;
@@ -335,7 +335,7 @@ const CUES: Record<SoundCue, (ac: AudioContext, t: number) => void> = {
 export const sound = {
   /** Start downloading the sound files, so the first sounds don't wait on the network. */
   preload() {
-    for (const url of [musicUrl, windUrl, whooshUrl, ...Object.values(OBJECT_SOUNDS)]) {
+    for (const url of [musicUrl, windUrl, whooshUrl, ...Object.values(OBJECT_SOUNDS).map((s) => s.url)]) {
       void fetchFile(url);
     }
   },
@@ -372,7 +372,7 @@ export const sound = {
   cue(name: SoundCue, object?: string) {
     const recorded = object && OBJECT_SOUNDS[object];
     if (recorded) {
-      if (enabled) void play(recorded, OBJECT_LEVEL);
+      if (enabled) void play(recorded.url, recorded.level ?? OBJECT_LEVEL);
       return;
     }
     const ac = context();
