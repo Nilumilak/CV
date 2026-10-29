@@ -39,11 +39,14 @@ export default function WorldCanvas() {
         <fog attach="fog" args={[c.horizon, c.fogNear, c.fogFar]} />
         <SkyDome top={c.top} horizon={c.horizon} bottom={c.bottom} exponent={c.exponent} />
         <Lighting sunIntensity={c.sunIntensity} skyIntensity={c.skyIntensity} />
+        {/*
+          One boundary for clouds and islands: the islands only appear once the cloud sea
+          (whose puff texture loads asynchronously) is there to hide them from the welcome
+          view. Each island still loads its own art behind its own boundary.
+        */}
         <Suspense fallback={null}>
           <CloudLayers />
-        </Suspense>
-        <Islands />
-        <Suspense fallback={null}>
+          <Islands />
           <Route />
         </Suspense>
         <WelcomeSun />
