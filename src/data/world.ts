@@ -74,11 +74,12 @@ export const ISLANDS: IslandLayout[] = [
   },
   {
     id: 'lighthouse',
-    position: [-19, -6, 13],
-    scale: 0.6,
+    // Right of the Workshop's line of sight, so it does not hang over the lighthouse in focus.
+    position: [-16, -6, 13],
+    scale: 0.85,
     seed: 7,
-    labelOffset: [0, 6, 0],
-    camera: islandCamera([-19, -5, 13]),
+    labelOffset: [0, 7, 0], // above the lighthouse's weather vane
+    camera: islandCamera([-16, -4, 13]),
     accent: '#D94B4B',
   },
 ];

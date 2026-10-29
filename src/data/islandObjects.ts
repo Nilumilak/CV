@@ -49,6 +49,8 @@ export const ISLAND_OBJECTS = [
     cue: 'chime',
   },
   { id: 'salyut-macros', label: 'Python macros', name: 'the scroll', cue: 'paper' },
+  // Lighthouse (design: docs/plan/islands/lighthouse.md)
+  { id: 'kafka-auth', label: 'Authorization page', name: 'the lighthouse', cue: 'hum' },
 ] as const satisfies readonly IslandObject[];
 
 export type IslandObjectId = (typeof ISLAND_OBJECTS)[number]['id'];

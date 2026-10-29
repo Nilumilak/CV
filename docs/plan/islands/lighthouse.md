@@ -2,7 +2,7 @@
 
 [Back to Phase 4](../phase-4-island-art.md) · [AI model prompts](../phase-4-ai-prompts.md) · Previous: [Workshop](workshop.md)
 
-**Status:** draft for review, 2026-10-29. Nothing generated yet.
+**Status:** built on 2026-10-29. All 3 models generated (the base redrawn once for a round top) and placed; the lighthouse is interactive. Lamp height measured on the model. First layout, to be tuned from screenshots.
 
 ---
 
@@ -31,7 +31,7 @@ A lonely, friendly lighthouse at the edge of the sky, like a coastal lighthouse 
 
 ## 3. How it looks from far away (overview)
 
-The Lighthouse sits low and off to one side (`[−19, −6, 13]`, scale 0.6), the smallest island. From the overview it must read as "a lighthouse", by silhouette alone:
+The Lighthouse sits low and off to one side (`[−16, −6, 13]`, scale 0.85), the smallest island. It was planned at scale 0.6 and `x = −19`, but the focus camera stands at the same distance from every island, so it looked tiny there, with the Workshop hanging right above it. From the overview it must read as "a lighthouse", by silhouette alone:
 
 - a tall white tower with red stripes and a glass lamp room on top,
 - a slow light beam turning from the lamp room, visible from far away,
@@ -43,22 +43,22 @@ The beam is the island's signature: it can be seen sweeping over the other islan
 
 ## 4. Layout
 
-A small island, so no two rows: the lighthouse at the back left, the dock running out towards the front right.
+A small island, so no two rows: the lighthouse just behind the middle, the dock running out towards the front left (the way the generated base has it), the boat past the dock's end.
 
 ```
-        [ LIGHTHOUSE ]
-                         [mailbox]
-                 ===== dock =====  [sky boat]
-                     front (towards the camera)
+                    [ LIGHTHOUSE ]
+        [mailbox]
+  [boat] ===== dock
+        front (towards the camera)
 ```
 
-| Object     | Across, towards | Size       | Notes                                             |
-| ---------- | --------------- | ---------- | ------------------------------------------------- |
-| Lighthouse | −1.0, −1.5      | 6.5 tall   | Landmark and the interactive object               |
-| Dock       | part of base    |            | Wooden planks on posts, out from the front right  |
-| Mailbox    | on the dock     | Home's     | Reused from Home, free; not interactive           |
-| Sky boat   | off the dock    | 2.5 long   | Small wooden boat with a sail, bobbing in the air |
-| Rocks      | edges           | shared kit | One or two, free                                  |
+| Object     | Across, towards       | Size       | Notes                                                       |
+| ---------- | --------------------- | ---------- | ----------------------------------------------------------- |
+| Lighthouse | 1.0, −1.2             | 6.5 tall   | Landmark and the interactive object                         |
+| Dock       | part of base          |            | The base is shifted so its round grass top is in the middle |
+| Mailbox    | −1.5, 3.0             | 1.0 tall   | Home's, on the grass by the dock; not interactive           |
+| Sky boat   | past the dock         | 2.5 long   | Just past the dock's end in open sky, bobbing and swaying   |
+| Rocks      | 2.5, 1.5 · −2.4, −1.8 | shared kit | Two, free                                                   |
 
 ---
 
@@ -77,8 +77,8 @@ The original plan had the tooltip offer a link to the pull request. The panel al
 
 ### Not interactive
 
-- **Sky boat:** a small wooden boat with a patched sail, moored to the dock by a rope, bobbing gently (code).
-- **Mailbox:** Home's mailbox at the end of the dock, a small link back to Home.
+- **Sky boat:** a small wooden boat with a sail, waiting just past the dock's end, bobbing and swaying gently (code).
+- **Mailbox:** Home's mailbox on the grass by the dock, a small link back to Home.
 - **Seagull:** one gull gliding in slow circles round the lighthouse (code-made from a few simple shapes, wings flapping now and then). A small character is what AI 3D builds worst, so it is not generated.
 
 ---
@@ -100,14 +100,14 @@ The mailbox and rocks are reused; the beam and the gull are code.
 | Spare for retries  |       | ~40      |
 | **Total**          |       | **~140** |
 
-Balance: about 1,390 credits, so about 1,250 would be left.
+Balance: about 1,390 credits, so about 1,250 would be left. Spent: 12 for concepts (one base redraw) and 90 for models, so about 1,288 are left.
 
 Lessons applied: three-quarter views with volume for every concept (multi-view ready if one comes out flat); grass right up to the edge on the base; the dock is part of the base, because a loose plank deck on its own would fail the flat-model check; the lamp room's glass left plain, with the light made in code; concepts shown for review before any 3D.
 
 ---
 
-## 7. Open questions
+## 7. Decisions (2026-10-29)
 
-1. **Sky boat:** add it (30 credits), or keep the island to the lighthouse and dock only?
-2. **Seagull:** code-made gull circling the lighthouse, or none?
-3. **Click tag text:** "merged · in the release notes", or something else?
+1. **Sky boat:** yes, moored to the dock (3 models, about 140 credits).
+2. **Seagull:** yes, code-made, circling the lighthouse.
+3. **Click tag text:** "merged · in the release notes".

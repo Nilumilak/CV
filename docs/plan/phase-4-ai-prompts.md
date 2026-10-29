@@ -718,6 +718,53 @@ rolled paper scroll tied with a ribbon lying on the slanted top. Carved warm woo
 
 ---
 
+## Lighthouse island
+
+Full design description and decisions: [islands/lighthouse.md](islands/lighthouse.md).
+
+A small lighthouse on a rock at the edge of the sky, with a wooden dock and a sky boat moored to it. The beam, the lamp's glow and the seagull are code-made; Home's mailbox and the shared rocks are reused.
+
+| #   | File name         | Object                                     | Budget           | Interactive                 | Status   |
+| --- | ----------------- | ------------------------------------------ | ---------------- | --------------------------- | -------- |
+| 1   | `island-base.glb` | Small rocky island, grass top, wooden dock | 12,000 triangles | No                          | **Done** |
+| 2   | `lighthouse.glb`  | White and red striped lighthouse           | 8,000            | Yes: the authorization page | **Done** |
+| 3   | `sky-boat.glb`    | Small wooden boat with a sail              | 3,000            | No (bobs)                   | **Done** |
+
+### 1. Island base
+
+The first try came out with a square top and tall, so it was redrawn asking for a round disc. This is the redraw that was built:
+
+```
+A small floating sky island seen from a three-quarter view from slightly above: a wide, round,
+softly rounded grassy top shaped like a disc, much wider than the island is tall, evenly covered
+in short green grass right up to its rounded edge, with no bare patches and no corners.
+Underneath, a chunk of weathered sandy coastal rock tapering into a short upside-down cone, with a
+few mossy ledges and hanging roots. A short sturdy wooden dock of planks on thick posts runs
+straight out from one side of the grass, its deck exactly level with the grass top, with a mooring
+post at its far end.
+```
+
+### 2. Lighthouse
+
+```
+A small charming lighthouse seen from a three-quarter view from slightly above: a round, gently
+tapering tower painted in bold white and red horizontal stripes, a small arched wooden door at the
+bottom, two little round windows, a balcony gallery with an iron railing near the top, a round
+glass lamp room with a warm lamp inside, and a red domed cap with a small weather vane. Sturdy,
+slightly chubby storybook proportions.
+```
+
+### 3. Sky boat
+
+```
+A small wooden boat made for sailing through the sky, seen from a three-quarter view from slightly
+above: a rounded honey-wood hull with visible planks, a short mast with a cream canvas sail
+billowing out full of wind, a small red pennant on top, a coil of rope and a little lantern at the
+bow. Chunky, cosy proportions, one solid object with real thickness.
+```
+
+---
+
 ## Checklist for a good result
 
 - [ ] The concept shows the object from a three-quarter view, with shading that shows its volume (see the volume rule).
