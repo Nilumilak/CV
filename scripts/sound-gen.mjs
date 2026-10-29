@@ -247,6 +247,7 @@ const PICKS = {
   'mone-nextjs': 'mone-nextjs-5',
   'mone-pdl': 'mone-pdl-6',
   'mone-packages': 'mone-packages-1',
+  'mone-bnpl': 'mone-bnpl-2',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */

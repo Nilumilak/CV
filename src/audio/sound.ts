@@ -11,6 +11,7 @@ import catUrl from '@/assets/audio/home-cat.mp3?url';
 import signpostUrl from '@/assets/audio/mone-account.mp3?url';
 import balloonUrl from '@/assets/audio/mone-fsd.mp3?url';
 import shopUrl from '@/assets/audio/mone-nextjs.mp3?url';
+import tramUrl from '@/assets/audio/mone-bnpl.mp3?url';
 import windmillUrl from '@/assets/audio/mone-packages.mp3?url';
 import fountainUrl from '@/assets/audio/mone-pdl.mp3?url';
 import lighthouseUrl from '@/assets/audio/kafka-auth.mp3?url';
@@ -50,7 +51,8 @@ const OBJECT_SOUNDS: Record<string, { url: string; level?: number }> = {
   'eco-build': { url: saplingsUrl, level: 0.4 },
   // Its sharp thumps capped the levelling, so this file is about 5 dB quieter than the rest.
   'eco-lead': { url: binsUrl, level: 0.4 },
-  'mone-packages': { url: windmillUrl },
+  'mone-bnpl': { url: tramUrl },
+  'mone-packages': { url: windmillUrl, level: 0.8 },
   'mone-pdl': { url: fountainUrl, level: 0.4 },
   'mone-nextjs': { url: shopUrl },
   'mone-fsd': { url: balloonUrl },
