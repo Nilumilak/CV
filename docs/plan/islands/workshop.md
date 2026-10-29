@@ -73,28 +73,28 @@ Same pattern as the other islands: hover glows gold with a hint, click plays a s
 
 A brass factory steam whistle on a short pipe stand with a valve wheel.
 
-- **Click:** the whistle blows a puff of steam, and the team appears above it: 5 blue and 15 orange little hard hats pop up in rows (5 developers, 15 machine workers and assemblers), then fade. Code-made, so the counts are exact.
+- **Click:** the whistle shakes and blows a puff of steam, and a gold tag "5 developers · 15 workers" pops up above it.
 
-This replaces the plan's "group of small worker figures": small characters are what AI 3D builds worst (flat or misshapen), and hard hats tell the same story.
+This replaces the plan's "group of small worker figures": small characters are what AI 3D builds worst (flat or misshapen), and the tag tells the same story.
 
 ### Workbench with an oscilloscope · 30+ precision electronics projects
 
 A sturdy wooden workbench with an old oscilloscope on it (plain dark-green screen), a soldering iron and a few parts.
 
-- **Idle:** a flat line on the screen (code-made picture, one surface, no flicker).
-- **Click:** a clean sine wave draws across the screen, then the frequency changes twice (synthesizers, stabilizers).
+- **Idle:** the screen and the desk lamp glow faintly.
+- **Click:** the oscilloscope screen glows up green and the desk lamp warm, then both fade back (light only, like the Radio bunker door).
 
 ### Big circuit board on an easel · Assemblies of 100+ high-precision elements
 
 A large green circuit board with copper traces, standing on a wooden easel.
 
-- **Click:** over 100 tiny parts light up across the board in a wave (code-made dots placed on the board's face, measured on the model), then fade.
+- **Click:** a soft light sweeps across in front of the board from one corner to the other, catching its real chips and traces as it passes.
 
 ### Scroll on a lectern · Python macros for documents
 
 A wooden lectern with a rolled paper scroll lying on top.
 
-- **Click:** a sheet unrolls down the front of the lectern, showing lines of Python-coloured code, and a gold stamp "faster, fewer errors" pops up.
+- **Click:** a few loose pages flutter up out of the scroll and drift back down, and a gold tag "faster, fewer errors" pops up.
 
 ### Not interactive
 
@@ -131,3 +131,5 @@ Lessons applied: three-quarter views with volume for every concept (and multi-vi
 ## 7. Decisions (2026-10-29)
 
 All six proposals accepted as written: the steam whistle with 20 hard hats (5 developers, 15 workers), the oscilloscope's sine wave, the circuit board lighting up, the scroll with Python code and the stamp, three gears turning on the factory wall, and about 265 credits.
+
+**Reaction rule (revised 2026-10-29).** Once built, the first reactions (hard hats, the sine wave, board lights, the unrolling sheet) were rejected: the models' faces are not flat, so pictures drawn over them float or cut through. Reactions now use only whole-object motion, light, small separate flying bits and gold tags, as section 5 describes. The gears and chimney smoke stay.

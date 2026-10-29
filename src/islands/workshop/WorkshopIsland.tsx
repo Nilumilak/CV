@@ -16,7 +16,7 @@ import { PercentTag } from '../arena/effects';
 import { GeneratedModel } from '../GeneratedModel';
 import { deg, FACE_CAMERA, view } from '../layout';
 import { useGroundHeights } from '../useGroundHeights';
-import { BoardLights, HardHats, ScopeTrace, SteamBurst, Turning, UnrollSheet } from './effects';
+import { FlutterPages, LightSwell, LightSweep, SteamBurst, Turning } from './effects';
 
 /** Props for an object's Interactable, from the shared list in data/islandObjects.ts. */
 const interactive = (id: IslandObjectId) => {
@@ -109,34 +109,32 @@ export function WorkshopIsland() {
       <group position={at('bench')} rotation-y={deg(FACE_CAMERA + 20)}>
         <Interactable {...interactive('salyut-projects')}>
           <GeneratedModel url={benchUrl} height={BENCH_HEIGHT} />
-          <ScopeTrace
-            id="salyut-projects"
-            position={[-0.143, 0.957, 0.042]}
-            width={0.27}
-            height={0.21}
-          />
         </Interactable>
+        {/* Measured on the model: the screen and the desk lamp's shade. */}
+        <LightSwell
+          id="salyut-projects"
+          position={[-0.143, 0.96, 0.35]}
+          color="#a6f5b4"
+          idle={0.2}
+          peak={2.6}
+          distance={1.8}
+        />
+        <LightSwell id="salyut-projects" position={[-0.59, 1.0, -0.2]} idle={0.3} peak={2.4} />
       </group>
 
       <group position={at('board')} rotation-y={deg(FACE_CAMERA + 10)}>
         <Interactable {...interactive('salyut-assemblies')}>
           <GeneratedModel url={boardUrl} height={BOARD_HEIGHT} />
         </Interactable>
-        {/* Measured: the board leans back 13.3°, face centre (0, 0.83, 0.11). */}
-        <BoardLights
-          id="salyut-assemblies"
-          centre={[0, 0.84, 0.165]}
-          width={0.6}
-          height={0.84}
-          tilt={13.3}
-        />
+        {/* A light passes across in front of the board's face (measured centre y 0.83). */}
+        <LightSweep id="salyut-assemblies" from={[-0.55, 1.05, 0.5]} to={[0.55, 0.65, 0.5]} />
       </group>
 
       <group position={at('lectern')} rotation-y={deg(FACE_CAMERA - 10)}>
         <Interactable {...interactive('salyut-macros')}>
           <GeneratedModel url={lecternUrl} height={LECTERN_HEIGHT} />
         </Interactable>
-        <UnrollSheet id="salyut-macros" top={[0, 1.05, 0.8]} />
+        <FlutterPages id="salyut-macros" position={[-0.1, LECTERN_HEIGHT - 0.05, 0.3]} />
         <PercentTag
           id="salyut-macros"
           position={[0, LECTERN_HEIGHT + 0.5, 0]}
@@ -151,7 +149,11 @@ export function WorkshopIsland() {
           </Wobble>
         </Interactable>
         <SteamBurst id="salyut-lead" position={[0, WHISTLE_HEIGHT, 0]} />
-        <HardHats id="salyut-lead" position={[0, WHISTLE_HEIGHT + 0.5, 0]} />
+        <PercentTag
+          id="salyut-lead"
+          position={[0, WHISTLE_HEIGHT + 0.7, 0]}
+          text="5 developers · 15 workers"
+        />
       </group>
 
       <GeneratedModel url={rockUrl} length={1.3} position={at('rocks1')} rotation-y={deg(30)} />
