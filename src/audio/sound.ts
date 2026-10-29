@@ -14,6 +14,7 @@ import shopUrl from '@/assets/audio/mone-nextjs.mp3?url';
 import tramUrl from '@/assets/audio/mone-bnpl.mp3?url';
 import containersUrl from '@/assets/audio/radio-backend.mp3?url';
 import robotUrl from '@/assets/audio/radio-llm.mp3?url';
+import bunkerUrl from '@/assets/audio/radio-platform.mp3?url';
 import windmillUrl from '@/assets/audio/mone-packages.mp3?url';
 import fountainUrl from '@/assets/audio/mone-pdl.mp3?url';
 import lighthouseUrl from '@/assets/audio/kafka-auth.mp3?url';
@@ -54,6 +55,7 @@ const OBJECT_SOUNDS: Record<string, { url: string; level?: number }> = {
   // Its sharp thumps capped the levelling, so this file is about 5 dB quieter than the rest.
   'eco-lead': { url: binsUrl, level: 0.4 },
   'radio-backend': { url: containersUrl },
+  'radio-platform': { url: bunkerUrl },
   'radio-llm': { url: robotUrl },
   'mone-bnpl': { url: tramUrl },
   'mone-packages': { url: windmillUrl, level: 0.8 },

@@ -250,6 +250,7 @@ const PICKS = {
   'mone-bnpl': 'mone-bnpl-2',
   'radio-llm': 'radio-llm-1',
   'radio-backend': 'radio-backend-3',
+  'radio-platform': 'radio-platform-1',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
