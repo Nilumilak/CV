@@ -246,6 +246,7 @@ const PICKS = {
   'mone-fsd': 'mone-fsd-1',
   'mone-nextjs': 'mone-nextjs-5',
   'mone-pdl': 'mone-pdl-6',
+  'mone-packages': 'mone-packages-1',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
