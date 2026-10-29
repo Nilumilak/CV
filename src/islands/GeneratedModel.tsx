@@ -55,15 +55,26 @@ function footCentre(object: THREE.Object3D, maxY: number, out: THREE.Vector3) {
   out.z = (foot.min.z + foot.max.z) / 2;
 }
 
-/** One toon material per source texture, shared by every copy of the same model. */
+/**
+ * One toon material per source texture, shared by every copy of the same model.
+ * It keeps the original material's side: Meshy models are double-sided, and their thin
+ * parts (a bridge between two towers, the bars of a gate) are single sheets that vanish
+ * when seen from behind if drawn one-sided.
+ */
 const materialCache = new WeakMap<THREE.Texture, THREE.Material>();
-const sharedPaintedToon = (map: THREE.Texture | null) => {
-  if (!map) return paintedToon(null);
+const sharedPaintedToon = (original: THREE.MeshStandardMaterial) => {
+  const map = original.map ?? null;
+  if (!map) return withSide(paintedToon(null), original.side);
   let material = materialCache.get(map);
   if (!material) {
-    material = paintedToon(map);
+    material = withSide(paintedToon(map), original.side);
     materialCache.set(map, material);
   }
+  return material;
+};
+
+const withSide = (material: THREE.Material, side: THREE.Side) => {
+  material.side = side;
   return material;
 };
 
@@ -85,7 +96,7 @@ export const GeneratedModel = forwardRef<THREE.Group, GeneratedModelProps>(funct
       const mesh = o as THREE.Mesh;
       if (!mesh.isMesh) return;
       const original = mesh.material as THREE.MeshStandardMaterial;
-      mesh.material = sharedPaintedToon(original.map ?? null);
+      mesh.material = sharedPaintedToon(original);
     });
 
     box.setFromObject(object);

@@ -116,7 +116,7 @@ export function ArenaIsland() {
             kind="desktop"
             delay={0.12}
             // Measured on the model: the monitor leans back 18.6°, centre (0, 0.92, -0.03).
-            position={[0, 0.937, 0.013]}
+            position={[0.01, 0.915, 0.013]}
             tilt={18.6}
             width={0.92}
             height={0.56}
