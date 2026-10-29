@@ -87,7 +87,7 @@ export function LighthouseIsland() {
 
       <GeneratedModel
         url={buoyPostUrl}
-        height={1.1}
+        height={1.4}
         position={at('buoyPost')}
         rotation-y={deg(FACE_CAMERA)}
       />

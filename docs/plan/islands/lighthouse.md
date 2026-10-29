@@ -56,7 +56,7 @@ A small island, so no two rows: the lighthouse just behind the middle, the dock 
 | ---------- | --------------------- | ---------- | ----------------------------------------------------------- |
 | Lighthouse | 1.0, −1.2             | 6.5 tall   | Landmark and the interactive object                         |
 | Dock       | part of base          |            | The base is shifted so its round grass top is in the middle |
-| Lifebuoy post | −1.5, 3.0          | 1.1 tall   | On the grass by the dock; not interactive                   |
+| Lifebuoy post | −1.5, 3.0          | 1.4 tall   | On the grass by the dock; not interactive                   |
 | Sky boat   | past the dock         | 2.5 long   | Just past the dock's end in open sky, bobbing and swaying   |
 | Rocks      | 2.5, 1.5 · −2.4, −1.8 | shared kit | Two, free                                                   |
 
