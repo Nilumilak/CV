@@ -26,6 +26,7 @@ export function StandScreen({
   kind,
   delay,
   position,
+  tilt = 0,
   width,
   height,
 }: {
@@ -33,6 +34,8 @@ export function StandScreen({
   kind: 'phone' | 'desktop' | 'gate';
   delay: number;
   position: Vec3;
+  /** Degrees the screen leans back (faces upward), to match the model's screen. */
+  tilt?: number;
   width: number;
   height: number;
 }) {
@@ -48,7 +51,12 @@ export function StandScreen({
     (screen.current.material as THREE.MeshBasicMaterial).color.setScalar(0.45 + 0.55 * lit);
   });
   return (
-    <mesh ref={screen} position={position} raycast={noHit}>
+    <mesh
+      ref={screen}
+      position={position}
+      rotation-x={THREE.MathUtils.degToRad(-tilt)}
+      raycast={noHit}
+    >
       <planeGeometry args={[width, height]} />
       <meshBasicMaterial map={texture} toneMapped={false} {...PICTURE_OFFSET} />
     </mesh>

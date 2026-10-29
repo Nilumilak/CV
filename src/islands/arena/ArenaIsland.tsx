@@ -38,7 +38,7 @@ const SPOTS = {
   stadium: [0, 0],
   scoreboard: view(0, -4.1),
   towers: view(-4.0, -1.2),
-  stands: view(2.6, 3.3),
+  stands: view(2.6, 3.0),
   parcel: view(-2.5, 3.3),
   rocks1: view(4.2, -1.0),
   rocks2: view(-4.3, 1.6),
@@ -100,24 +100,26 @@ export function ArenaIsland() {
         <MessageBall id="olimp-iframe" from={[-0.42, 2.2, 0]} to={[0.42, 2.2, 0]} />
       </group>
 
-      <group position={at('stands')} rotation-y={deg(FACE_CAMERA)}>
+      <group position={at('stands')} rotation-y={deg(FACE_CAMERA - 120)}>
         <Interactable {...interactive('olimp-apps')}>
           <GeneratedModel url={standsUrl} height={STANDS_HEIGHT} />
           <StandScreen
             id="olimp-apps"
             kind="phone"
             delay={0}
-            position={[-1.1, 0.99, 0.03]}
-            width={0.5}
-            height={1.3}
+            position={[-1.13, 1.0, 0.01]}
+            width={0.55}
+            height={1.19}
           />
           <StandScreen
             id="olimp-apps"
             kind="desktop"
             delay={0.12}
-            position={[0, 0.92, 0.07]}
-            width={0.9}
-            height={0.5}
+            // Measured on the model: the monitor leans back 18.6°, centre (0, 0.92, -0.03).
+            position={[0, 0.937, 0.013]}
+            tilt={18.6}
+            width={0.92}
+            height={0.56}
           />
         </Interactable>
         <TeamFlags id="olimp-apps" position={[0, 0.1, 0.55]} />
