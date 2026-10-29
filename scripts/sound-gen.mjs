@@ -209,8 +209,6 @@ const PICKS = {
   whoosh: 'whoosh-6',
   rustle: 'rustle-1',
   tap: 'tap-1',
-  'home-cat': 'home-cat-6',
-  'home-bookshelf': 'home-bookshelf-1',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */

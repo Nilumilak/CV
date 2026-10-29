@@ -1,13 +1,12 @@
 /**
- * The site's sound: a music loop and a wind loop for ambience, a whoosh for the fly-in and a
- * short sound per interactive object. Recorded files come from ElevenLabs (scripts/sound-gen.mjs);
- * objects without a recorded sound yet fall back to a small synthesized cue.
+ * The site's sound: a music loop and a wind loop for ambience, a whoosh for the fly-in, and a
+ * page rustle and a soft tap for the interface, all recorded with ElevenLabs
+ * (scripts/sound-gen.mjs). Interactive objects keep small synthesized cues, which suit their
+ * reactions better than the recorded versions did.
  *
  * Browsers only allow audio after a user gesture, so setEnabled() and whoosh() must be
  * called from a click handler (or after the page has had one: activation is sticky).
  */
-import bookshelfUrl from '@/assets/audio/home-bookshelf.mp3?url';
-import catUrl from '@/assets/audio/home-cat.mp3?url';
 import musicUrl from '@/assets/audio/music.mp3?url';
 import rustleUrl from '@/assets/audio/rustle.mp3?url';
 import tapUrl from '@/assets/audio/tap.mp3?url';
@@ -19,22 +18,12 @@ const LEVEL = 0.8;
 const FADE_IN = 2.5;
 const FADE_OUT = 0.6;
 
-/**
- * Every file is levelled to the same loudness, so these set the mix: the music sits under
- * the wind, and object sounds come through clearly over both.
- */
+/** Every file is levelled to the same loudness, so these set the mix. */
 const MUSIC_LEVEL = 0.45;
 const WIND_LEVEL = 0.35;
 const WHOOSH_LEVEL = 0.8;
-const OBJECT_LEVEL = 0.9;
 /** Interface sounds stay in the background: a page turning, a soft tap. */
 const UI_LEVEL = 0.5;
-
-/** Recorded object sounds, by object id, each with an optional level of its own. */
-const OBJECT_SOUNDS: Record<string, { url: string; level?: number }> = {
-  'home-cat': { url: catUrl, level: 0.45 },
-  'home-bookshelf': { url: bookshelfUrl },
-};
 
 let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
@@ -341,8 +330,7 @@ const CUES: Record<SoundCue, (ac: AudioContext, t: number) => void> = {
 export const sound = {
   /** Start downloading the sound files, so the first sounds don't wait on the network. */
   preload() {
-    const objects = Object.values(OBJECT_SOUNDS).map((s) => s.url);
-    for (const url of [musicUrl, windUrl, whooshUrl, rustleUrl, tapUrl, ...objects]) {
+    for (const url of [musicUrl, windUrl, whooshUrl, rustleUrl, tapUrl]) {
       void fetchFile(url);
     }
   },
@@ -382,16 +370,8 @@ export const sound = {
     if (enabled) void play(tapUrl, UI_LEVEL);
   },
 
-  /**
-   * An interactive object's reaction sound: its recorded sound if it has one, otherwise the
-   * synthesized cue for its kind. Plays only when sound is on.
-   */
-  cue(name: SoundCue, object?: string) {
-    const recorded = object && OBJECT_SOUNDS[object];
-    if (recorded) {
-      if (enabled) void play(recorded.url, recorded.level ?? OBJECT_LEVEL);
-      return;
-    }
+  /** A short reaction sound for an interactive object. Plays only when sound is on. */
+  cue(name: SoundCue) {
     const ac = context();
     if (!ac || !enabled) return;
     CUES[name](ac, ac.currentTime);
