@@ -297,3 +297,125 @@ function tagTexture(text: string) {
     g.fillText(text, 128, 68);
   });
 }
+
+/**
+ * Stadium floodlights as light, not objects: a soft glare at each lamp head, a faint beam
+ * falling to the pitch, and one gentle light that brightens the pitch. Nothing has a hard
+ * edge: the glare fades out from its centre, and the beams fade along their length and
+ * towards their sides.
+ */
+export function Floodlights({
+  lamps,
+  pitch,
+  beamReach = 0.6,
+}: {
+  lamps: Vec3[];
+  /** Where the lamps point: the middle of the pitch. */
+  pitch: Vec3;
+  /** How far each beam reaches towards the pitch, as a share of the way. */
+  beamReach?: number;
+}) {
+  const glare = useMemo(() => glareTexture(), []);
+  const beams = useMemo(
+    () =>
+      lamps.map((lamp) => {
+        const from = new THREE.Vector3(...lamp);
+        const to = from.clone().lerp(new THREE.Vector3(...pitch), beamReach);
+        const length = from.distanceTo(to);
+        const middle = from.clone().add(to).multiplyScalar(0.5);
+        // The cylinder's +Y end is the narrow lamp end.
+        const up = from.clone().sub(to).normalize();
+        const turn = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), up);
+        return { length, middle: middle.toArray() as Vec3, turn };
+      }),
+    [lamps, pitch, beamReach],
+  );
+  const beamMaterial = useMemo(() => beamShader(), []);
+
+  return (
+    <group>
+      {lamps.map((lamp, i) => (
+        <sprite key={`glare-${i}`} position={lamp} scale={0.9} raycast={noHit}>
+          <spriteMaterial
+            map={glare}
+            transparent
+            depthWrite={false}
+            blending={THREE.AdditiveBlending}
+            toneMapped={false}
+          />
+        </sprite>
+      ))}
+      {beams.map((b, i) => (
+        <mesh
+          key={`beam-${i}`}
+          position={b.middle}
+          quaternion={b.turn}
+          material={beamMaterial}
+          renderOrder={3}
+          raycast={noHit}
+        >
+          <cylinderGeometry args={[0.1, 0.85, b.length, 24, 1, true]} />
+        </mesh>
+      ))}
+      <pointLight
+        position={[pitch[0], pitch[1] + 1.6, pitch[2]]}
+        color="#fff4dc"
+        intensity={1.2}
+        distance={4.5}
+        decay={2}
+      />
+    </group>
+  );
+}
+
+/** Warm white glare: bright core, quick falloff, long faint tail. */
+function glareTexture() {
+  return canvasTexture(128, 128, (g) => {
+    const r = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+    r.addColorStop(0, 'rgba(255, 252, 240, 1)');
+    r.addColorStop(0.12, 'rgba(255, 244, 214, 0.75)');
+    r.addColorStop(0.35, 'rgba(255, 232, 190, 0.22)');
+    r.addColorStop(1, 'rgba(255, 228, 180, 0)');
+    g.fillStyle = r;
+    g.fillRect(0, 0, 128, 128);
+  });
+}
+
+/**
+ * Additive light-beam material: strongest at the lamp end (top of the cylinder), fading
+ * towards the pitch, and fading where the cone's surface turns side-on to the viewer, so
+ * its outline never shows.
+ */
+function beamShader() {
+  return new THREE.ShaderMaterial({
+    uniforms: { color: { value: new THREE.Color('#fff2d6') }, strength: { value: 0.22 } },
+    vertexShader: /* glsl */ `
+      varying float vAlong;
+      varying vec3 vNormal;
+      varying vec3 vView;
+      void main() {
+        vAlong = uv.y; // 1 at the lamp end, 0 at the far end
+        vec4 viewPos = modelViewMatrix * vec4(position, 1.0);
+        vNormal = normalize(normalMatrix * normal);
+        vView = normalize(-viewPos.xyz);
+        gl_Position = projectionMatrix * viewPos;
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      uniform vec3 color;
+      uniform float strength;
+      varying float vAlong;
+      varying vec3 vNormal;
+      varying vec3 vView;
+      void main() {
+        float facing = abs(dot(normalize(vNormal), normalize(vView)));
+        float a = strength * pow(vAlong, 1.8) * pow(facing, 1.5);
+        gl_FragColor = vec4(color * a, a);
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending,
+  });
+}

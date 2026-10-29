@@ -13,7 +13,14 @@ import { Squash } from '@/objects/reactions';
 import { GeneratedModel } from '../GeneratedModel';
 import { deg, FACE_CAMERA, view } from '../layout';
 import { useGroundHeights } from '../useGroundHeights';
-import { MessageBall, PercentTag, ScoreboardRows, StandScreen, TeamFlags } from './effects';
+import {
+  Floodlights,
+  MessageBall,
+  PercentTag,
+  ScoreboardRows,
+  StandScreen,
+  TeamFlags,
+} from './effects';
 
 /** Props for an object's Interactable, from the shared list in data/islandObjects.ts. */
 const interactive = (id: IslandObjectId) => {
@@ -43,9 +50,20 @@ const SCOREBOARD_HEIGHT = 3;
 const STANDS_HEIGHT = 1.8;
 const TOWERS_HEIGHT = 3.5;
 
+/** The stadium's four lamp heads, measured on the model (its highest points), at this size. */
+const FLOODLIGHT_LAMPS: [number, number, number][] = [
+  [-1.61, 1.62, 1.4],
+  [1.66, 1.62, -1.31],
+  [1.96, 1.62, 0.95],
+  [-1.48, 1.62, -1.35],
+];
+/** The middle of the pitch, where the lamps point. */
+const PITCH: [number, number, number] = [0, 0.3, 0];
+
 /**
  * Arena island (design: docs/plan/islands/arena.md). Every model is AI-generated; code
- * places them and gives the four achievement objects their reactions.
+ * places them, adds the floodlights' glare and beams, and gives the four achievement
+ * objects their reactions.
  */
 export function ArenaIsland() {
   const frame = useRef<THREE.Group>(null);
@@ -62,12 +80,10 @@ export function ArenaIsland() {
       <GeneratedModel ref={base} url={baseUrl} length={11} anchor="top" />
 
       {/* Centre: the stadium landmark (not interactive), long side across the view. */}
-      <GeneratedModel
-        url={stadiumUrl}
-        height={STADIUM_HEIGHT}
-        position={at('stadium')}
-        rotation-y={deg(FACE_CAMERA)}
-      />
+      <group position={at('stadium')} rotation-y={deg(FACE_CAMERA)}>
+        <GeneratedModel url={stadiumUrl} height={STADIUM_HEIGHT} />
+        <Floodlights lamps={FLOODLIGHT_LAMPS} pitch={PITCH} />
+      </group>
 
       <group position={at('scoreboard')} rotation-y={deg(FACE_CAMERA)}>
         <Interactable {...interactive('olimp-virtual')}>
