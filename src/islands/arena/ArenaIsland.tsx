@@ -102,8 +102,8 @@ export function ArenaIsland() {
         </Interactable>
       </group>
 
-      {/* Turned a little, so the deck runs partly into the view and stays off the rim. */}
-      <group position={at('booths')} rotation-y={deg(FACE_CAMERA + 25)}>
+      {/* The deck runs along the rim here (127°), so both ends stay on the grass. */}
+      <group position={at('booths')} rotation-y={deg(127)}>
         <Interactable {...interactive('olimp-iframe')}>
           <GeneratedModel url={boothsUrl} height={BOOTHS_HEIGHT} />
         </Interactable>
