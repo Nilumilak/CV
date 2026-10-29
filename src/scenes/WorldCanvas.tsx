@@ -7,6 +7,7 @@ import { debugCamera, isDebug, skipIntro } from '@/debug/isDebug';
 import { useWorldControls } from '@/debug/useWorldControls';
 import { Islands } from '@/islands/Islands';
 import { FlyIn } from '@/scenes/FlyIn';
+import { WelcomeSun } from '@/scenes/WelcomeSun';
 import { LoadingReporter } from '@/scenes/LoadingReporter';
 import { useWorld } from '@/store/useWorld';
 import { CloudLayers } from '@/world/CloudLayers';
@@ -45,6 +46,7 @@ export default function WorldCanvas() {
         <Suspense fallback={null}>
           <Route />
         </Suspense>
+        <WelcomeSun />
         <FlyIn />
         <CameraRig />
         <LoadingReporter />

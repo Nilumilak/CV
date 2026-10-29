@@ -22,10 +22,24 @@ const smoothstep = (a: number, b: number, x: number) => {
   return t * t * (3 - 2 * t);
 };
 
+/**
+ * The welcome view looks out towards the horizon (about 14° down), so the sky and the low
+ * welcome sun show above the sea of clouds. The dive tips down from it in its first part.
+ */
+const WELCOME_LOOK = new THREE.Vector3(0, -0.25, -1).normalize();
+/** Share of the dive over which the view tips from the welcome look to the dive's own. */
+const TIP_DOWN = 0.35;
+/** The welcome float: a slow drift of the gaze (radians) and a faint rise and fall. */
+const DRIFT = THREE.MathUtils.degToRad(2.5);
+const RISE = 0.35;
+
 const overviewTarget = new THREE.Vector3(...OVERVIEW.target);
 const cloudCenter = new THREE.Vector3(...FLY_IN_CLOUD.position);
 const lookTarget = new THREE.Vector3();
 const ahead = new THREE.Vector3();
+const look = new THREE.Vector3();
+const welcomeLook = new THREE.Vector3();
+const UP = new THREE.Vector3(0, 1, 0);
 
 /**
  * Owns the camera until the world is ready: holds the welcome view, flies the dive,
@@ -45,13 +59,26 @@ export function FlyIn() {
   const from = useRef(0);
   const duration = useRef(DURATION);
   const introSeen = useRef(false);
+  /** The welcome float where it was when the dive began, faded out as the view tips down. */
+  const float = useRef({ drift: 0, rise: 0 });
 
-  /** Puts the camera at curve position k (0..1), looking along the path, then at the islands. */
-  const placeAt = (k: number, sway = 0) => {
+  /**
+   * Puts the camera at curve position k (0..1), looking along the path, then at the
+   * islands. `welcome` (0..1) turns the gaze towards the welcome view instead; `drift`
+   * swings that view sideways (radians) and `rise` lifts the camera a little.
+   */
+  const placeAt = (k: number, welcome = 0, drift = 0, rise = 0) => {
     camera.position.copy(curve.getPointAt(k));
+    camera.position.y += rise;
     ahead.copy(curve.getPointAt(Math.min(k + 0.02, 1)));
     lookTarget.lerpVectors(ahead, overviewTarget, smoothstep(0.6, 1, k));
-    lookTarget.x += sway;
+    if (welcome > 0) {
+      // Blend directions, not points: the path's look point is only a few units ahead.
+      look.subVectors(lookTarget, camera.position).normalize();
+      welcomeLook.copy(WELCOME_LOOK).applyAxisAngle(UP, drift);
+      look.lerp(welcomeLook, welcome).normalize();
+      lookTarget.copy(camera.position).add(look);
+    }
     camera.lookAt(lookTarget);
   };
 
@@ -73,7 +100,7 @@ export function FlyIn() {
   useLayoutEffect(() => {
     if (phase === 'loading' || phase === 'welcome') {
       introSeen.current = true;
-      placeAt(0);
+      placeAt(0, 1);
     } else if (phase === 'flyIn') {
       introSeen.current = true;
       const returning = useWorld.getState().visited.length > 0;
@@ -101,15 +128,19 @@ export function FlyIn() {
     }
 
     if (current === 'loading' || current === 'welcome') {
-      // A slow, gentle look around while the visitor reads the welcome screen.
-      placeAt(0, Math.sin(state.clock.elapsedTime * 0.25) * 6);
+      // Hanging in the air while the visitor reads: a slow drift and a faint rise and fall.
+      const t = state.clock.elapsedTime;
+      float.current = { drift: Math.sin(t * 0.15) * DRIFT, rise: Math.sin(t * 0.32) * RISE };
+      placeAt(0, 1, float.current.drift, float.current.rise);
       return;
     }
     if (current !== 'flyIn') return;
 
     progress.current = Math.min(progress.current + delta / duration.current, 1);
     const k = from.current + (1 - from.current) * easeInOutCubic(progress.current);
-    placeAt(k);
+    // A full dive starts from the welcome view; a returning visitor's short one does not.
+    const tip = from.current === 0 ? 1 - smoothstep(0, TIP_DOWN, progress.current) : 0;
+    placeAt(k, tip, float.current.drift * tip, float.current.rise * tip);
 
     applyCloudEffects(progress.current);
 
