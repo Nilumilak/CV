@@ -126,7 +126,10 @@ const SOUNDS = {
   // Lighthouse.
   'kafka-auth': {
     seconds: 3.4,
-    prompt: 'A lighthouse lamp switching on and sweeping around, a warm low electric hum swelling and fading.',
+    prompt:
+      'Cartoon seaside sound from a hand-drawn animated film: a flock of seagulls calling clearly ' +
+      'and cheerfully close by, several gull cries overlapping, over gentle sea waves washing in ' +
+      'and out by a lighthouse. Lively but cosy, not harsh.',
   },
 
   // Market Town.
@@ -231,6 +234,8 @@ const PICKS = {
   'eco-build': 'eco-build-7',
   'eco-lead': 'eco-lead-9',
   'eco-payments': 'eco-payments-6',
+  // A mix made with ffmpeg: kafka-auth-5 (waves) with kafka-auth-8 (gulls) at 70%.
+  'kafka-auth': 'kafka-auth-11',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
