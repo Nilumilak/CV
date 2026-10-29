@@ -2,7 +2,7 @@
 
 [Back to Phase 4](../phase-4-island-art.md) · [AI model prompts](../phase-4-ai-prompts.md) · Previous: [Arena](arena.md)
 
-**Status:** design draft for review (2026-10-29). Nothing generated yet.
+**Status:** design decided (2026-10-29, section 7). Generating models.
 
 ---
 
@@ -135,12 +135,6 @@ Lessons applied: three-quarter views with volume for every concept, extra care f
 
 ---
 
-## 7. Questions for you
+## 7. Decisions (2026-10-29)
 
-1. **Waterfall** pouring off the right edge, made in code (animated water and mist). OK?
-2. **Recycling bins:** litter flies into the right bins and a "trash-free.ru" tag pops up. OK?
-3. **Saplings:** four saplings grow into small trees one by one. OK?
-4. **The shrine** under the big tree. Keep it (a small mossy stone shrine), or something else there, such as a wooden bench or a stone lantern?
-5. **Collection box** for ЮKassa: coins drop in and a green check pops up. OK?
-6. **Noticeboard** for the admin-editable content: notes shuffle and change colour. OK?
-7. **Credits:** about 265. OK?
+All seven proposals accepted as written: the code-made waterfall, the recycling bins with litter and the "trash-free.ru" tag, the growing saplings, the mossy stone shrine under the big tree, the collection box for ЮKassa, the noticeboard for admin-editable content, and about 265 credits.

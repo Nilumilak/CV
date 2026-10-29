@@ -564,6 +564,84 @@ warm lit windows on each tower on the sides facing each other, flat roofs with s
 
 ---
 
+## Green Grove island
+
+Full design description and decisions: [islands/grove.md](islands/grove.md).
+
+A calm mossy grove: a huge old tree with a small shrine at its foot, recycling bins, saplings, a collection box and a noticeboard. The two trees use the foliage volume line (see the volume rule). The noticeboard's face stays plain; its notes are code-made.
+
+| #   | File name            | Object                                     | Budget           | Interactive          | Status |
+| --- | -------------------- | ------------------------------------------ | ---------------- | -------------------- | ------ |
+| 1   | `island-base.glb`    | Mossy rock island, grass and moss to edge  | 15,000 triangles | No                   | To do  |
+| 2   | `big-tree.glb`       | Huge old tree                              | 8,000            | No (landmark)        | To do  |
+| 3   | `shrine.glb`         | Small mossy stone shrine                   | 2,000            | No                   | To do  |
+| 4   | `recycling-bins.glb` | Three recycling bins in a row              | 3,000            | Yes: led the team    | To do  |
+| 5   | `sapling.glb`        | One staked sapling (placed ×4)             | 1,500            | Yes: built, mentored | To do  |
+| 6   | `noticeboard.glb`    | Wooden noticeboard on legs, plain face     | 2,000            | Yes: admin content   | To do  |
+| 7   | `collection-box.glb` | Wooden collection box on a post, coin slot | 1,500            | Yes: ЮKassa payments | To do  |
+
+### 1. Island base
+
+```
+A small floating sky island seen from a three-quarter view from slightly above: a chunk of dark
+mossy rock shaped like an upside-down cone, layered strata with moss and small ferns in the cracks,
+a few hanging roots and vines underneath. The flat top is evenly covered in lush short green grass
+and soft moss right up to the edge, with no bare patches. Wider than it is tall.
+```
+
+### 2. Big old tree
+
+```
+One huge old broad-leaf tree with a thick twisting mossy trunk and big roots gripping the ground,
+and a wide domed crown of lush deep green leaf clumps. Rendered as a solid sculpted 3D model seen
+from a three-quarter view from slightly above. The foliage is a full rounded volume of chunky leaf
+clumps that wrap all the way around, with clumps behind clumps, sunlit tops and darker shaded
+undersides. Not a flat illustration, not a sticker.
+```
+
+### 3. Shrine
+
+```
+A small mossy stone wayside shrine, seen from a three-quarter view from slightly above: a simple
+little stone box on a short stone base, a small pitched stone roof covered in moss, a tiny
+offering shelf in front. Old, weathered, calm.
+```
+
+### 4. Recycling bins
+
+```
+Three small rounded recycling bins standing side by side, seen from a three-quarter view from
+slightly above: one green, one blue, one yellow, each with a rounded hinged lid and a soft white
+stripe, no symbols or writing. Chunky, friendly shapes.
+```
+
+### 5. Sapling
+
+```
+A single young sapling tied to a thin wooden stake, seen from a three-quarter view from slightly
+above: a slim trunk and a small round crown of fresh green leaves, a little mound of soil at its
+foot. Rendered as a solid sculpted 3D model; the small crown is a full rounded volume of leaf
+clumps with sunlit tops and shaded undersides.
+```
+
+### 6. Noticeboard
+
+```
+A wooden noticeboard standing on two legs with a small pitched wooden roof on top, seen from a
+three-quarter view from slightly above: a plain empty cork board face in a wooden frame, no notes,
+no paper, no writing.
+```
+
+### 7. Collection box
+
+```
+A small wooden collection box on a sturdy wooden post, seen from a three-quarter view from slightly
+above: a box with a coin slot on top, brass corners and a little pitched wooden roof, like a
+donation box at a nature reserve. No writing.
+```
+
+---
+
 ## Checklist for a good result
 
 - [ ] The concept shows the object from a three-quarter view, with shading that shows its volume (see the volume rule).

@@ -155,7 +155,7 @@ Full design description: [islands/arena.md](islands/arena.md).
 
 ### Green Grove · Eco Activists
 
-Full design description: [islands/grove.md](islands/grove.md) (draft for review).
+Full design description: [islands/grove.md](islands/grove.md).
 
 - **Base:** mossy rock with a waterfall pouring off one edge into the clouds.
 - **Landmark:** a huge old tree with a little shrine under it.
