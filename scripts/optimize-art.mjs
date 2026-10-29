@@ -105,6 +105,7 @@ const MODELS = [
   { from: 'lighthouse/island-base.glb', to: 'models/lighthouse/island-base.glb', texture: 1024 },
   { from: 'lighthouse/lighthouse.glb', to: 'models/lighthouse/lighthouse.glb', texture: 1024 },
   { from: 'lighthouse/sky-boat.glb', to: 'models/lighthouse/sky-boat.glb', texture: 512 },
+  { from: 'lighthouse/lifebuoy-post.glb', to: 'models/lighthouse/lifebuoy-post.glb', texture: 512 },
 
   // Shared kit, reused across islands
   { from: 'shared/rock-cluster.glb', to: 'models/shared/rock-cluster.glb', texture: 512 },

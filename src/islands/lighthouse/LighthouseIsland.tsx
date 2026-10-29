@@ -1,9 +1,9 @@
 import { useRef } from 'react';
 import type * as THREE from 'three';
 import baseUrl from '@/assets/models/lighthouse/island-base.glb?url';
+import buoyPostUrl from '@/assets/models/lighthouse/lifebuoy-post.glb?url';
 import lighthouseUrl from '@/assets/models/lighthouse/lighthouse.glb?url';
 import boatUrl from '@/assets/models/lighthouse/sky-boat.glb?url';
-import mailboxUrl from '@/assets/models/home/mailbox.glb?url';
 import rockUrl from '@/assets/models/shared/rock-cluster.glb?url';
 import { islandObject, type IslandObjectId } from '@/data/islandObjects';
 import { Interactable } from '@/objects/Interactable';
@@ -35,7 +35,7 @@ const BASE_SHIFT = 1.14;
  */
 const SPOTS = {
   lighthouse: view(1.0, -1.2),
-  mailbox: view(-1.5, 3.0),
+  buoyPost: view(-1.5, 3.0),
   rocks1: view(2.5, 1.5),
   rocks2: view(-2.4, -1.8),
 } satisfies Record<string, [number, number]>;
@@ -49,7 +49,7 @@ const BOAT: [number, number, number] = [0, -1.1, 8.1];
 
 /**
  * Lighthouse island (design: docs/plan/islands/lighthouse.md). Every model is AI-generated
- * (the mailbox is Home's); code places them, turns the lamp's beam, bobs the boat and flies
+ * (the rocks are shared); code places them, turns the lamp's beam, bobs the boat and flies
  * the seagull.
  */
 export function LighthouseIsland() {
@@ -86,9 +86,9 @@ export function LighthouseIsland() {
       <Seagull centre={[SPOTS.lighthouse[0], 7.2, SPOTS.lighthouse[1]]} radius={3.2} />
 
       <GeneratedModel
-        url={mailboxUrl}
-        height={1.0}
-        position={at('mailbox')}
+        url={buoyPostUrl}
+        height={1.1}
+        position={at('buoyPost')}
         rotation-y={deg(FACE_CAMERA)}
       />
 

@@ -47,7 +47,7 @@ A small island, so no two rows: the lighthouse just behind the middle, the dock 
 
 ```
                     [ LIGHTHOUSE ]
-        [mailbox]
+        [lifebuoy]
   [boat] ===== dock
         front (towards the camera)
 ```
@@ -56,7 +56,7 @@ A small island, so no two rows: the lighthouse just behind the middle, the dock 
 | ---------- | --------------------- | ---------- | ----------------------------------------------------------- |
 | Lighthouse | 1.0, −1.2             | 6.5 tall   | Landmark and the interactive object                         |
 | Dock       | part of base          |            | The base is shifted so its round grass top is in the middle |
-| Mailbox    | −1.5, 3.0             | 1.0 tall   | Home's, on the grass by the dock; not interactive           |
+| Lifebuoy post | −1.5, 3.0          | 1.1 tall   | On the grass by the dock; not interactive                   |
 | Sky boat   | past the dock         | 2.5 long   | Just past the dock's end in open sky, bobbing and swaying   |
 | Rocks      | 2.5, 1.5 · −2.4, −1.8 | shared kit | Two, free                                                   |
 
@@ -78,7 +78,7 @@ The original plan had the tooltip offer a link to the pull request. The panel al
 ### Not interactive
 
 - **Sky boat:** a small wooden boat with a sail, waiting just past the dock's end, bobbing and swaying gently (code).
-- **Mailbox:** Home's mailbox on the grass by the dock, a small link back to Home.
+- **Lifebuoy post:** a weathered post with a red-and-white lifebuoy and a coil of rope, on the grass by the dock. It replaced Home's borrowed mailbox (2026-10-29), so the island has its own seaside prop.
 - **Seagull:** one gull gliding in slow circles round the lighthouse (code-made from a few simple shapes, wings flapping now and then). A small character is what AI 3D builds worst, so it is not generated.
 
 ---
@@ -91,7 +91,7 @@ The original plan had the tooltip offer a link to the pull request. The panel al
 | 2   | `lighthouse.glb`  | White tower with red stripes, glass lamp room, gallery railing, red cap | 8,000       |
 | 3   | `sky-boat.glb`    | Small wooden boat with a mast and a patched sail                        | 3,000       |
 
-The mailbox and rocks are reused; the beam and the gull are code.
+The rocks are reused; the beam and the gull are code.
 
 | Step               | Items | Credits  |
 | ------------------ | ----- | -------- |
