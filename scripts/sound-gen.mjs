@@ -179,7 +179,10 @@ const SOUNDS = {
   },
   'radio-services': {
     seconds: 1.8,
-    prompt: 'A satellite dish turning with a soft motor whirr, then a few soft radio signal pings.',
+    prompt:
+      'Cartoon radio waves from a hand-drawn animated film: a satellite dish sending out signals, ' +
+      'playful wobbly wave sounds rippling outwards, wub-wub-wub with soft beeping pings. ' +
+      'Whimsical and bouncy, not realistic, not harsh.',
   },
   'radio-ui': {
     seconds: 1,
@@ -251,6 +254,7 @@ const PICKS = {
   'radio-llm': 'radio-llm-1',
   'radio-backend': 'radio-backend-3',
   'radio-platform': 'radio-platform-1',
+  'radio-services': 'radio-services-6',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
