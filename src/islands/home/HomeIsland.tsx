@@ -13,8 +13,17 @@ import stumpUrl from '@/assets/models/home/stump.glb?url';
 import treeUrl from '@/assets/models/home/big-tree.glb?url';
 import { homeObject, type HomeObjectId } from '@/data/homeObjects';
 import { Interactable } from '@/objects/Interactable';
-import { Hop, Spin, Wobble } from '@/objects/reactions';
-import { Breathe, ChimneySmoke, Fireflies, LanternGlow, PoppingLetter, Sway } from '../ambient';
+import { Spin, Wobble } from '@/objects/reactions';
+import {
+  Breathe,
+  ChimneySmoke,
+  Fireflies,
+  LanternGlow,
+  PoppingLetter,
+  SleepyZs,
+  Snuggle,
+  Sway,
+} from '../ambient';
 import { GeneratedModel } from '../GeneratedModel';
 import { useGroundHeights } from '../useGroundHeights';
 
@@ -54,8 +63,8 @@ const STONES = [
   { spot: 'stone4', size: 0.7, turn: 220 },
 ] as const;
 
-/** Island-unit sizes that the cat and globe sit on. Tuned from screenshots. */
-const BENCH_SEAT_HEIGHT = 0.42;
+/** Island-unit sizes that the cat and globe sit on. The cat lies on the seat, not in it. */
+const BENCH_SEAT_HEIGHT = 0.5;
 const STUMP_HEIGHT = 0.6;
 
 /**
@@ -96,13 +105,15 @@ export function HomeIsland() {
       <group position={at('bench')} rotation-y={deg(-30)}>
         <GeneratedModel url={benchUrl} length={1.6} />
         <group position={[0.15, BENCH_SEAT_HEIGHT, 0]} rotation-y={deg(30)}>
+          {/* Asleep, and it stays asleep: poked, it takes a deep breath and z's float up. */}
           <Interactable {...interactive('home-cat')}>
-            <Hop id="home-cat">
+            <Snuggle id="home-cat">
               <Breathe>
                 <GeneratedModel url={catUrl} length={0.9} />
               </Breathe>
-            </Hop>
+            </Snuggle>
           </Interactable>
+          <SleepyZs id="home-cat" position={[0.15, 0.55, 0.1]} />
         </group>
       </group>
 

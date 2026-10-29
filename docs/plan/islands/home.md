@@ -110,7 +110,7 @@ An old broad-leaf tree with a thick twisting trunk, visible roots and a wide rou
 A chubby orange tabby lying on the bench, eyes half closed. About 0.9 m long, oversized on purpose.
 
 - **Idle:** the tail tip flicks, and every few seconds the cat breathes slowly.
-- **Click:** the cat stretches, yawns, and a speech bubble opens with the summary's first line, while the panel highlights the summary.
+- **Click:** it stays asleep: it takes one slow, deep, contented breath with a small sleepy shuffle, and three soft "z"s float up from it and fade (`Snuggle` and `SleepyZs` in `ambient.tsx`).
 - **Why the cat:** the summary is "who I am", and the cat is the soul of the home, as in the lofi reference.
 
 ### Garden lantern → skills

@@ -203,3 +203,94 @@ export function PoppingLetter({
     </group>
   );
 }
+
+/** A sleeping cat's click, in seconds: one slow, deep breath and a few drifting z's. */
+const SLEEPY_SECONDS = 3;
+
+/**
+ * A sleeping animal nestling deeper when it is poked: one slow, deep, contented breath
+ * (rising and sinking), with a small sleepy shuffle side to side. It never wakes.
+ * Origin at the bottom.
+ */
+export function Snuggle({ id, children }: { id: string; children: ReactNode }) {
+  const ref = useRef<THREE.Group>(null!);
+  const progress = useReaction(id, SLEEPY_SECONDS);
+  useFrame(({ clock }) => {
+    const p = progress(clock.elapsedTime);
+    const g = ref.current;
+    if (p === null) {
+      g.scale.setScalar(1);
+      g.rotation.z = 0;
+      return;
+    }
+    const breath = Math.sin(p * Math.PI);
+    g.scale.set(1 + breath * 0.04, 1 + breath * 0.09, 1 + breath * 0.04);
+    // Two small rocks, dying away, as it settles back in.
+    g.rotation.z = Math.sin(p * Math.PI * 4) * 0.05 * (1 - p);
+  });
+  return <group ref={ref}>{children}</group>;
+}
+
+/** A soft hand-lettered "z" for a sleeping animal. */
+function zTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 128;
+  const g = canvas.getContext('2d')!;
+  g.font = 'bold 104px "Fredoka", "Nunito", sans-serif';
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.lineJoin = 'round';
+  g.lineWidth = 14;
+  g.strokeStyle = 'rgba(58, 46, 42, 0.55)';
+  g.strokeText('z', 64, 68);
+  g.fillStyle = '#fffaf0';
+  g.fillText('z', 64, 68);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
+const ZS = 3;
+
+/**
+ * Three soft z's that float up from a sleeper one after another, drifting and swaying,
+ * growing a little and fading: "still asleep".
+ */
+export function SleepyZs({ id, position }: { id: string; position: [number, number, number] }) {
+  const sprites = useRef<THREE.Sprite[]>([]);
+  const texture = useMemo(() => zTexture(), []);
+  const progress = useReaction(id, SLEEPY_SECONDS);
+  useFrame(({ clock }) => {
+    const p = progress(clock.elapsedTime);
+    sprites.current.forEach((s, i) => {
+      if (!s) return;
+      const k = p === null ? -1 : (p * SLEEPY_SECONDS - 0.3 - i * 0.55) / 1.6;
+      s.visible = k > 0 && k < 1;
+      if (!s.visible) return;
+      s.position.set(
+        position[0] + k * 0.35 + Math.sin(k * 6 + i) * 0.06,
+        position[1] + k * 0.75,
+        position[2],
+      );
+      s.scale.setScalar((0.14 + i * 0.05) * (0.6 + k * 0.6));
+      (s.material as THREE.SpriteMaterial).opacity = Math.min(1, k * 5) * (1 - k);
+      (s.material as THREE.SpriteMaterial).rotation = Math.sin(k * 4 + i) * 0.25;
+    });
+  });
+  return (
+    <group>
+      {Array.from({ length: ZS }, (_, i) => (
+        <sprite
+          key={i}
+          ref={(el) => {
+            if (el) sprites.current[i] = el;
+          }}
+          visible={false}
+          raycast={() => null}
+        >
+          <spriteMaterial map={texture} transparent depthWrite={false} toneMapped={false} />
+        </sprite>
+      ))}
+    </group>
+  );
+}
