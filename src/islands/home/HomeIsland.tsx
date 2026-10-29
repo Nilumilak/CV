@@ -55,8 +55,8 @@ const SPOTS = {
   stone2: [1.2, 1.4],
   stone3: [1.8, 1.85],
   stone4: [2, 2.6],
-  hydrangea: [-3.7, 1.0],
-  daisy: [-2.2, 3.4],
+  hydrangea: [-3.7, 1.6],
+  daisy: [0.2, 4.0],
 } as const satisfies Record<string, [number, number]>;
 
 const STONES = [

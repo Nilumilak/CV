@@ -6,19 +6,28 @@ import { introAt } from '@/debug/isDebug';
 import { useWorld } from '@/store/useWorld';
 import { setVeilOpacity } from './introEffects';
 
-/** Full dive length in seconds. */
-const DURATION = 5;
+/** Full dive length in seconds, the drift back included. */
+const DURATION = 6.5;
 /**
  * Returning visitors take the same dive from the welcome view, only faster. (Starting them
  * partway down the curve made the camera jump from the welcome view into the clouds.)
  */
-const RETURN_DURATION = 3;
+const RETURN_DURATION = 3.9;
 
 const BASE_FOV = 45;
 /** Extra field of view at the fastest point of the dive, for a sense of speed. */
 const FOV_KICK = 14;
 
 const easeInOutCubic = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const easeInOutSine = (x: number) => (1 - Math.cos(Math.PI * x)) / 2;
+
+/**
+ * Out of the clouds the camera glides past the overview, a little closer to the islands,
+ * then drifts back to it, instead of braking to a stop on it. OVERSHOOT is how much closer
+ * (island units), and the drift back takes the last SETTLE share of the dive.
+ */
+const OVERSHOOT = 8;
+const SETTLE = 0.22;
 const smoothstep = (a: number, b: number, x: number) => {
   const t = THREE.MathUtils.clamp((x - a) / (b - a), 0, 1);
   return t * t * (3 - 2 * t);
@@ -36,6 +45,11 @@ const DRIFT = THREE.MathUtils.degToRad(2.5);
 const RISE = 0.35;
 
 const overviewTarget = new THREE.Vector3(...OVERVIEW.target);
+const overviewPosition = new THREE.Vector3(...OVERVIEW.position);
+/** The point past the overview where the glide turns back, on the line towards the islands. */
+const turnPoint = overviewPosition
+  .clone()
+  .add(overviewTarget.clone().sub(overviewPosition).setLength(OVERSHOOT));
 const cloudCenter = new THREE.Vector3(...FLY_IN_CLOUD.position);
 const lookTarget = new THREE.Vector3();
 const ahead = new THREE.Vector3();
@@ -52,10 +66,19 @@ export function FlyIn() {
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
   const phase = useWorld((s) => s.phase);
 
-  const curve = useMemo(
-    () => new THREE.CatmullRomCurve3(FLY_IN_POINTS.map((p) => new THREE.Vector3(...p))),
-    [],
-  );
+  /**
+   * The dive path runs on past the overview to the turn point. `overviewAt` is where the
+   * overview sits on it, as a share of its length; dive progress k is measured so that
+   * k = 1 is the overview and k = PAST (above 1) is the turn point.
+   */
+  const { curve, overviewAt } = useMemo(() => {
+    const points = [...FLY_IN_POINTS.map((p) => new THREE.Vector3(...p)), turnPoint];
+    const path = new THREE.CatmullRomCurve3(points);
+    const steps = (points.length - 1) * 100;
+    const lengths = path.getLengths(steps);
+    return { curve: path, overviewAt: lengths[steps - 100] / lengths[steps] };
+  }, []);
+  const PAST = 1 / overviewAt;
 
   const progress = useRef(0);
   const duration = useRef(DURATION);
@@ -64,14 +87,15 @@ export function FlyIn() {
   const float = useRef({ drift: 0, rise: 0 });
 
   /**
-   * Puts the camera at curve position k (0..1), looking along the path, then at the
-   * islands. `welcome` (0..1) turns the gaze towards the welcome view instead; `drift`
+   * Puts the camera at dive progress k (0 = welcome view, 1 = overview, up to PAST),
+   * looking along the path, then at the islands. `welcome` (0..1) turns the gaze towards the welcome view instead; `drift`
    * swings that view sideways (radians) and `rise` lifts the camera a little.
    */
   const placeAt = (k: number, welcome = 0, drift = 0, rise = 0) => {
-    camera.position.copy(curve.getPointAt(k));
+    const u = Math.min(k * overviewAt, 1);
+    camera.position.copy(curve.getPointAt(u));
     camera.position.y += rise;
-    ahead.copy(curve.getPointAt(Math.min(k + 0.02, 1)));
+    ahead.copy(curve.getPointAt(Math.min(u + 0.02, 1)));
     lookTarget.lerpVectors(ahead, overviewTarget, smoothstep(0.6, 1, k));
     if (welcome > 0) {
       // Blend directions, not points: the path's look point is only a few units ahead.
@@ -137,7 +161,11 @@ export function FlyIn() {
     if (current !== 'flyIn') return;
 
     progress.current = Math.min(progress.current + delta / duration.current, 1);
-    const k = easeInOutCubic(progress.current);
+    const t = progress.current;
+    const k =
+      t < 1 - SETTLE
+        ? PAST * easeInOutCubic(t / (1 - SETTLE))
+        : PAST + (1 - PAST) * easeInOutSine((t - (1 - SETTLE)) / SETTLE);
     const tip = 1 - smoothstep(0, TIP_DOWN, progress.current);
     placeAt(k, tip, float.current.drift * tip, float.current.rise * tip);
 
