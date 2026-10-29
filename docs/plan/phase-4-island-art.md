@@ -145,6 +145,8 @@ Full design description: [islands/market.md](islands/market.md).
 
 ### Arena · Olimpbet KZ
 
+Full design description: [islands/arena.md](islands/arena.md) (draft for review).
+
 - **Base:** wide flat disc island.
 - **Landmark:** small open-air stadium with four floodlight towers.
 - **Objects to model:** big scoreboard, three screens (phone, desktop, gate with a lock), a parcel box, two towers with facing windows.
