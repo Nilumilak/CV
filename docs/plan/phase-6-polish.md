@@ -84,6 +84,7 @@ export function Effects() {
 - Wind and whoosh must ask for a *whimsical, hand-drawn animated film* sound and rule out realism ("no engine, no airplane"); realistic versions were rejected.
 - ElevenLabs Music writes a complete piece with an ending. The music loop cuts music-3 at 54 s, just after its final chord starts, and lays the chord's fading tail (54–60 s) over the opening, so the loop rings on into its first notes.
 - Picked: wind-5, music-3 (as the loop), whoosh-6, rustle-1 (an island panel opens or changes island), tap-1 (any interface button or link). Home: home-cat-6, home-bookshelf-1, home-mailbox-1, home-lantern-4 (a cartoon light switching on; an electric-zap version is being tried). The globe keeps its synthesized whirr: three rounds of recorded versions lost to it. Grove: eco-build-4, eco-lead-5, eco-payments-6 (all from cartoon prompts); the noticeboard keeps its synthesized paper sound.
+- [ ] Remove the temporary "Object sounds: new / old" comparison button (`SoundCompare` in `src/ui/Overlay.tsx` and `sound.toggleObjectsRecorded`) once every object's sound is picked.
 - [ ] Per-island ambience with drei `PositionalAudio`, or simple distance-based volume through howler: radio static, crowd, birds and water, machinery, tram bells.
 - [ ] Lower the ambient music slightly when an island is focused, so the island's own sound comes through.
 - [ ] Check the overall mix on laptop speakers and on headphones. Nothing should be startling.

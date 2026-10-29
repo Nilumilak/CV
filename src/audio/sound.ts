@@ -50,6 +50,11 @@ let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
 let ambientStarted = false;
 let enabled = false;
+/**
+ * TEMPORARY comparison switch (the button in ui/Overlay.tsx): false plays the old synthesized
+ * cue for every object. Remove both once all object sounds are picked.
+ */
+let objectsRecorded = true;
 let suspendTimer: number | undefined;
 
 function context(): AudioContext | null {
@@ -349,6 +354,12 @@ const CUES: Record<SoundCue, (ac: AudioContext, t: number) => void> = {
 };
 
 export const sound = {
+  /** TEMPORARY: switch objects between recorded and synthesized sounds, for comparing. */
+  toggleObjectsRecorded() {
+    objectsRecorded = !objectsRecorded;
+    return objectsRecorded;
+  },
+
   /** Start downloading the sound files, so the first sounds don't wait on the network. */
   preload() {
     const objects = Object.values(OBJECT_SOUNDS).map((s) => s.url);
@@ -397,7 +408,7 @@ export const sound = {
    * synthesized cue for its kind. Plays only when sound is on.
    */
   cue(name: SoundCue, object?: string) {
-    const recorded = object && OBJECT_SOUNDS[object];
+    const recorded = object && objectsRecorded && OBJECT_SOUNDS[object];
     if (recorded) {
       if (enabled) void play(recorded.url, recorded.level ?? OBJECT_LEVEL);
       return;

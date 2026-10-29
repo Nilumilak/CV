@@ -84,9 +84,9 @@ const SOUNDS = {
   'home-lantern': {
     seconds: 2.4,
     prompt:
-      'Cartoon electric zap from a hand-drawn animated film: a quick playful bzzt-zap as a lantern ' +
-      'switches on, a bright little pop of light, then a soft warm hum settling. Whimsical and ' +
-      'bouncy, not realistic, not harsh.',
+      'Classic exaggerated cartoon zap, like in an old animated cartoon: a springy, wobbly zzzap ' +
+      'with a comical bouncy twang and a cute little sparkle as a lantern flicks on. Very cartoony, ' +
+      'goofy and playful, not realistic, not harsh.',
   },
   'home-mailbox': {
     seconds: 1.3,
