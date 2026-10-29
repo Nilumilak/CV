@@ -4,21 +4,19 @@ import type { IslandId, Vec3 } from '@/data/types';
 import { layoutOf } from '@/data/world';
 
 /**
- * Where each cable post stands on an island, towards each neighbour on the route, in that
- * island's units. Measured on the base models: about 0.7 in from the grass edge, on the
- * grass height there, turned along the rim where an object stood in the way.
+ * Where each rope is tied to an island, towards each neighbour on the route, in that
+ * island's units: on the rim straight towards the neighbour, just under the grass lip, so
+ * nothing stands on the island's top. Measured on the base models.
  */
-const POSTS: Partial<Record<IslandId, Partial<Record<IslandId, Vec3>>>> = {
-  workshop: { grove: [2.34, -0.39, -1.88] },
-  // Grove's Workshop post stands at the left between the noticeboard and the bins (view
-  // -3.4, 0.9): from behind the trunk the cable ran through the big tree's crown.
-  grove: { workshop: [-1.29, -0.33, 3.25], radio: [1.94, -0.28, -2.61] },
-  radio: { grove: [-4.13, -0.28, 2.24], arena: [4.51, -0.29, 1.5] },
-  arena: { radio: [-4.57, -0.11, -1.09], market: [4.44, -0.18, 1.54] },
-  market: { arena: [-4.15, -0.18, -2.31] },
+const ANCHORS: Partial<Record<IslandId, Partial<Record<IslandId, Vec3>>>> = {
+  workshop: { grove: [3.04, -0.74, -2.03] },
+  grove: { workshop: [-3.12, -0.64, 2.08], radio: [3.65, -0.68, -1.22] },
+  radio: { grove: [-5.03, -0.59, 1.67], arena: [5.03, -0.64, 1.67] },
+  arena: { radio: [-4.93, -0.51, -1.64], market: [5.14, -0.5, 1.29] },
+  market: { arena: [-5.14, -0.53, -1.29] },
 };
 
-/** One stretch of cable between neighbouring career islands, with its two post spots. */
+/** One rope between neighbouring career islands, with its two tie points. */
 export interface Span {
   from: IslandId;
   to: IslandId;
@@ -31,40 +29,35 @@ export const SPANS: Span[] = (() => {
   const stops = chapters.filter((c) => c.kind === 'job').map((c) => c.id as IslandId);
   return stops.slice(1).map((to, i) => {
     const from = stops[i]!;
-    const a = POSTS[from]?.[to];
-    const b = POSTS[to]?.[from];
-    if (!a || !b) throw new Error(`No cable posts measured between ${from} and ${to}`);
+    const a = ANCHORS[from]?.[to];
+    const b = ANCHORS[to]?.[from];
+    if (!a || !b) throw new Error(`No rope anchors measured between ${from} and ${to}`);
     return { from, to, a, b };
   });
 })();
 
-/** Name of the post on one island that holds the cable to another. */
-export const postKey = (island: IslandId, towards: IslandId) => `${island}>${towards}`;
+/** Name of the tie point on one island that holds the rope to another. */
+export const anchorKey = (island: IslandId, towards: IslandId) => `${island}>${towards}`;
 
-/** Where a post stands in the world when the islands are at rest. */
-export function restPosition(island: IslandId, post: Vec3) {
+/** Where a tie point is in the world when the islands are at rest. */
+export function restPosition(island: IslandId, anchor: Vec3) {
   const layout = layoutOf(island);
-  return new THREE.Vector3(...post)
+  return new THREE.Vector3(...anchor)
     .multiplyScalar(layout.scale)
     .add(new THREE.Vector3(...layout.position));
 }
 
-/**
- * The posts on one island, each turned so its pulley (and the cable) faces the post
- * across the gap.
- */
-export function postsOn(island: IslandId) {
+/** The tie points on one island. */
+export function anchorsOn(island: IslandId) {
   return SPANS.flatMap((s) => {
-    const towards = s.from === island ? s.to : s.to === island ? s.from : null;
-    if (!towards) return [];
-    const [mine, theirs] = s.from === island ? [s.a, s.b] : [s.b, s.a];
-    const d = restPosition(towards, theirs).sub(restPosition(island, mine));
-    return [{ key: postKey(island, towards), position: mine, yaw: Math.atan2(-d.z, d.x) }];
+    if (s.from === island) return [{ key: anchorKey(island, s.to), position: s.a }];
+    if (s.to === island) return [{ key: anchorKey(island, s.from), position: s.b }];
+    return [];
   });
 }
 
 /**
- * The top of each post's pulley, by postKey. The posts live inside their islands (so they
- * bob and grow on hover with them); the cables read these to know where to hang.
+ * Each tie point's object, by anchorKey. They live inside their islands (so they bob and
+ * grow on hover with them); the ropes read these to know where to hang.
  */
-export const pulleys = new Map<string, THREE.Object3D>();
+export const anchors = new Map<string, THREE.Object3D>();

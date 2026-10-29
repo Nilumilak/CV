@@ -1,37 +1,16 @@
 import { useMemo, useRef } from 'react';
-import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { useReducedMotion } from 'motion/react';
 import * as THREE from 'three';
-import gondolaUrl from '@/assets/models/route/gondola.glb?url';
-import { GeneratedModel } from '@/islands/GeneratedModel';
 import { gradientMap } from '@/materials/toon';
-import { postKey, pulleys, restPosition, SPANS } from './routeSpans';
+import { anchorKey, anchors, restPosition, SPANS } from './routeSpans';
 
-// Start loading when this file loads, not mid-render: a load that starts during a render
-// updates drei's progress store from inside it (a React warning).
-useGLTF.preload(gondolaUrl);
-
-/** How far each cable sags, as a share of its length. */
+/** How far each rope sags, as a share of its length. */
 const SAG = 0.07;
 const CABLE_RADIUS = 0.07;
 const CABLE_SEGMENTS = 48;
 const CABLE_SIDES = 6;
 
-const GONDOLA_HEIGHT = 1.3;
-/**
- * How far the bottom of the gondola's pulley wheels is below its top, at this height
- * (measured). The cable runs in the wheels' grooves there, so the wheels ride on it.
- */
-const WHEEL_DROP = 0.28;
-/** Seconds to cross a span, and to wait at each end. */
-const TRAVEL = 16;
-const PAUSE = 3;
-/** The gondolas stop short of the posts, as a share of the cable. */
-const END = 0.1;
-
 const noHit = () => null;
-const smoothstep = (x: number) => x * x * (3 - 2 * x);
 
 /** A twisted-rope look: dark diagonal grooves on hemp. */
 function ropeTexture() {
@@ -122,13 +101,12 @@ function bendRope(geometry: THREE.BufferGeometry, curve: THREE.QuadraticBezierCu
 }
 
 /**
- * The cables linking the career islands in timeline order: a sagging rope from post to
- * post (the posts stand on the islands, see RoutePosts), and a little gondola on each span
- * gliding across and back. The rope follows the posts every frame, so it stays tied on as
- * the islands float and grow on hover.
+ * The ropes linking the career islands in timeline order, each sagging from one island's
+ * rim to the next. Their tie points live inside the islands (see RouteAnchors) and the
+ * ropes follow them every frame, so they stay tied on as the islands float and grow on
+ * hover.
  */
 export function Route() {
-  const reduceMotion = useReducedMotion();
   const rope = useMemo(() => new THREE.MeshToonMaterial({ map: ropeTexture(), gradientMap }), []);
   const geometries = useMemo(
     () =>
@@ -148,22 +126,16 @@ export function Route() {
     [],
   );
   const cables = useRef<THREE.Mesh[]>([]);
-  const gondolas = useRef<THREE.Group[]>([]);
-  const swings = useRef<THREE.Group[]>([]);
 
-  useFrame(({ clock }) => {
-    const time = clock.elapsedTime;
+  useFrame(() => {
     SPANS.forEach((s, i) => {
-      const a = pulleys.get(postKey(s.from, s.to));
-      const b = pulleys.get(postKey(s.to, s.from));
+      const a = anchors.get(anchorKey(s.from, s.to));
+      const b = anchors.get(anchorKey(s.to, s.from));
       const cable = cables.current[i];
-      const gondola = gondolas.current[i];
-      const swing = swings.current[i];
-      // Hidden until both islands (and their posts) have loaded.
-      const ready = !!a && !!b;
-      if (cable) cable.visible = ready;
-      if (gondola) gondola.visible = ready;
-      if (!a || !b || !gondola || !swing) return;
+      if (!cable) return;
+      // Hidden until both islands have loaded.
+      cable.visible = !!a && !!b;
+      if (!a || !b) return;
 
       const curve = curves[i]!;
       a.getWorldPosition(curve.v0);
@@ -172,62 +144,23 @@ export function Route() {
       // A quadratic curve dips half as far as its middle control point.
       curve.v1.y -= 2 * SAG * curve.v0.distanceTo(curve.v2);
       bendRope(geometries[i]!, curve);
-
-      // Across, wait, back, wait; each span on its own schedule.
-      const cycle = 2 * (TRAVEL + PAUSE);
-      const t = reduceMotion ? PAUSE + TRAVEL / 2 : (time + i * 7.3) % cycle;
-      const k =
-        t < PAUSE
-          ? 0
-          : t < PAUSE + TRAVEL
-            ? smoothstep((t - PAUSE) / TRAVEL)
-            : t < 2 * PAUSE + TRAVEL
-              ? 1
-              : 1 - smoothstep((t - 2 * PAUSE - TRAVEL) / TRAVEL);
-      const along = END + (1 - 2 * END) * k;
-      curve.getPoint(along, gondola.position);
-      curve.getTangent(along, tangent);
-      // Wheels along the cable (the model's X); the cabin hangs straight down.
-      gondola.rotation.y = Math.atan2(-tangent.z, tangent.x);
-      swing.rotation.x = reduceMotion ? 0 : Math.sin(time * 1.1 + i) * 0.05;
     });
   });
 
   return (
     <group>
       {SPANS.map((s, i) => (
-        <group key={postKey(s.from, s.to)}>
-          <mesh
-            ref={(el) => {
-              if (el) cables.current[i] = el;
-            }}
-            geometry={geometries[i]}
-            material={rope}
-            visible={false}
-            frustumCulled={false}
-            raycast={noHit}
-          />
-          <group
-            ref={(el) => {
-              if (el) gondolas.current[i] = el;
-            }}
-            visible={false}
-          >
-            <group
-              ref={(el) => {
-                if (el) swings.current[i] = el;
-              }}
-            >
-              {/* Its top sits above the cable by the wheels' depth, so the cable runs in their grooves. */}
-              <GeneratedModel
-                url={gondolaUrl}
-                height={GONDOLA_HEIGHT}
-                anchor="top"
-                position-y={WHEEL_DROP - CABLE_RADIUS * 0.5}
-              />
-            </group>
-          </group>
-        </group>
+        <mesh
+          key={anchorKey(s.from, s.to)}
+          ref={(el) => {
+            if (el) cables.current[i] = el;
+          }}
+          geometry={geometries[i]}
+          material={rope}
+          visible={false}
+          frustumCulled={false}
+          raycast={noHit}
+        />
       ))}
     </group>
   );
