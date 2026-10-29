@@ -1,6 +1,9 @@
 import { useRef } from 'react';
 import type * as THREE from 'three';
-import standsUrl from '@/assets/models/arena/display-stands.glb?url';
+import monitorUrl from '@/assets/models/arena/monitor.glb?url';
+import padlockUrl from '@/assets/models/arena/padlock.glb?url';
+import phoneUrl from '@/assets/models/arena/phone.glb?url';
+import podiumUrl from '@/assets/models/arena/podium.glb?url';
 import baseUrl from '@/assets/models/arena/island-base.glb?url';
 import shoeUrl from '@/assets/models/arena/winged-shoe.glb?url';
 import scoreboardUrl from '@/assets/models/arena/scoreboard.glb?url';
@@ -21,8 +24,10 @@ import {
   SHOE_SECONDS,
   ShoeDash,
   ScoreboardRows,
-  StandScreen,
-  TeamFlags,
+  PodiumHop,
+  ROLL_CALL_SECONDS,
+  Spotlights,
+  Confetti,
   TinCanPhone,
 } from './effects';
 
@@ -35,14 +40,14 @@ const interactive = (id: IslandObjectId) => {
 /**
  * Where everything stands (design: docs/plan/islands/arena.md, section 4).
  * A ring around the stadium: the stadium is the centre; the scoreboard stands behind it,
- * the team booths on the left, the display stands and the winged shoe in front. Ring spots are
+ * the team booths on the left, the winners' podium and the winged shoe in front. Ring spots are
  * "across the view, towards the camera" (see ../layout.ts).
  */
 const SPOTS = {
   stadium: [0, 0],
   scoreboard: view(0, -4.1),
   booths: view(-4.0, -1.2),
-  stands: view(2.6, 3.0),
+  podium: view(2.6, 3.0),
   shoe: view(-2.5, 3.3),
   rocks1: view(4.2, -1.0),
   rocks2: view(-4.3, 1.6),
@@ -51,7 +56,17 @@ const SPOTS = {
 /** Model sizes; the screen, window and lamp positions below are measured on these sizes. */
 const STADIUM_HEIGHT = 1.7;
 const SCOREBOARD_HEIGHT = 3;
-const STANDS_HEIGHT = 1.8;
+/** At this size the podium is about 2.25 wide. */
+const PODIUM_HEIGHT = 1.1;
+/**
+ * The apps on the podium, in roll-call order (third place first). Steps measured on the
+ * podium model: its blocks' middles at x −0.77, 0, +0.77 and tops at 0.81, 1.1, 0.45.
+ */
+const PODIUM_APPS = [
+  { name: 'auth service', url: padlockUrl, height: 0.67, step: [0.77, 0.45, 0] },
+  { name: 'desktop web app', url: monitorUrl, height: 0.67, step: [-0.77, 0.81, 0] },
+  { name: 'mobile app', url: phoneUrl, height: 0.88, step: [0, 1.1, 0] },
+] satisfies { name: string; url: string; height: number; step: [number, number, number] }[];
 /** At this size the shoe is about 1.55 long, toe along −X. */
 const SHOE_HEIGHT = 0.75;
 /** At this size the deck is about 2.4 long: it fits between the stadium and the rim. */
@@ -121,29 +136,29 @@ export function ArenaIsland() {
         />
       </group>
 
-      <group position={at('stands')} rotation-y={deg(FACE_CAMERA - 120)}>
+      {/* The three apps are the winners; the spotlights call them third to first. */}
+      <group position={at('podium')} rotation-y={deg(FACE_CAMERA)}>
         <Interactable {...interactive('olimp-apps')}>
-          <GeneratedModel url={standsUrl} height={STANDS_HEIGHT} />
-          <StandScreen
-            id="olimp-apps"
-            kind="phone"
-            delay={0}
-            position={[-1.13, 1.0, 0.01]}
-            width={0.55}
-            height={1.19}
-          />
-          <StandScreen
-            id="olimp-apps"
-            kind="desktop"
-            delay={0.12}
-            // Measured on the model: the monitor leans back 18.6°, centre (0, 0.92, -0.03).
-            position={[0.01, 0.915, 0.013]}
-            tilt={18.6}
-            width={0.92}
-            height={0.56}
-          />
+          <GeneratedModel url={podiumUrl} height={PODIUM_HEIGHT} />
+          {PODIUM_APPS.map((app, order) => (
+            <group key={app.name} position={app.step}>
+              <PodiumHop id="olimp-apps" order={order}>
+                <GeneratedModel url={app.url} height={app.height} centre="base" />
+              </PodiumHop>
+            </group>
+          ))}
         </Interactable>
-        <TeamFlags id="olimp-apps" position={[0, 0.1, 0.55]} />
+        <Spotlights
+          id="olimp-apps"
+          targets={PODIUM_APPS.map((a) => [a.step[0], a.step[1] + a.height / 2, a.step[2]])}
+        />
+        <Confetti id="olimp-apps" position={[0, PODIUM_HEIGHT + 0.3, 0.2]} />
+        <PercentTag
+          id="olimp-apps"
+          position={[0, PODIUM_HEIGHT + 1.3, 0]}
+          text="3 apps · team of 6"
+          delay={ROLL_CALL_SECONDS * 0.6}
+        />
       </group>
 
       {/* Side-on to the camera, toe to the left: it dashes off left, away from the stadium. */}

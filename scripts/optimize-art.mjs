@@ -61,13 +61,12 @@ const MODELS = [
   { from: 'arena/island-base.glb', to: 'models/arena/island-base.glb', texture: 1024 },
   { from: 'arena/stadium.glb', to: 'models/arena/stadium.glb', texture: 1024 },
   { from: 'arena/scoreboard.glb', to: 'models/arena/scoreboard.glb', texture: 512 },
-  {
-    from: 'arena/display-stands.glb',
-    to: 'models/arena/display-stands.glb',
-    texture: 512,
-    // A white web stretched between the monitor and the gate: a few huge faces.
-    removeFaces: [{ min: [0.194, 0.167, -0.167], max: [0.361, 0.444, -0.028], minArea: 100 }],
-  },
+  // A winners' podium with the three apps on it, each its own model so each can hop
+  // (replaced the display stands).
+  { from: 'arena/podium.glb', to: 'models/arena/podium.glb', texture: 512 },
+  { from: 'arena/phone.glb', to: 'models/arena/phone.glb', texture: 512 },
+  { from: 'arena/monitor.glb', to: 'models/arena/monitor.glb', texture: 512 },
+  { from: 'arena/padlock.glb', to: 'models/arena/padlock.glb', texture: 512 },
   // A winged running shoe: lighter and faster (replaced the parcel box).
   { from: 'arena/winged-shoe.glb', to: 'models/arena/winged-shoe.glb', texture: 512 },
   // Two team booths with a tin-can telephone between them (replaced the twin towers).

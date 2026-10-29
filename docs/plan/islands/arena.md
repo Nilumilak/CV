@@ -12,7 +12,7 @@ Olimpbet KZ, Frontend Software Engineer, May 2024 to September 2025. A betting p
 
 | Achievement                       | Object on the island                     |
 | --------------------------------- | ---------------------------------------- |
-| 3 apps, team of 6                 | Three display stands                     |
+| 3 apps, team of 6                 | Winners' podium with the three apps      |
 | Auth service rebuilt, bundle −40% | Winged running shoe                      |
 | Virtual scrolling for big data    | Big scoreboard                           |
 | Cross-team iframe integration     | Two team booths with a tin-can telephone |
@@ -48,21 +48,21 @@ Like Market Town, a ring: the stadium is the centre, and the four objects stand 
 
 ```
                          [ SCOREBOARD ]
-       [TEAM BOOTHS]                          [DISPLAY STANDS]
+       [TEAM BOOTHS]                          [WINNERS' PODIUM]
                        ( STADIUM, pitch )
                         floodlights x 4
                [WINGED SHOE]
                      front (towards the camera)
 ```
 
-| Object         | Across, towards | Size       | Notes                                          |
-| -------------- | --------------- | ---------- | ---------------------------------------------- |
-| Stadium        | island centre   | 5.5 wide   | Landmark, not interactive                      |
-| Scoreboard     | 0, −4.0         | 3 tall     | Back, facing the camera, above the stands      |
-| Team booths    | −4.0, −1.2      | 1.45 tall  | Left side; their windows face each other       |
-| Display stands | 3.8, −1.0       | 2 tall     | Right side, three screens turned to the camera |
-| Winged shoe    | −2.5, 3.3       | 0.75 tall  | Front left, side-on, dashes off to the left    |
-| Rocks          | at the edges    | shared kit | A few, to fill gaps (free, already generated)  |
+| Object          | Across, towards | Size       | Notes                                         |
+| --------------- | --------------- | ---------- | --------------------------------------------- |
+| Stadium         | island centre   | 5.5 wide   | Landmark, not interactive                     |
+| Scoreboard      | 0, −4.0         | 3 tall     | Back, facing the camera, above the stands     |
+| Team booths     | −4.0, −1.2      | 1.45 tall  | Left side; their windows face each other      |
+| Winners' podium | 2.6, 3.0        | 0.9 tall   | Front right, apps on its steps, facing camera |
+| Winged shoe     | −2.5, 3.3       | 0.75 tall  | Front left, side-on, dashes off to the left   |
+| Rocks           | at the edges    | shared kit | A few, to fill gaps (free, already generated) |
 
 ---
 
@@ -70,12 +70,11 @@ Like Market Town, a ring: the stadium is the centre, and the four objects stand 
 
 Same pattern as the other islands: hover glows gold with a hint, click plays a short code-made reaction and sound, and the panel scrolls to the achievement.
 
-### Three display stands · 3 apps, team of 6
+### Winners' podium · 3 apps, team of 6
 
-One model: three outdoor display stands side by side, a tall narrow one (the mobile app), a wide one (the desktop web app) and one shaped like a gate with a padlock (the authorization service). The screen faces are plain; the pictures are drawn in code (as on Radio's screen, one surface each, so nothing flickers).
+Replaced the display stands on 2026-10-29 (the concept was liked; the model and its reaction were not interesting). A sports winners' podium, cream with sky-blue sides and gold stars, with the three apps as the winners, each its own model so each can move: the smartphone (mobile app) on the top step, the monitor (desktop web app) on the left, a golden padlock with a blue bow (auth service) on the right. Front facing the camera.
 
-- **Idle:** the screens show simple app drawings, dimmed.
-- **Click:** the three screens light up one by one, and six small team flags pop up on little poles beside them, one after another.
+- **Click:** a roll call, third place first: a spotlight swings on over the padlock, then the monitor, then the phone, each app giving a hop with a happy half-turn as it is lit; then a burst of confetti in six team colours, one per teammate, and a gold tag "3 apps · team of 6".
 
 ### Winged shoe · Auth service rebuilt, bundle −40%
 
@@ -106,14 +105,14 @@ Replaced the twin towers on 2026-10-29 (`team-booths.glb`, the third concept; a 
 
 ## 6. Models and cost
 
-| #   | File                 | Object                                      | Budget      |
-| --- | -------------------- | ------------------------------------------- | ----------- |
-| 1   | `island-base.glb`    | Wide flat island, grass to the edge         | 15,000 tris |
-| 2   | `stadium.glb`        | Small oval stadium with 4 floodlights       | 8,000       |
-| 3   | `scoreboard.glb`     | Tall scoreboard on two legs                 | 3,000       |
-| 4   | `display-stands.glb` | Three display stands (phone, desktop, gate) | 4,000       |
-| 5   | `winged-shoe.glb`    | Winged running shoe (was the parcel box)    | 4,000       |
-| 6   | `team-booths.glb`    | Two team booths on a deck (was twin towers) | 6,000       |
+| #   | File              | Object                                       | Budget      |
+| --- | ----------------- | -------------------------------------------- | ----------- |
+| 1   | `island-base.glb` | Wide flat island, grass to the edge          | 15,000 tris |
+| 2   | `stadium.glb`     | Small oval stadium with 4 floodlights        | 8,000       |
+| 3   | `scoreboard.glb`  | Tall scoreboard on two legs                  | 3,000       |
+| 4   | `podium.glb` + 3  | Podium, phone, monitor, padlock (was stands) | 4 × 2,500   |
+| 5   | `winged-shoe.glb` | Winged running shoe (was the parcel box)     | 4,000       |
+| 6   | `team-booths.glb` | Two team booths on a deck (was twin towers)  | 6,000       |
 
 | Step               | Items | Credits  |
 | ------------------ | ----- | -------- |

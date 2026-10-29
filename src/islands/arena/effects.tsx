@@ -6,7 +6,7 @@
 import { useMemo, useRef, type ReactNode } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { colors, gradientMap, palette } from '@/materials/toon';
+import { colors, gradientMap } from '@/materials/toon';
 import { useReaction } from '@/objects/useReaction';
 import { beamShader, glareTexture } from '../lightMaterials';
 
@@ -18,98 +18,184 @@ const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 /** Depth bias that keeps a picture in front of the model face it is placed on. */
 const PICTURE_OFFSET = { polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -8 };
 
+// --- Winners' podium: a spotlight roll call ------------------------------------------------
+
+/** The roll call, in seconds: one spotlight per app, then confetti for the team. */
+export const ROLL_CALL_SECONDS = 3.6;
+/** When each spotlight comes on, in roll-call order (third place first, the winner last). */
+const LIT_AT = [0.2, 0.9, 1.6];
+const CONFETTI_AT = 2.3;
+
 /**
- * One screen of the display stands. Dimmed when idle; when activated it lights up after
- * `delay` (share of the reaction), stays lit, and dims again at the end.
+ * One of the apps on the podium: hops when its spotlight comes on. `order` is its place in
+ * the roll call (0 first).
  */
-export function StandScreen({
+export function PodiumHop({
   id,
-  kind,
-  delay,
-  position,
-  tilt = 0,
-  width,
-  height,
+  order,
+  children,
 }: {
   id: string;
-  kind: 'phone' | 'desktop' | 'gate';
-  delay: number;
-  position: Vec3;
-  /** Degrees the screen leans back (faces upward), to match the model's screen. */
-  tilt?: number;
-  width: number;
-  height: number;
+  order: number;
+  children: ReactNode;
 }) {
-  const screen = useRef<THREE.Mesh>(null!);
-  const progress = useReaction(id, 3.2);
-  const texture = useMemo(() => appTexture(kind), [kind]);
+  const ref = useRef<THREE.Group>(null!);
+  const progress = useReaction(id, ROLL_CALL_SECONDS);
   useFrame(({ clock }) => {
     const p = progress(clock.elapsedTime);
-    const lit =
-      p === null
-        ? 0
-        : smoothstep(clamp01((p - delay) / 0.12)) * smoothstep(clamp01((1 - p) / 0.15));
-    (screen.current.material as THREE.MeshBasicMaterial).color.setScalar(0.45 + 0.55 * lit);
+    const k = p === null ? -1 : (p * ROLL_CALL_SECONDS - LIT_AT[order]! - 0.1) / 0.5;
+    const g = ref.current;
+    if (k < 0 || k > 1) {
+      g.position.y = 0;
+      g.rotation.y = 0;
+      return;
+    }
+    // A hop with a happy half-turn and back.
+    g.position.y = Math.sin(k * Math.PI) * 0.3;
+    g.rotation.y = Math.sin(k * Math.PI * 2) * 0.5;
+  });
+  return <group ref={ref}>{children}</group>;
+}
+
+/**
+ * Spotlights that switch on one after another, each shining down onto one app from above
+ * and in front, and stay on until the end of the roll call. Light only: a soft beam and a
+ * light on the app. `targets` are the apps' middles, in roll-call order.
+ */
+export function Spotlights({ id, targets }: { id: string; targets: Vec3[] }) {
+  const beams = useRef<THREE.Mesh[]>([]);
+  const lights = useRef<THREE.PointLight[]>([]);
+  const progress = useReaction(id, ROLL_CALL_SECONDS);
+  const shapes = useMemo(
+    () =>
+      targets.map((target) => {
+        const to = new THREE.Vector3(...target);
+        const from = to.clone().add(new THREE.Vector3(0, 2.2, 1.0));
+        const length = from.distanceTo(to);
+        // The cylinder's +Y end is the narrow lamp end, up and in front.
+        const turn = new THREE.Quaternion().setFromUnitVectors(
+          new THREE.Vector3(0, 1, 0),
+          from.clone().sub(to).normalize(),
+        );
+        const middle = from.clone().add(to).multiplyScalar(0.5);
+        return { length, turn, middle, to, material: beamShader() };
+      }),
+    [targets],
+  );
+  useFrame(({ clock }) => {
+    const p = progress(clock.elapsedTime);
+    const t = p === null ? -1 : p * ROLL_CALL_SECONDS;
+    const end = p === null ? 0 : smoothstep(clamp01((ROLL_CALL_SECONDS - t) / 0.4));
+    shapes.forEach((s, i) => {
+      const on = p === null ? 0 : smoothstep(clamp01((t - LIT_AT[i]!) / 0.25)) * end;
+      s.material.uniforms.strength!.value = 0.5 * on;
+      const beam = beams.current[i];
+      if (beam) beam.visible = on > 0.01;
+      const light = lights.current[i];
+      if (light) light.intensity = 3 * on;
+    });
   });
   return (
-    <mesh
-      ref={screen}
-      position={position}
-      rotation-x={THREE.MathUtils.degToRad(-tilt)}
-      raycast={noHit}
-    >
-      <planeGeometry args={[width, height]} />
-      <meshBasicMaterial map={texture} toneMapped={false} {...PICTURE_OFFSET} />
-    </mesh>
+    <group>
+      {shapes.map((s, i) => (
+        <group key={i}>
+          <mesh
+            ref={(el) => {
+              if (el) beams.current[i] = el;
+            }}
+            position={s.middle}
+            quaternion={s.turn}
+            material={s.material}
+            visible={false}
+            renderOrder={3}
+            raycast={noHit}
+          >
+            <cylinderGeometry args={[0.05, 0.4, s.length, 20, 1, true]} />
+          </mesh>
+          <pointLight
+            ref={(el) => {
+              if (el) lights.current[i] = el;
+            }}
+            position={[s.to.x, s.to.y + 0.6, s.to.z + 0.4]}
+            color="#fff1c4"
+            intensity={0}
+            distance={2}
+            decay={2}
+          />
+        </group>
+      ))}
+    </group>
   );
 }
 
-const FLAG_COLORS = [colors.accentGold, '#3C7DD9', colors.roofRed, '#5fbf5a', '#fbf3e0', '#6fb3d9'];
+/** Six team colours, one per teammate. */
+const TEAM_COLORS = [colors.accentGold, '#3C7DD9', colors.roofRed, '#5fbf5a', '#fbf3e0', '#b58ad9'];
+const CONFETTI = 36;
+const confettiGeometry = new THREE.PlaneGeometry(0.07, 0.11);
 
-/** Six little team flags on poles that pop up one after another, then go down again. */
-export function TeamFlags({
-  id,
-  position,
-  spacing = 0.32,
-}: {
-  id: string;
-  position: Vec3;
-  spacing?: number;
-}) {
-  const flags = useRef<THREE.Group[]>([]);
-  const progress = useReaction(id, 3.2);
+/**
+ * A burst of confetti in the six team colours, thrown up from the podium after the roll
+ * call: it flutters down and fades.
+ */
+export function Confetti({ id, position }: { id: string; position: Vec3 }) {
+  const pieces = useRef<THREE.Mesh[]>([]);
+  const materials = useMemo(
+    () =>
+      TEAM_COLORS.map(
+        (color) =>
+          new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide, transparent: true }),
+      ),
+    [],
+  );
+  const throws = useMemo(
+    () =>
+      Array.from({ length: CONFETTI }, (_, i) => {
+        const a = i * 2.4;
+        const spread = 0.6 + (i % 5) * 0.25;
+        return {
+          vx: Math.cos(a) * spread,
+          vz: Math.sin(a) * spread * 0.6,
+          vy: 2.4 + (i % 7) * 0.25,
+          spin: 4 + (i % 4) * 2,
+        };
+      }),
+    [],
+  );
+  const progress = useReaction(id, ROLL_CALL_SECONDS);
   useFrame(({ clock }) => {
     const p = progress(clock.elapsedTime);
-    for (let i = 0; i < 6; i++) {
-      const flag = flags.current[i];
-      if (!flag) continue;
-      const k =
-        p === null
-          ? 0
-          : smoothstep(clamp01((p - 0.35 - i * 0.06) / 0.1)) * smoothstep(clamp01((1 - p) / 0.12));
-      flag.visible = k > 0.001;
-      flag.scale.set(1, k, 1);
-    }
+    const t = p === null ? -1 : p * ROLL_CALL_SECONDS - CONFETTI_AT;
+    const fade = clamp01((ROLL_CALL_SECONDS - CONFETTI_AT - t) / 0.4);
+    throws.forEach((c, i) => {
+      const piece = pieces.current[i];
+      if (!piece) return;
+      // Pieces of one colour share a material, so they fade together.
+      (piece.material as THREE.MeshBasicMaterial).opacity = fade;
+      piece.visible = t > 0 && fade > 0;
+      if (!piece.visible) return;
+      // Up and out, then a slow, swaying fall: confetti drifts rather than drops.
+      const fall = Math.max(0, t - 0.45);
+      piece.position.set(
+        position[0] + c.vx * Math.min(t, 0.45) + Math.sin(t * 5 + i) * 0.08 * fall,
+        position[1] + c.vy * Math.min(t, 0.45) - 4 * Math.min(t, 0.45) ** 2 - 0.5 * fall,
+        position[2] + c.vz * Math.min(t, 0.45),
+      );
+      piece.rotation.set(t * c.spin, t * c.spin * 0.7, i);
+    });
   });
   return (
-    <group position={position}>
-      {FLAG_COLORS.map((color, i) => (
-        <group
+    <group>
+      {throws.map((_, i) => (
+        <mesh
           key={i}
           ref={(el) => {
-            if (el) flags.current[i] = el;
+            if (el) pieces.current[i] = el;
           }}
-          position={[(i - 2.5) * spacing, 0, 0]}
+          geometry={confettiGeometry}
+          material={materials[i % materials.length]}
           visible={false}
-        >
-          <mesh position={[0, 0.35, 0]} material={palette.wood} raycast={noHit}>
-            <cylinderGeometry args={[0.015, 0.02, 0.7, 6]} />
-          </mesh>
-          <mesh position={[0.1, 0.6, 0]} raycast={noHit}>
-            <planeGeometry args={[0.2, 0.14]} />
-            <meshBasicMaterial color={color} side={THREE.DoubleSide} />
-          </mesh>
-        </group>
+          raycast={noHit}
+        />
       ))}
     </group>
   );
@@ -501,45 +587,6 @@ function box(g: CanvasRenderingContext2D, x: number, y: number, w: number, h: nu
   g.beginPath();
   g.roundRect(x, y, w, h, r);
   g.fill();
-}
-
-const BLUE = '#3C7DD9';
-
-/** A simple app screen: mobile, desktop or a login gate. No real content. */
-function appTexture(kind: 'phone' | 'desktop' | 'gate') {
-  const [w, h] = kind === 'phone' ? [200, 400] : kind === 'desktop' ? [400, 260] : [260, 320];
-  return canvasTexture(w, h, (g) => {
-    g.fillStyle = '#f4f7fb';
-    g.fillRect(0, 0, w, h);
-    g.fillStyle = BLUE;
-    g.fillRect(0, 0, w, kind === 'phone' ? 46 : 36);
-    if (kind === 'gate') {
-      // Login: avatar, two fields, a button.
-      g.fillStyle = '#cdd9ec';
-      g.beginPath();
-      g.arc(w / 2, 100, 32, 0, Math.PI * 2);
-      g.fill();
-      box(g, 40, 160, w - 80, 30, 8);
-      box(g, 40, 205, w - 80, 30, 8);
-      g.fillStyle = colors.accentGold;
-      box(g, 70, 255, w - 140, 34, 17);
-      return;
-    }
-    // A list of events with odds buttons.
-    const rows = kind === 'phone' ? 6 : 4;
-    const top = kind === 'phone' ? 66 : 54;
-    const rowH = kind === 'phone' ? 52 : 46;
-    for (let r = 0; r < rows; r++) {
-      const y = top + r * rowH;
-      g.fillStyle = '#dfe7f3';
-      box(g, 14, y, w - 28, rowH - 10, 8);
-      g.fillStyle = '#9fb3d1';
-      box(g, 26, y + 10, w * 0.35, 10, 5);
-      g.fillStyle = r % 2 ? colors.accentGold : BLUE;
-      for (let b = 0; b < (kind === 'phone' ? 2 : 3); b++)
-        box(g, w - 30 - (b + 1) * 46, y + 8, 40, rowH - 26, 6);
-    }
-  });
 }
 
 /** Long strip of score rows; the scoreboard shows a window of it and scrolls through. */
