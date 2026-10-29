@@ -11,7 +11,6 @@ import catUrl from '@/assets/audio/home-cat.mp3?url';
 import saplingsUrl from '@/assets/audio/eco-build.mp3?url';
 import binsUrl from '@/assets/audio/eco-lead.mp3?url';
 import collectionBoxUrl from '@/assets/audio/eco-payments.mp3?url';
-import globeUrl from '@/assets/audio/home-globe.mp3?url';
 import lanternUrl from '@/assets/audio/home-lantern.mp3?url';
 import mailboxUrl from '@/assets/audio/home-mailbox.mp3?url';
 import musicUrl from '@/assets/audio/music.mp3?url';
@@ -41,7 +40,6 @@ const OBJECT_SOUNDS: Record<string, { url: string; level?: number }> = {
   'home-cat': { url: catUrl, level: 0.4 },
   'home-bookshelf': { url: bookshelfUrl, level: 0.4 },
   'home-mailbox': { url: mailboxUrl, level: 0.4 },
-  'home-globe': { url: globeUrl, level: 0.4 },
   'home-lantern': { url: lanternUrl },
   'eco-build': { url: saplingsUrl },
   'eco-lead': { url: binsUrl },

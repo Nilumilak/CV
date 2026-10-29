@@ -84,9 +84,9 @@ const SOUNDS = {
   'home-lantern': {
     seconds: 2.4,
     prompt:
-      'Cartoon light turning on, from a hand-drawn animated film: a playful soft pling as a lantern ' +
-      'lights up, then a warm magical glow swelling gently and settling. Whimsical and cosy, not ' +
-      'realistic, no fire, no crackle, no electric buzz.',
+      'Cartoon electric zap from a hand-drawn animated film: a quick playful bzzt-zap as a lantern ' +
+      'switches on, a bright little pop of light, then a soft warm hum settling. Whimsical and ' +
+      'bouncy, not realistic, not harsh.',
   },
   'home-mailbox': {
     seconds: 1.3,
@@ -223,7 +223,6 @@ const PICKS = {
   'home-cat': 'home-cat-6',
   'home-bookshelf': 'home-bookshelf-1',
   'home-mailbox': 'home-mailbox-1',
-  'home-globe': 'home-globe-7',
   'home-lantern': 'home-lantern-4',
   'eco-build': 'eco-build-4',
   'eco-lead': 'eco-lead-5',
