@@ -107,10 +107,10 @@ An old broad-leaf tree with a thick twisting trunk, visible roots and a wide rou
 
 ### Cat → summary
 
-A chubby orange tabby. **Animated since 2026-10-29:** the same cat standing (`cat-standing.glb`, made from the sleeping cat's concept), rigged as a quadruped on meshy.ai with a walk (`cat-animated.glb`; the rig comes back untextured, so the art pipeline copies the painting back from `cat-standing.glb`). Meshy's API rigs only two-legged characters, so the rigging was done by hand on the website. It stands on the grass beside the door path, about 0.85 m tall; the bench is now empty. Component: `src/islands/home/AnimatedCat.tsx`.
+A chubby orange tabby lying on the bench, eyes half closed. About 0.9 m long, oversized on purpose.
 
-- **Idle (code on its bones):** a slow tail swish, a breath, and now and then a look around.
-- **Click:** it strolls a loop round its spot with Meshy's walk cycle, facing the way it walks, and settles back where it started.
+- **Idle:** the tail tip flicks, and every few seconds the cat breathes slowly.
+- **Click:** the cat stretches, yawns, and a speech bubble opens with the summary's first line, while the panel highlights the summary.
 - **Why the cat:** the summary is "who I am", and the cat is the soul of the home, as in the lofi reference.
 
 ### Garden lantern → skills

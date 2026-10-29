@@ -308,22 +308,3 @@ function hslToRgb(h, s, l) {
               : [c, 0, x];
   return [r, g, b].map((v) => Math.round((v + m) * 255));
 }
-
-/**
- * Puts another model's painted texture back onto a model that lost it, e.g. a model rigged
- * and animated on meshy.ai, which comes back untextured but with its UVs intact.
- */
-export async function textureFromModel(input, output, source) {
-  const io = new NodeIO().registerExtensions(ALL_EXTENSIONS);
-  const document = await io.read(input);
-  const painted = (await io.read(source)).getRoot().listTextures()[0];
-  if (!painted) throw new Error(`${source} has no texture to copy`);
-  const texture = document
-    .createTexture('baseColor')
-    .setImage(painted.getImage())
-    .setMimeType(painted.getMimeType());
-  for (const material of document.getRoot().listMaterials()) {
-    material.setBaseColorTexture(texture).setBaseColorFactor([1, 1, 1, 1]);
-  }
-  await io.write(output, document);
-}
