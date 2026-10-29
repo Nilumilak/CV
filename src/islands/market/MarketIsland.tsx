@@ -144,7 +144,7 @@ export function MarketIsland() {
         </Interactable>
         <WaterSparkles position={[0, 0.5, 0]} />
         <CoinBurst id="mone-pdl" position={[0, 0.45, 0]} />
-        <Interactable {...interactive('mone-bnpl')}>
+        <Interactable {...interactive('mone-bnpl')} lift={false}>
           {/* The stop is on the camera's side of the fountain. */}
           <TramLoop id="mone-bnpl" radius={TRAM_RADIUS} stopAngle={deg(FACE_CAMERA - 90)}>
             <GeneratedModel url={tramUrl} length={1.3} />
