@@ -14,45 +14,139 @@ const TAU = Math.PI * 2;
 const noHit = () => null;
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
 
-const COINS = 9;
-const coinGeometry = new THREE.CylinderGeometry(0.07, 0.07, 0.018, 14);
-const coinMaterial = new THREE.MeshBasicMaterial({ color: '#f3c25b' });
+// --- Fountain: a four-jet water show ----------------------------------------------------
 
-/** Gold coins jump out of the fountain in a ring and fall back in. */
-export function CoinBurst({ id, position }: { id: string; position: Vec3 }) {
-  const coins = useRef<THREE.Mesh[]>([]);
-  const progress = useReaction(id, 1.3);
+/** The show, in seconds. */
+export const WATER_SHOW_SECONDS = 3.4;
+const JETS = 4;
+const DROPS = 16; // per jet
+/** When each jet starts (one per shipped flow), when they all lean in, and when they stop. */
+const JET_ON = [0.15, 0.5, 0.85, 1.2];
+const CROWN = [1.55, 1.9] as const;
+const JETS_OFF = 2.5;
+/** How long a drop flies, and gravity. */
+const DROP_LIFE = 0.75;
+const GRAVITY = 9.8;
+
+const dropGeometry = new THREE.SphereGeometry(0.035, 8, 6);
+const dropMaterial = new THREE.MeshBasicMaterial({
+  color: '#dff3ff',
+  transparent: true,
+  opacity: 0.9,
+});
+const rippleGeometry = new THREE.RingGeometry(0.8, 1, 32);
+const rippleMaterial = new THREE.MeshBasicMaterial({
+  color: '#ffffff',
+  transparent: true,
+  side: THREE.DoubleSide,
+  depthWrite: false,
+});
+
+const dummy = new THREE.Object3D();
+const lean = (t: number) => {
+  // 0: arcing outwards into the basin; 1: leaning in to meet over the top as a crown.
+  const k = Math.min(1, Math.max(0, (t - CROWN[0]) / (CROWN[1] - CROWN[0])));
+  return k * k * (3 - 2 * k);
+};
+
+/**
+ * The fountain comes alive: four jets of water shoot up around the basin one after another
+ * (one per production flow), then lean in together into a crown over the top, glint, stop,
+ * and the water settles in rings of ripples. Drops are a stream of little beads along each
+ * jet's arc; nothing is drawn on the model.
+ *
+ * `water` is the height of the lower basin's water, `radius` how far out the jets stand in
+ * it, `top` the upper bowl's water, where the last ripple spreads.
+ */
+export function WaterShow({
+  id,
+  water,
+  radius,
+  top,
+}: {
+  id: string;
+  water: number;
+  radius: number;
+  top: number;
+}) {
+  const drops = useRef<THREE.InstancedMesh>(null!);
+  const ripples = useRef<THREE.Mesh[]>([]);
+  const progress = useReaction(id, WATER_SHOW_SECONDS);
+  const rippleMaterials = useMemo(
+    () => Array.from({ length: JETS + 1 }, () => rippleMaterial.clone()),
+    [],
+  );
   useFrame(({ clock }) => {
     const p = progress(clock.elapsedTime);
-    for (let i = 0; i < COINS; i++) {
-      const coin = coins.current[i];
-      if (!coin) continue;
-      coin.visible = p !== null;
-      if (p === null) continue;
-      const a = (i / COINS) * TAU;
-      const r = 0.15 + p * 0.55;
-      coin.position.set(
-        Math.cos(a) * r,
-        4 * 0.9 * p * (1 - p) + (i % 3) * 0.05 * p,
-        Math.sin(a) * r,
-      );
-      coin.rotation.set(p * 9 + i, p * 6, 0);
+    const t = p === null ? -1 : p * WATER_SHOW_SECONDS;
+    const mesh = drops.current;
+    mesh.visible = p !== null;
+    for (let i = 0; i < JETS; i++) {
+      const a = (i / JETS) * TAU + Math.PI / 4;
+      const out = new THREE.Vector3(Math.cos(a), 0, Math.sin(a));
+      for (let j = 0; j < DROPS; j++) {
+        // Drops leave the nozzle one after another; each flies DROP_LIFE seconds.
+        const age = ((t / DROP_LIFE + j / DROPS) % 1) * DROP_LIFE;
+        const born = t - age;
+        const flying = p !== null && born > JET_ON[i]! && born < JETS_OFF;
+        const crown = lean(born);
+        // Outwards into the basin, or (crown) up and in to meet over the middle.
+        const up = 3.3 + 1.3 * crown;
+        const sideways = 0.12 - 0.92 * crown;
+        dummy.position
+          .copy(out)
+          .multiplyScalar(radius + sideways * age)
+          .setY(water + up * age - 0.5 * GRAVITY * age * age);
+        // Swell out of the nozzle, shrink as they fall; gone below the water.
+        const size =
+          flying && dummy.position.y > water - 0.02 ? Math.min(1, age * 12) * (1 - 0.4 * age) : 0;
+        dummy.scale.setScalar(size);
+        dummy.updateMatrix();
+        mesh.setMatrixAt(i * DROPS + j, dummy.matrix);
+      }
     }
+    mesh.instanceMatrix.needsUpdate = true;
+
+    // A ripple where each jet starts, and one wide ring as the water settles.
+    ripples.current.forEach((ring, i) => {
+      const start = i < JETS ? JET_ON[i]! + 0.35 : JETS_OFF + 0.4;
+      const k = p === null ? -1 : (t - start) / 0.9;
+      ring.visible = k > 0 && k < 1;
+      if (!ring.visible) return;
+      const r = i < JETS ? 0.05 + 0.12 * k : 0.08 + 0.26 * k;
+      ring.scale.setScalar(r);
+      rippleMaterials[i]!.opacity = 0.7 * (1 - k);
+    });
   });
   return (
-    <group position={position}>
-      {Array.from({ length: COINS }, (_, i) => (
-        <mesh
-          key={i}
-          ref={(el) => {
-            if (el) coins.current[i] = el;
-          }}
-          geometry={coinGeometry}
-          material={coinMaterial}
-          visible={false}
-          raycast={noHit}
-        />
-      ))}
+    <group>
+      <instancedMesh
+        ref={drops}
+        args={[dropGeometry, dropMaterial, JETS * DROPS]}
+        frustumCulled={false}
+        visible={false}
+        raycast={noHit}
+      />
+      {rippleMaterials.map((material, i) => {
+        const a = (i / JETS) * TAU + Math.PI / 4;
+        const landing = radius + 0.08;
+        return (
+          <mesh
+            key={i}
+            ref={(el) => {
+              if (el) ripples.current[i] = el;
+            }}
+            geometry={rippleGeometry}
+            material={material}
+            position={
+              i < JETS ? [Math.cos(a) * landing, water + 0.01, Math.sin(a) * landing] : [0, top, 0]
+            }
+            rotation-x={-Math.PI / 2}
+            visible={false}
+            raycast={noHit}
+          />
+        );
+      })}
     </group>
   );
 }

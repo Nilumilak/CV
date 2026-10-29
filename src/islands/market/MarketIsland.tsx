@@ -21,13 +21,14 @@ import { useGroundHeights } from '../useGroundHeights';
 import {
   KitDelivery,
   Bunting,
-  CoinBurst,
   DustPuff,
   FloatUp,
   LaunchPad,
   Pole,
   Sails,
   TramLoop,
+  WATER_SHOW_SECONDS,
+  WaterShow,
   WaterSparkles,
   WINDMILL_SECONDS,
 } from './effects';
@@ -172,7 +173,15 @@ export function MarketIsland() {
           <GeneratedModel url={fountainUrl} length={1.6} />
         </Interactable>
         <WaterSparkles position={[0, 0.5, 0]} />
-        <CoinBurst id="mone-pdl" position={[0, 0.45, 0]} />
+        {/* Measured on the fountain at this size: lower basin water at 0.25 between the
+            upper bowl (to r 0.4) and the rim (r 0.75); the upper bowl's water near 0.71. */}
+        <WaterShow id="mone-pdl" water={0.25} radius={0.5} top={0.71} />
+        <PercentTag
+          id="mone-pdl"
+          position={[0, 2.0, 0]}
+          text="4 flows · live"
+          delay={WATER_SHOW_SECONDS * 0.45}
+        />
         <Interactable {...interactive('mone-bnpl')} lift={false}>
           {/* The stop is on the camera's side of the fountain. */}
           <TramLoop id="mone-bnpl" radius={TRAM_RADIUS} stopAngle={deg(FACE_CAMERA - 90)}>

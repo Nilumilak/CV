@@ -82,7 +82,7 @@ Same pattern as Home and Radio: hover glows gold with a hint, click plays a shor
 A round stone fountain with a little figure or spout in the middle, gold coins at the bottom.
 
 - **Idle:** a few water sparkles.
-- **Click:** a small burst of gold coins jumps out and falls back in.
+- **Click:** a water show (revised 2026-10-29; the coin burst was too plain): four jets shoot up from the lower basin one after another, one per shipped production flow; then all four lean in together and meet in a crown over the upper bowl, stop, and the water settles in ripples. A gold tag "4 flows · live" pops up. Drops are code-made beads along each jet's arc.
 
 ### Old shack and glass building · WordPress to Next.js
 
