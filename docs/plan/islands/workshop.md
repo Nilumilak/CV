@@ -2,7 +2,7 @@
 
 [Back to Phase 4](../phase-4-island-art.md) · [AI model prompts](../phase-4-ai-prompts.md) · Previous: [Green Grove](grove.md)
 
-**Status:** design decided (2026-10-29, section 7). Generating concepts.
+**Status:** built on 2026-10-29. All 7 models generated and placed; all four achievement objects interactive. Screen, board, chimney and wall positions measured on the models; the lectern's sheet position is estimated. First layout, to be tuned from screenshots.
 
 ---
 

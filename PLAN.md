@@ -26,7 +26,7 @@ Read the first three once. Then work through the phases in order.
 | 1   | [Sky world](docs/plan/phase-1-sky-world.md)                                        | 2 to 3 days  | A painted sky with layered clouds                              | Built, check FPS on your GPU    |
 | 2   | [Islands and navigation](docs/plan/phase-2-islands-navigation.md)                  | 4 to 5 days  | The complete CV on placeholder islands, classic CV, deep links | Built, waiting for Vercel       |
 | 3   | [Welcome and fly-in](docs/plan/phase-3-welcome-flyin.md)                           | 2 days       | Welcome screen, cloud dive, sound                              | Built, check FPS and sound      |
-| 4   | [Island art](docs/plan/phase-4-island-art.md)                                      | 1 to 3 weeks | Every island with its own look                                 | 5 of 7 islands done             |
+| 4   | [Island art](docs/plan/phase-4-island-art.md)                                      | 1 to 3 weeks | Every island with its own look                                 | 6 of 7 islands done             |
 | 5   | [Interactive objects](docs/plan/phase-5-interactive-objects.md)                    | 1 to 2 weeks | One animated object per achievement                            | Not started                     |
 | 6   | [Polish](docs/plan/phase-6-polish.md)                                              | 3 to 5 days  | Post effects, ambient life, sound design                       | Not started                     |
 | 7   | [Performance, mobile, accessibility](docs/plan/phase-7-performance-mobile-a11y.md) | 3 to 5 days  | Smooth on phones, full keyboard support, good previews         | Not started                     |

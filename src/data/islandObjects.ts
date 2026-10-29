@@ -39,6 +39,16 @@ export const ISLAND_OBJECTS = [
   { id: 'eco-build', label: 'Frontend, APIs, mentoring', name: 'the saplings', cue: 'chime' },
   { id: 'eco-payments', label: 'ЮKassa payments', name: 'the collection box', cue: 'coins' },
   { id: 'eco-admin', label: 'Admin-editable content', name: 'the noticeboard', cue: 'paper' },
+  // Workshop (design: docs/plan/islands/workshop.md)
+  { id: 'salyut-lead', label: 'Led 5+ projects', name: 'the steam whistle', cue: 'bell' },
+  { id: 'salyut-projects', label: '30+ projects', name: 'the oscilloscope', cue: 'beep' },
+  {
+    id: 'salyut-assemblies',
+    label: '100+ element assemblies',
+    name: 'the circuit board',
+    cue: 'chime',
+  },
+  { id: 'salyut-macros', label: 'Python macros', name: 'the scroll', cue: 'paper' },
 ] as const satisfies readonly IslandObject[];
 
 export type IslandObjectId = (typeof ISLAND_OBJECTS)[number]['id'];

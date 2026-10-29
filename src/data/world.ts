@@ -30,7 +30,7 @@ export const ISLANDS: IslandLayout[] = [
     position: [-30, 3, -8],
     scale: 1,
     seed: 2,
-    labelOffset: [0, 7, 0],
+    labelOffset: [0, 7.5, 0], // above the factory's chimneys
     camera: islandCamera([-30, 4, -8]),
     accent: '#B8733A',
   },

@@ -87,6 +87,15 @@ const MODELS = [
   { from: 'grove/noticeboard.glb', to: 'models/grove/noticeboard.glb', texture: 512 },
   { from: 'grove/collection-box.glb', to: 'models/grove/collection-box.glb', texture: 512 },
 
+  // Workshop island
+  { from: 'workshop/island-base.glb', to: 'models/workshop/island-base.glb', texture: 1024 },
+  { from: 'workshop/factory.glb', to: 'models/workshop/factory.glb', texture: 1024 },
+  { from: 'workshop/gear.glb', to: 'models/workshop/gear.glb', texture: 512 },
+  { from: 'workshop/whistle.glb', to: 'models/workshop/whistle.glb', texture: 512 },
+  { from: 'workshop/workbench.glb', to: 'models/workshop/workbench.glb', texture: 512 },
+  { from: 'workshop/circuit-board.glb', to: 'models/workshop/circuit-board.glb', texture: 512 },
+  { from: 'workshop/lectern.glb', to: 'models/workshop/lectern.glb', texture: 512 },
+
   // Shared kit, reused across islands
   { from: 'shared/rock-cluster.glb', to: 'models/shared/rock-cluster.glb', texture: 512 },
 ];

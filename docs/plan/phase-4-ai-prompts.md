@@ -648,15 +648,15 @@ Full design description and decisions: [islands/workshop.md](islands/workshop.md
 
 A cosy old engineering workshop: a red-brick factory with two chimneys, brass gears, a steam whistle, a workbench with an oscilloscope, a circuit board on an easel and a scroll on a lectern. Screen and board faces stay plain; their pictures are code-made.
 
-| #   | File name           | Object                                      | Budget           | Interactive           | Status |
-| --- | ------------------- | ------------------------------------------- | ---------------- | --------------------- | ------ |
-| 1   | `island-base.glb`   | Rock with metal plates and pipes, grass top | 15,000 triangles | No                    | To do  |
-| 2   | `factory.glb`       | Red-brick workshop with two chimneys        | 8,000            | No (landmark)         | To do  |
-| 3   | `gear.glb`          | One brass gear (placed ×3)                  | 1,500            | No (turns)            | To do  |
-| 4   | `whistle.glb`       | Brass steam whistle on a pipe stand         | 1,500            | Yes: led the projects | To do  |
-| 5   | `workbench.glb`     | Workbench with an oscilloscope              | 4,000            | Yes: 30+ projects     | To do  |
-| 6   | `circuit-board.glb` | Big circuit board on an easel               | 2,500            | Yes: 100+ elements    | To do  |
-| 7   | `lectern.glb`       | Wooden lectern with a rolled scroll         | 2,000            | Yes: Python macros    | To do  |
+| #   | File name           | Object                                      | Budget           | Interactive           | Status   |
+| --- | ------------------- | ------------------------------------------- | ---------------- | --------------------- | -------- |
+| 1   | `island-base.glb`   | Rock with metal plates and pipes, grass top | 15,000 triangles | No                    | **Done** |
+| 2   | `factory.glb`       | Red-brick workshop with two chimneys        | 8,000            | No (landmark)         | **Done** |
+| 3   | `gear.glb`          | One brass gear (placed ×3)                  | 1,500            | No (turns)            | **Done** |
+| 4   | `whistle.glb`       | Brass steam whistle on a pipe stand         | 1,500            | Yes: led the projects | **Done** |
+| 5   | `workbench.glb`     | Workbench with an oscilloscope              | 4,000            | Yes: 30+ projects     | **Done** |
+| 6   | `circuit-board.glb` | Big circuit board on an easel               | 2,500            | Yes: 100+ elements    | **Done** |
+| 7   | `lectern.glb`       | Wooden lectern with a rolled scroll         | 2,000            | Yes: Python macros    | **Done** |
 
 ### 1. Island base
 

@@ -5,6 +5,7 @@ import { HomeIsland } from './home/HomeIsland';
 import { ArenaIsland } from './arena/ArenaIsland';
 import { GroveIsland } from './grove/GroveIsland';
 import { MarketIsland } from './market/MarketIsland';
+import { WorkshopIsland } from './workshop/WorkshopIsland';
 import { RadioIsland } from './radio/RadioIsland';
 import { Island } from './Island';
 import { LabelProjector } from './LabelProjector';
@@ -17,6 +18,7 @@ const ART: Partial<Record<IslandId, (seed: number) => ReactNode>> = {
   market: () => <MarketIsland />,
   arena: () => <ArenaIsland />,
   grove: () => <GroveIsland />,
+  workshop: () => <WorkshopIsland />,
 };
 
 /** All islands from world.ts. Each real island loads in its own Suspense, showing its placeholder meanwhile. */
