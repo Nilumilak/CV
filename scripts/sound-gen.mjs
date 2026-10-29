@@ -248,6 +248,7 @@ const PICKS = {
   'mone-pdl': 'mone-pdl-6',
   'mone-packages': 'mone-packages-1',
   'mone-bnpl': 'mone-bnpl-2',
+  'radio-llm': 'radio-llm-1',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
