@@ -184,7 +184,7 @@ export function WindParticles() {
     leafMesh.current.visible = petalMesh.current.visible = points.current.visible = visible;
     if (!visible) return;
     flight.current ??= {
-      leaves: flyers(11, LEAVES, [0.38, 0.65], [0.75, 1.3]),
+      leaves: flyers(11, LEAVES, [0.22, 0.38], [0.75, 1.3]),
       petals: flyers(23, PETALS, [0.16, 0.28], [0.6, 1.1]),
       motes: flyers(37, MOTES, [1, 1], [0.25, 0.6]),
     };
