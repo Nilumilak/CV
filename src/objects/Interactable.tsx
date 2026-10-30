@@ -9,6 +9,9 @@ import { colors } from '@/materials/toon';
 import { useWorld } from '@/store/useWorld';
 import { tooltip } from './tooltip';
 
+/** Shared by every Interactable: only the hovered one uses it, once a frame. */
+const stillUnder = new THREE.Raycaster();
+
 interface InteractableProps {
   id: string;
   island: IslandId;
@@ -87,7 +90,14 @@ export function Interactable({ id, island, label, lift = true, children }: Inter
   }, [active, id]);
   useEffect(() => () => tooltip.hide(id), [id]);
 
-  useFrame((_, delta) => {
+  useFrame(({ pointer, camera }, delta) => {
+    // Pointer events only re-check what's under the pointer when the mouse moves, so an
+    // object that moves away from a still pointer (a reaction, the island's bob, a camera
+    // flight) would keep its hover and tooltip. The hovered object checks for itself.
+    if (hovered) {
+      stillUnder.setFromCamera(pointer, camera);
+      if (stillUnder.intersectObject(ref.current, true).length === 0) setHovered(false);
+    }
     easing.damp(glow, 'current', active || hinted ? GLOW_INTENSITY : 0, HOVER_EASE, delta);
     const meshes = glowingMeshes.current;
     for (let i = 0; i < meshes.length; i++) {
