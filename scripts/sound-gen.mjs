@@ -320,6 +320,9 @@ const PICKS = {
   // and podium-confetti-2 at 2.3 s, the podium's spotlight and confetti cues.
   'olimp-apps': 'olimp-apps-11',
   'olimp-virtual': 'olimp-virtual-4',
+  // Assembled with ffmpeg on the phone's timeline: phone-travel-4 over (0 s) and back a little
+  // lower (1.5 s), phone-pop-4 at 70% on each can (1.2 and 2.6 s), low-passed at 4.5 kHz.
+  'olimp-iframe': 'olimp-iframe-13',
   // Assembled with ffmpeg on the shoe's timeline: shoe-shake-1 at 0, shoe-dash-1 at 0.55 and
   // 1.35 s, shoe-skid-1 at 1.1 and 1.9 s (at 60%).
   'olimp-preact': 'olimp-preact-10',

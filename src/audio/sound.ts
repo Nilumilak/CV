@@ -18,6 +18,7 @@ import bunkerUrl from '@/assets/audio/radio-platform.mp3?url';
 import dishUrl from '@/assets/audio/radio-services.mp3?url';
 import screenUrl from '@/assets/audio/radio-ui.mp3?url';
 import podiumUrl from '@/assets/audio/olimp-apps.mp3?url';
+import phoneUrl from '@/assets/audio/olimp-iframe.mp3?url';
 import shoeUrl from '@/assets/audio/olimp-preact.mp3?url';
 import scoreboardUrl from '@/assets/audio/olimp-virtual.mp3?url';
 import circuitBoardUrl from '@/assets/audio/salyut-assemblies.mp3?url';
@@ -65,8 +66,10 @@ const OBJECT_SOUNDS: Record<string, { url: string; level?: number }> = {
   // Its sharp thumps capped the levelling, so this file is about 5 dB quieter than the rest.
   'eco-lead': { url: binsUrl, level: 0.4 },
   'radio-backend': { url: containersUrl },
-  'olimp-preact': { url: shoeUrl },
+  'olimp-preact': { url: shoeUrl, level: 0.4 },
   'olimp-virtual': { url: scoreboardUrl, level: 0.4 },
+  // About 2 dB under the other files (a peak capped its levelling), hence a little higher.
+  'olimp-iframe': { url: phoneUrl, level: 1.1 },
   'olimp-apps': { url: podiumUrl, level: 0.4 },
   'salyut-assemblies': { url: circuitBoardUrl, level: 0.4 },
   'salyut-macros': { url: scrollUrl, level: 0.4 },
@@ -89,11 +92,6 @@ let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
 let ambientStarted = false;
 let enabled = false;
-/**
- * TEMPORARY comparison switch (the button in ui/Overlay.tsx): false plays the old synthesized
- * cue for every object. Remove both once all object sounds are picked.
- */
-let objectsRecorded = true;
 let suspendTimer: number | undefined;
 
 function context(): AudioContext | null {
@@ -393,12 +391,6 @@ const CUES: Record<SoundCue, (ac: AudioContext, t: number) => void> = {
 };
 
 export const sound = {
-  /** TEMPORARY: switch objects between recorded and synthesized sounds, for comparing. */
-  toggleObjectsRecorded() {
-    objectsRecorded = !objectsRecorded;
-    return objectsRecorded;
-  },
-
   /** Start downloading the sound files, so the first sounds don't wait on the network. */
   preload() {
     const objects = Object.values(OBJECT_SOUNDS).map((s) => s.url);
@@ -447,7 +439,7 @@ export const sound = {
    * synthesized cue for its kind. Plays only when sound is on.
    */
   cue(name: SoundCue, object?: string) {
-    const recorded = object && objectsRecorded && OBJECT_SOUNDS[object];
+    const recorded = object && OBJECT_SOUNDS[object];
     if (recorded) {
       if (enabled) void play(recorded.url, recorded.level ?? OBJECT_LEVEL);
       return;

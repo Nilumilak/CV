@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { sound } from '@/audio/sound';
 import { AnimatePresence } from 'motion/react';
 import { chapterOf, neighbours } from '@/data/navigation';
@@ -39,7 +39,6 @@ export function Overlay() {
           <IslandLabels />
           <ObjectTooltip />
           <TopBar />
-          <SoundCompare />
         </>
       )}
       <AnimatePresence>
@@ -49,23 +48,6 @@ export function Overlay() {
         {announcement}
       </p>
     </>
-  );
-}
-
-/**
- * TEMPORARY: switches every object between its new recorded sound and its old synthesized
- * one, for comparing. Remove (with sound.toggleObjectsRecorded) once all sounds are picked.
- */
-function SoundCompare() {
-  const [recorded, setRecorded] = useState(true);
-  return (
-    <button
-      type="button"
-      style={{ position: 'fixed', left: 16, bottom: 16, zIndex: 50, padding: '6px 10px', font: '13px system-ui' }}
-      onClick={() => setRecorded(sound.toggleObjectsRecorded())}
-    >
-      Object sounds: {recorded ? 'new (recorded)' : 'old (synthesized)'}
-    </button>
   );
 }
 
