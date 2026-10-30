@@ -283,9 +283,9 @@ const PICKS = {
   'salyut-lead': 'salyut-lead-2',
   'salyut-projects': 'salyut-projects-5',
   'salyut-macros': 'salyut-macros-9',
-  // Assembled with ffmpeg: podium-spot-1 at 0.2, 0.9 and 1.6 s (each a whole tone higher)
-  // and podium-confetti-1 at 2.3 s, the podium's spotlight and confetti cues.
-  'olimp-apps': 'olimp-apps-10',
+  // Assembled with ffmpeg: podium-spot-2 at 0.2, 0.9 and 1.6 s (each a whole tone higher)
+  // and podium-confetti-2 at 2.3 s, the podium's spotlight and confetti cues.
+  'olimp-apps': 'olimp-apps-11',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
