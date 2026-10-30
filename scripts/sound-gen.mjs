@@ -234,14 +234,13 @@ const SOUNDS = {
   'phone-travel': {
     seconds: 1.2,
     prompt:
-      'Cartoon sound from a hand-drawn animated film: a little message zipping along a taut string ' +
-      'between two tin cans, a twangy wobbly zip. Playful, no words, not realistic, not harsh.',
+      'A small paper envelope sliding gently along a taut string between two tin cans, a soft warm ' +
+      'hum of the string vibrating. Cosy, muffled and gentle, no words, nothing sharp.',
   },
   'phone-pop': {
     seconds: 0.5,
     prompt:
-      'Cartoon sound from a hand-drawn animated film: a small tin can giving a happy little jump, ' +
-      'one tinny boing. Playful, not realistic, not harsh.',
+      'A gentle muted tap on a small tin can, a soft warm hollow tink. Cosy and quiet, nothing sharp.',
   },
   'shoe-shake': {
     seconds: 0.6,
