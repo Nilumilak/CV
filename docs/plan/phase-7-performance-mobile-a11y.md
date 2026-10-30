@@ -120,3 +120,24 @@ Phase 2 already built the basics: classic CV, keyboard navigation, deep links, b
 | Date | Device | Scene | FPS | Draw calls | Triangles | Notes |
 | ---- | ------ | ----- | --- | ---------- | --------- | ----- |
 |      |        |       |     |            |           |       |
+
+---
+
+## Measurements and changes (2026-10-30)
+
+Measured offline from the production build and the model files (no browser profiling yet; FPS and draw calls still need `?debug` on real devices).
+
+| Metric                                  | Before       | After          | Budget   |
+| --------------------------------------- | ------------ | -------------- | -------- |
+| Initial JavaScript (gzip)               | 129 KB       | 129 KB         | 100 KB   |
+| 3D code (gzip)                          | 376 KB       | 312 KB         | 600 KB   |
+| Models, all (55 meshes, 282k triangles) | 9.8 MB       | 9.8 MB         | 10 MB    |
+| Model textures in GPU memory            | about 170 MB | about 170 MB   | none set |
+| Audio before Enter                      | 1.6 MB       | 0              | 0        |
+| Waits before Enter shows                | every model  | sky and clouds |          |
+
+- **Debug panel out of the bundle.** leva (64 KB gzip) only loads with `?debug` (`src/debug/DebugControls.tsx`); visitors render the defaults in `src/debug/worldLook.ts`.
+- **No audio before Enter.** Sound files download the first time sound is turned on.
+- **Enter sooner.** The welcome view shows only sky and clouds, so Enter appears once the cloud sea has loaded (`skyReady`). Each island marks itself loaded (`islandsLoaded`); if they aren't all in when the dive is deepest in the cloud bank (about 2.8 s in), the dive eases to a stop there, hidden by the white veil, and goes on once they are, or after 15 s.
+- **Not worth it:** gzip on top of meshopt saves only 7%, and meshopt already runs at its highest level, so smaller downloads would need simplified models.
+- **Considered, not done for now:** frame-rate-based resolution scaling, lower quality on phones, 512 px textures for small props, a manual quality switch.
