@@ -3,7 +3,7 @@ import { chapters, profile } from '@/data/cv';
 import { datesOf } from '@/data/navigation';
 import styles from './ClassicCV.module.css';
 
-const prettyUrl = (href: string) => href.replace(/^https?:\/\//, '');
+const prettyUrl = (href: string) => href.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
 const monthYear = (ym: string) =>
   new Date(Number(ym.slice(0, 4)), Number(ym.slice(5, 7)) - 1).toLocaleString('en', {
@@ -68,6 +68,11 @@ export function ClassicCV({ noWebGL = false }: { noWebGL?: boolean }) {
                 <a href={`mailto:${contacts.email}`}>{contacts.email}</a>
               </li>
               {contacts.phone && <li>{contacts.phone}</li>}
+              {contacts.website && (
+                <li>
+                  <a href={contacts.website}>{prettyUrl(contacts.website)}</a>
+                </li>
+              )}
               <li>
                 <a href={contacts.linkedin}>{prettyUrl(contacts.linkedin)}</a>
               </li>

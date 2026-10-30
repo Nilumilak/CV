@@ -67,6 +67,7 @@ export interface Profile {
   contacts: {
     email: string;
     phone?: string;
+    website?: string;
     linkedin: string;
     github: string;
   };

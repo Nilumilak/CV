@@ -237,6 +237,13 @@ function HomeBody() {
               {copied ? 'Email address copied' : ''}
             </span>
           </li>
+          {contacts.website && (
+            <li>
+              <a className={styles.link} href={contacts.website} target="_blank" rel="noreferrer">
+                {contacts.website.replace(/^https?:\/\//, '').replace(/\/$/, '')} ↗
+              </a>
+            </li>
+          )}
           <li>
             <a className={styles.link} href={contacts.linkedin} target="_blank" rel="noreferrer">
               LinkedIn ↗
