@@ -19,6 +19,7 @@ import dishUrl from '@/assets/audio/radio-services.mp3?url';
 import screenUrl from '@/assets/audio/radio-ui.mp3?url';
 import circuitBoardUrl from '@/assets/audio/salyut-assemblies.mp3?url';
 import whistleUrl from '@/assets/audio/salyut-lead.mp3?url';
+import scrollUrl from '@/assets/audio/salyut-macros.mp3?url';
 import oscilloscopeUrl from '@/assets/audio/salyut-projects.mp3?url';
 import windmillUrl from '@/assets/audio/mone-packages.mp3?url';
 import fountainUrl from '@/assets/audio/mone-pdl.mp3?url';
@@ -61,9 +62,10 @@ const OBJECT_SOUNDS: Record<string, { url: string; level?: number }> = {
   // Its sharp thumps capped the levelling, so this file is about 5 dB quieter than the rest.
   'eco-lead': { url: binsUrl, level: 0.4 },
   'radio-backend': { url: containersUrl },
-  'salyut-assemblies': { url: circuitBoardUrl },
-  'salyut-lead': { url: whistleUrl },
-  'salyut-projects': { url: oscilloscopeUrl },
+  'salyut-assemblies': { url: circuitBoardUrl, level: 0.4 },
+  'salyut-macros': { url: scrollUrl },
+  'salyut-lead': { url: whistleUrl, level: 0.6 },
+  'salyut-projects': { url: oscilloscopeUrl, level: 0.4 },
   'radio-ui': { url: screenUrl, level: 0.4 },
   'radio-services': { url: dishUrl, level: 0.4 },
   'radio-platform': { url: bunkerUrl, level: 0.4 },

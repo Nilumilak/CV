@@ -202,11 +202,17 @@ const SOUNDS = {
   },
   'salyut-macros': {
     seconds: 2.6,
-    prompt: 'The pages of an old paper scroll fluttering softly in a breeze.',
+    prompt:
+      'Cartoon sound from a hand-drawn animated film: the pages of a magic paper scroll flipping ' +
+      'quickly by themselves, fast fluttery paper flaps, ending with a tiny sparkle. Playful and ' +
+      'light, not realistic.',
   },
   'salyut-projects': {
-    seconds: 2.4,
-    prompt: 'An old oscilloscope warming up, a soft electric hum with a gentle rising tone.',
+    seconds: 2.6,
+    prompt:
+      'Cartoon sound from a hand-drawn animated film: soft wobbly sine-wave tones rising one after ' +
+      'another, woo-ooo-ooo, floating up like little signals, with a gentle steady beeping pulse. ' +
+      'Whimsical and dreamy, not realistic, not harsh.',
   },
 
   // Arena.
@@ -260,7 +266,8 @@ const PICKS = {
   'radio-ui': 'radio-ui-7',
   'salyut-assemblies': 'salyut-assemblies-3',
   'salyut-lead': 'salyut-lead-2',
-  'salyut-projects': 'salyut-projects-2',
+  'salyut-projects': 'salyut-projects-5',
+  'salyut-macros': 'salyut-macros-5',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
