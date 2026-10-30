@@ -1,10 +1,9 @@
 import { Suspense, lazy } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Leva } from 'leva';
 import { CameraRig } from '@/camera/CameraRig';
 import { FLY_IN_POINTS, OVERVIEW } from '@/data/world';
 import { debugCamera, isDebug, skipIntro } from '@/debug/isDebug';
-import { useWorldControls } from '@/debug/useWorldControls';
+import { useWorldLook } from '@/debug/worldLook';
 import { Islands } from '@/islands/Islands';
 import { FlyIn } from '@/scenes/FlyIn';
 import { WelcomeSun } from '@/scenes/WelcomeSun';
@@ -17,12 +16,17 @@ import { WindParticles } from '@/world/WindParticles';
 import { SkyDome } from '@/world/SkyDome';
 
 const Debug = lazy(() => import('@/debug/Debug'));
+const DebugControls = lazy(() => import('@/debug/DebugControls'));
 
 export default function WorldCanvas() {
-  const c = useWorldControls();
+  const c = useWorldLook();
   return (
     <>
-      <Leva hidden={!isDebug} collapsed />
+      {isDebug && (
+        <Suspense fallback={null}>
+          <DebugControls />
+        </Suspense>
+      )}
       <Canvas
         flat
         dpr={[1, 2]}
