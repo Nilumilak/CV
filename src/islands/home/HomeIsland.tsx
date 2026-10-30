@@ -31,8 +31,8 @@ const deg = (d: number) => (d * Math.PI) / 180;
 
 /** Props for an object's Interactable, from the shared list in data/homeObjects.ts. */
 const interactive = (id: HomeObjectId) => {
-  const { label, cue } = homeObject(id);
-  return { id, label, cue, island: 'home' as const };
+  const { label } = homeObject(id);
+  return { id, label, island: 'home' as const };
 };
 
 /**

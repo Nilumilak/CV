@@ -43,8 +43,6 @@ export const palette = {
   gold: toon(colors.accentGold),
 } as const;
 
-export type PaletteKey = keyof typeof palette;
-
 /**
  * Softer banding for AI models with painted textures: the texture already has painted
  * shading, so shadows stay light and the steps only add a gentle sense of form.

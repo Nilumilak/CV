@@ -73,7 +73,8 @@ const SOUNDS = {
   },
   'home-bookshelf': {
     seconds: 1,
-    prompt: 'A small wooden bookshelf wobbling, books softly bumping against each other and settling.',
+    prompt:
+      'A small wooden bookshelf wobbling, books softly bumping against each other and settling.',
   },
   'home-globe': {
     seconds: 1.6,
@@ -91,7 +92,8 @@ const SOUNDS = {
   },
   'home-mailbox': {
     seconds: 1.3,
-    prompt: 'A small mailbox flap rattling softly, then a letter popping out with a light paper flick.',
+    prompt:
+      'A small mailbox flap rattling softly, then a letter popping out with a light paper flick.',
   },
 
   // Green Grove.
@@ -141,11 +143,13 @@ const SOUNDS = {
   },
   'mone-bnpl': {
     seconds: 4.5,
-    prompt: 'A small toy tram rolling around a town square on rails, soft clickety-clack, two light bell dings.',
+    prompt:
+      'A small toy tram rolling around a town square on rails, soft clickety-clack, two light bell dings.',
   },
   'mone-fsd': {
     seconds: 5,
-    prompt: 'A small hot-air balloon lifting off, a soft burner whoosh, then a gentle airy rise and float.',
+    prompt:
+      'A small hot-air balloon lifting off, a soft burner whoosh, then a gentle airy rise and float.',
   },
   'mone-nextjs': {
     seconds: 3,
@@ -155,7 +159,8 @@ const SOUNDS = {
   },
   'mone-packages': {
     seconds: 3.2,
-    prompt: 'Wooden windmill sails turning faster with soft creaks in a breeze, small parcels whooshing out.',
+    prompt:
+      'Wooden windmill sails turning faster with soft creaks in a breeze, small parcels whooshing out.',
   },
   'mone-pdl': {
     seconds: 3.4,
@@ -167,11 +172,13 @@ const SOUNDS = {
   // Radio Tower.
   'radio-backend': {
     seconds: 2.6,
-    prompt: 'A soft thump on stacked metal containers, quick tiny ticks, then a gentle success chime.',
+    prompt:
+      'A soft thump on stacked metal containers, quick tiny ticks, then a gentle success chime.',
   },
   'radio-llm': {
     seconds: 3.2,
-    prompt: 'A cute little robot thinking with soft computing bleeps, then a small hop and a happy two-note beep.',
+    prompt:
+      'A cute little robot thinking with soft computing bleeps, then a small hop and a happy two-note beep.',
   },
   'radio-platform': {
     seconds: 2.4,
@@ -194,7 +201,8 @@ const SOUNDS = {
   // Workshop.
   'salyut-assemblies': {
     seconds: 2.3,
-    prompt: 'Small metal parts flying onto a circuit board one after another, each clicking softly into place.',
+    prompt:
+      'Small metal parts flying onto a circuit board one after another, each clicking softly into place.',
   },
   'salyut-lead': {
     seconds: 1.6,
@@ -264,11 +272,13 @@ const SOUNDS = {
   // Arena.
   'olimp-apps': {
     seconds: 3.6,
-    prompt: 'Three soft spotlight clunks one after another, then light confetti popping and a sparkly chime.',
+    prompt:
+      'Three soft spotlight clunks one after another, then light confetti popping and a sparkly chime.',
   },
   'olimp-iframe': {
     seconds: 2.8,
-    prompt: 'A tin-can telephone string tightening, a soft twang and a tinny buzz travelling along the string.',
+    prompt:
+      'A tin-can telephone string tightening, a soft twang and a tinny buzz travelling along the string.',
   },
   'olimp-preact': {
     seconds: 2.6,
@@ -336,8 +346,16 @@ function exportPicks() {
     const stereo = name === 'music';
     const out = `${dir}/${name}.mp3`;
     execFileSync(ffmpeg, [
-      '-y', '-v', 'error', '-i', `${OUT}/${pick}.mp3`,
-      '-ac', stereo ? '2' : '1', '-b:a', stereo ? '112k' : '64k', out,
+      '-y',
+      '-v',
+      'error',
+      '-i',
+      `${OUT}/${pick}.mp3`,
+      '-ac',
+      stereo ? '2' : '1',
+      '-b:a',
+      stereo ? '112k' : '64k',
+      out,
     ]);
     console.log(`${pick} -> ${out}`);
   }
@@ -397,7 +415,17 @@ async function generate(name) {
 
 /** Measures a file's loudness and loudest peak with ffmpeg. */
 function measure(path) {
-  const args = ['-hide_banner', '-nostats', '-i', path, '-af', 'ebur128=peak=true', '-f', 'null', '-'];
+  const args = [
+    '-hide_banner',
+    '-nostats',
+    '-i',
+    path,
+    '-af',
+    'ebur128=peak=true',
+    '-f',
+    'null',
+    '-',
+  ];
   return spawnSync(ffmpeg, args, { encoding: 'utf8' }).stderr;
 }
 
@@ -411,7 +439,18 @@ function level() {
     const loudness = Number(/I:\s+(-?[\d.]+) LUFS/.exec(summary)?.[1]);
     const peak = Number(/Peak:\s+(-?[\d.]+) dBFS/.exec(summary)?.[1]);
     const gain = Math.min(LOUDNESS - loudness, PEAK - peak);
-    execFileSync(ffmpeg, ['-y', '-v', 'error', '-i', `${RAW}/${f}`, '-af', `volume=${gain.toFixed(1)}dB`, '-b:a', '128k', out]);
+    execFileSync(ffmpeg, [
+      '-y',
+      '-v',
+      'error',
+      '-i',
+      `${RAW}/${f}`,
+      '-af',
+      `volume=${gain.toFixed(1)}dB`,
+      '-b:a',
+      '128k',
+      out,
+    ]);
     console.log(`${f}: ${loudness} LUFS, peak ${peak} dBFS -> gain ${gain.toFixed(1)} dB`);
   }
 }
@@ -426,7 +465,10 @@ function writePage() {
         .sort((a, b) => parseInt(a.slice(name.length + 1)) - parseInt(b.slice(name.length + 1)));
       if (!mine.length) return '';
       const players = mine
-        .map((f) => `<figure><figcaption>${f.replace('.mp3', '')}</figcaption><audio controls preload="none" src="${f}"${SOUNDS[name].loop || SOUNDS[name].music ? ' loop' : ''}></audio></figure>`)
+        .map(
+          (f) =>
+            `<figure><figcaption>${f.replace('.mp3', '')}</figcaption><audio controls preload="none" src="${f}"${SOUNDS[name].loop || SOUNDS[name].music ? ' loop' : ''}></audio></figure>`,
+        )
         .join('');
       return `<section><h2>${name}</h2><p>${SOUNDS[name].prompt}</p><div>${players}</div></section>`;
     })

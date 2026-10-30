@@ -17,31 +17,6 @@ interface ReactionProps {
   children: ReactNode;
 }
 
-/** A happy squash-and-stretch hop. */
-export function Hop({
-  id,
-  height = 0.3,
-  seconds = 0.75,
-  children,
-}: ReactionProps & { height?: number; seconds?: number }) {
-  const ref = useRef<THREE.Group>(null!);
-  const progress = useReaction(id, seconds);
-  useFrame(({ clock }) => {
-    const t = progress(clock.elapsedTime);
-    const g = ref.current;
-    if (t === null) {
-      g.position.y = 0;
-      g.scale.setScalar(1);
-      return;
-    }
-    g.position.y = Math.sin(t * Math.PI) * height;
-    // Stretch on the way up, squash on landing.
-    const s = Math.sin(t * TAU) * 0.12;
-    g.scale.set(1 - s * 0.5, 1 + s, 1 - s * 0.5);
-  });
-  return <group ref={ref}>{children}</group>;
-}
-
 /** A wobble that dies down, like something nudged. */
 export function Wobble({
   id,

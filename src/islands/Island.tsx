@@ -6,12 +6,11 @@ import { useReducedMotion } from 'motion/react';
 import type * as THREE from 'three';
 import type { IslandLayout } from '@/data/types';
 import { useWorld } from '@/store/useWorld';
-import { PlaceholderIsland } from './PlaceholderIsland';
 
 interface IslandProps {
   layout: IslandLayout;
-  /** Real island art (Phase 4). Falls back to the placeholder. */
-  children?: ReactNode;
+  /** The island's art. */
+  children: ReactNode;
 }
 
 /** How far an island rises and sinks, in island units. */
@@ -60,7 +59,7 @@ export function Island({ layout, children }: IslandProps) {
             if (!isFocused) focus(layout.id);
           }}
         >
-          {children ?? <PlaceholderIsland id={layout.id} seed={layout.seed} />}
+          {children}
         </group>
       </group>
     </group>

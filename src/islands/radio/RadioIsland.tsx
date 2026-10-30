@@ -34,8 +34,8 @@ import {
 
 /** Props for an object's Interactable, from the shared list in data/islandObjects.ts. */
 const interactive = (id: IslandObjectId) => {
-  const { label, cue } = islandObject(id);
-  return { id, label, cue, island: 'radio' as const };
+  const { label } = islandObject(id);
+  return { id, label, island: 'radio' as const };
 };
 
 /**

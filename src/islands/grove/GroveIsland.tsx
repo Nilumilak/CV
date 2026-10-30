@@ -29,8 +29,8 @@ import {
 
 /** Props for an object's Interactable, from the shared list in data/islandObjects.ts. */
 const interactive = (id: IslandObjectId) => {
-  const { label, cue } = islandObject(id);
-  return { id, label, cue, island: 'grove' as const };
+  const { label } = islandObject(id);
+  return { id, label, island: 'grove' as const };
 };
 
 /**

@@ -1,7 +1,7 @@
 /**
- * The site's sound: a music loop and a wind loop for ambience, a whoosh for the fly-in and a
- * short sound per interactive object. Recorded files come from ElevenLabs (scripts/sound-gen.mjs);
- * objects without a recorded sound yet fall back to a small synthesized cue.
+ * The site's sound: a music loop and a wind loop for ambience, a whoosh for the fly-in, a page
+ * rustle and a soft tap for the interface, and a short sound per interactive object. Recorded
+ * files come from ElevenLabs (scripts/sound-gen.mjs); two objects keep synthesized sounds.
  *
  * Browsers only allow audio after a user gesture, so setEnabled() and whoosh() must be
  * called from a click handler (or after the page has had one: activation is sticky).
@@ -173,33 +173,6 @@ function rampTo(param: AudioParam, value: number, seconds: number) {
   param.linearRampToValueAtTime(value, now + seconds);
 }
 
-/** Short, soft reaction sounds for interactive objects. All under a second. */
-export type SoundCue =
-  'mrrp' | 'chime' | 'paper' | 'knock' | 'whirr' | 'beep' | 'hum' | 'click' | 'bell' | 'coins';
-
-/** One oscillator with a gliding pitch and a quick attack, exponential fade. */
-function voice(
-  ac: AudioContext,
-  t: number,
-  type: OscillatorType,
-  pitch: [seconds: number, hz: number][],
-  peak: number,
-  seconds: number,
-  out: AudioNode = ac.destination,
-) {
-  const osc = ac.createOscillator();
-  osc.type = type;
-  osc.frequency.setValueAtTime(pitch[0][1], t);
-  for (const [at, hz] of pitch.slice(1)) osc.frequency.exponentialRampToValueAtTime(hz, t + at);
-  const gain = ac.createGain();
-  gain.gain.setValueAtTime(0.0001, t);
-  gain.gain.exponentialRampToValueAtTime(peak, t + 0.015);
-  gain.gain.exponentialRampToValueAtTime(0.0001, t + seconds);
-  osc.connect(gain).connect(out);
-  osc.start(t);
-  osc.stop(t + seconds + 0.05);
-}
-
 /** Band-passed noise with a sweeping centre, for paper and air sounds. */
 function noiseSweep(
   ac: AudioContext,
@@ -224,62 +197,26 @@ function noiseSweep(
   src.stop(t + seconds);
 }
 
-const CUES: Record<SoundCue, (ac: AudioContext, t: number) => void> = {
-  // A cat's chirp-trill: a voiced buzz shaped by two vowel-like resonances, with a fast
-  // flutter in loudness for the rolled "rr". The pitch lifts a little and settles,
-  // like a question ("mrrp?"), instead of a bouncy glide.
-  mrrp: (ac, t) => {
-    const seconds = 0.42;
-    const buzz = ac.createOscillator();
-    buzz.type = 'sawtooth';
-    buzz.frequency.setValueAtTime(240, t);
-    buzz.frequency.exponentialRampToValueAtTime(310, t + 0.16);
-    buzz.frequency.exponentialRampToValueAtTime(275, t + seconds);
-
-    // The rolled "rr": loudness wobbles about 24 times a second.
-    const roll = ac.createGain();
-    roll.gain.value = 0.55;
-    const flutter = ac.createOscillator();
-    flutter.frequency.value = 24;
-    const depth = ac.createGain();
-    depth.gain.value = 0.45;
-    flutter.connect(depth).connect(roll.gain);
-    buzz.connect(roll);
-
-    // Envelope: soft start, a short hold, and the mouth closing at the end ("p").
-    const env = ac.createGain();
-    env.gain.setValueAtTime(0.0001, t);
-    env.gain.exponentialRampToValueAtTime(0.5, t + 0.05);
-    env.gain.setValueAtTime(0.5, t + seconds * 0.6);
-    env.gain.exponentialRampToValueAtTime(0.0001, t + seconds);
-    env.connect(ac.destination);
-
-    // Two resonances, roughly the vowel in "mur", so it sounds voiced, not electronic.
-    for (const [hz, q, level] of [
-      [700, 5, 1],
-      [1250, 7, 0.45],
-    ]) {
-      const formant = ac.createBiquadFilter();
-      formant.type = 'bandpass';
-      formant.frequency.value = hz;
-      formant.Q.value = q;
-      const mix = ac.createGain();
-      mix.gain.value = level;
-      roll.connect(formant).connect(mix).connect(env);
-    }
-
-    for (const osc of [buzz, flutter]) {
-      osc.start(t);
-      osc.stop(t + seconds + 0.05);
-    }
-  },
-  // Two bell tones a fifth apart (C6, G6).
-  chime: (ac, t) => {
-    voice(ac, t, 'sine', [[0, 1046.5]], 0.07, 1.1);
-    voice(ac, t + 0.09, 'sine', [[0, 1568]], 0.05, 1.0);
-  },
-  // Two quick rustles, like a letter sliding out.
-  paper: (ac, t) => {
+/**
+ * The two objects whose synthesized sounds were kept over recorded ones: the globe's whirr
+ * and the noticeboard's paper rustle. Every other object plays its file from OBJECT_SOUNDS.
+ */
+const SYNTHESIZED: Record<string, (ac: AudioContext, t: number) => void> = {
+  // Air rushing up and down, like a globe spun by hand.
+  'home-globe': (ac, t) =>
+    noiseSweep(
+      ac,
+      t,
+      [
+        [0, 500],
+        [0.35, 1400],
+        [0.9, 420],
+      ],
+      0.07,
+      0.9,
+    ),
+  // Two quick rustles, like notes being shuffled.
+  'eco-admin': (ac, t) => {
     noiseSweep(
       ac,
       t,
@@ -300,93 +237,6 @@ const CUES: Record<SoundCue, (ac: AudioContext, t: number) => void> = {
       0.08,
       0.26,
     );
-  },
-  // Two soft knocks on wood.
-  knock: (ac, t) => {
-    voice(
-      ac,
-      t,
-      'sine',
-      [
-        [0, 190],
-        [0.12, 95],
-      ],
-      0.22,
-      0.16,
-    );
-    voice(
-      ac,
-      t + 0.13,
-      'sine',
-      [
-        [0, 170],
-        [0.12, 90],
-      ],
-      0.16,
-      0.16,
-    );
-  },
-  // Air rushing up and down, like a globe spun by hand.
-  whirr: (ac, t) =>
-    noiseSweep(
-      ac,
-      t,
-      [
-        [0, 500],
-        [0.35, 1400],
-        [0.9, 420],
-      ],
-      0.07,
-      0.9,
-    ),
-  // Two friendly robot blips, the second higher.
-  beep: (ac, t) => {
-    voice(ac, t, 'square', [[0, 880]], 0.04, 0.09);
-    voice(ac, t + 0.11, 'square', [[0, 1320]], 0.04, 0.12);
-  },
-  // A low electric hum swelling and fading, like a lab switching on.
-  hum: (ac, t) =>
-    voice(
-      ac,
-      t,
-      'sine',
-      [
-        [0, 110],
-        [0.6, 120],
-      ],
-      0.12,
-      0.9,
-    ),
-  // A soft switch click.
-  click: (ac, t) =>
-    voice(
-      ac,
-      t,
-      'triangle',
-      [
-        [0, 1800],
-        [0.04, 600],
-      ],
-      0.08,
-      0.06,
-    ),
-  // A little tram bell: two quick dings.
-  bell: (ac, t) => {
-    voice(ac, t, 'sine', [[0, 1318]], 0.08, 0.5);
-    voice(ac, t + 0.18, 'sine', [[0, 1318]], 0.07, 0.6);
-  },
-  // Coins tumbling: a handful of short bright pings at random pitches.
-  coins: (ac, t) => {
-    for (let i = 0; i < 6; i++) {
-      voice(
-        ac,
-        t + i * 0.06 + Math.random() * 0.03,
-        'sine',
-        [[0, 2200 + Math.random() * 1400]],
-        0.04,
-        0.18,
-      );
-    }
   },
 };
 
@@ -434,18 +284,15 @@ export const sound = {
     if (enabled) void play(tapUrl, UI_LEVEL);
   },
 
-  /**
-   * An interactive object's reaction sound: its recorded sound if it has one, otherwise the
-   * synthesized cue for its kind. Plays only when sound is on.
-   */
-  cue(name: SoundCue, object?: string) {
-    const recorded = object && OBJECT_SOUNDS[object];
+  /** An interactive object's reaction sound, by object id. Plays only when sound is on. */
+  cue(object: string) {
+    if (!enabled) return;
+    const recorded = OBJECT_SOUNDS[object];
     if (recorded) {
-      if (enabled) void play(recorded.url, recorded.level ?? OBJECT_LEVEL);
+      void play(recorded.url, recorded.level ?? OBJECT_LEVEL);
       return;
     }
     const ac = context();
-    if (!ac || !enabled) return;
-    CUES[name](ac, ac.currentTime);
+    if (ac) SYNTHESIZED[object]?.(ac, ac.currentTime);
   },
 };

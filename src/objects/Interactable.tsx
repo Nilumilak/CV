@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { useCursor } from '@react-three/drei';
 import { easing } from 'maath';
 import * as THREE from 'three';
-import { sound, type SoundCue } from '@/audio/sound';
+import { sound } from '@/audio/sound';
 import type { IslandId } from '@/data/types';
 import { colors } from '@/materials/toon';
 import { useWorld } from '@/store/useWorld';
@@ -14,7 +14,6 @@ interface InteractableProps {
   island: IslandId;
   /** Hover hint, e.g. "Skills". */
   label: string;
-  cue: SoundCue;
   /**
    * Whether hovering lifts (slightly enlarges) the object. Turn it off for a group spread
    * across the island, such as a row of saplings: the lift grows around the group origin,
@@ -42,7 +41,7 @@ const canGlow = (m: THREE.Material): m is Glowing => 'emissive' in m;
  * Click: activates the object in the store. Reactions and the panel listen for that,
  * so the panel's "Show me" buttons play exactly the same thing.
  */
-export function Interactable({ id, island, label, cue, lift = true, children }: InteractableProps) {
+export function Interactable({ id, island, label, lift = true, children }: InteractableProps) {
   const ref = useRef<THREE.Group>(null!);
   const glow = useRef(0);
   const glowingMeshes = useRef<THREE.Mesh[]>([]);
@@ -78,9 +77,9 @@ export function Interactable({ id, island, label, cue, lift = true, children }: 
   useEffect(
     () =>
       useWorld.subscribe((s, prev) => {
-        if (s.activeCount !== prev.activeCount && s.activeObject === id) sound.cue(cue, id);
+        if (s.activeCount !== prev.activeCount && s.activeObject === id) sound.cue(id);
       }),
-    [id, cue],
+    [id],
   );
 
   useEffect(() => {

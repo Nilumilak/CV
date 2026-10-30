@@ -13,8 +13,8 @@ import { Island } from './Island';
 import { LabelProjector } from './LabelProjector';
 import { PlaceholderIsland } from './PlaceholderIsland';
 
-/** Islands that have real art. The rest stay placeholders until their turn in Phase 4. */
-const ART: Partial<Record<IslandId, (seed: number) => ReactNode>> = {
+/** Each island's art. */
+const ART: Record<IslandId, () => ReactNode> = {
   home: () => <HomeIsland />,
   radio: () => <RadioIsland />,
   market: () => <MarketIsland />,
@@ -24,24 +24,19 @@ const ART: Partial<Record<IslandId, (seed: number) => ReactNode>> = {
   lighthouse: () => <LighthouseIsland />,
 };
 
-/** All islands from world.ts. Each real island loads in its own Suspense, showing its placeholder meanwhile. */
+/** All islands from world.ts. Each loads in its own Suspense, showing a placeholder meanwhile. */
 export function Islands() {
   return (
     <>
-      {ISLANDS.map((layout) => {
-        const art = ART[layout.id];
-        return (
-          <Island key={layout.id} layout={layout}>
-            {art ? (
-              <Suspense fallback={<PlaceholderIsland id={layout.id} seed={layout.seed} />}>
-                {art(layout.seed)}
-                {/* The route's ropes tie on here, so they float and grow on hover with the island. */}
-                <RouteAnchors island={layout.id} />
-              </Suspense>
-            ) : undefined}
-          </Island>
-        );
-      })}
+      {ISLANDS.map((layout) => (
+        <Island key={layout.id} layout={layout}>
+          <Suspense fallback={<PlaceholderIsland id={layout.id} seed={layout.seed} />}>
+            {ART[layout.id]()}
+            {/* The route's ropes tie on here, so they float and grow on hover with the island. */}
+            <RouteAnchors island={layout.id} />
+          </Suspense>
+        </Island>
+      ))}
       <LabelProjector />
     </>
   );
