@@ -18,6 +18,7 @@ import bunkerUrl from '@/assets/audio/radio-platform.mp3?url';
 import dishUrl from '@/assets/audio/radio-services.mp3?url';
 import screenUrl from '@/assets/audio/radio-ui.mp3?url';
 import podiumUrl from '@/assets/audio/olimp-apps.mp3?url';
+import shoeUrl from '@/assets/audio/olimp-preact.mp3?url';
 import scoreboardUrl from '@/assets/audio/olimp-virtual.mp3?url';
 import circuitBoardUrl from '@/assets/audio/salyut-assemblies.mp3?url';
 import whistleUrl from '@/assets/audio/salyut-lead.mp3?url';
@@ -64,7 +65,8 @@ const OBJECT_SOUNDS: Record<string, { url: string; level?: number }> = {
   // Its sharp thumps capped the levelling, so this file is about 5 dB quieter than the rest.
   'eco-lead': { url: binsUrl, level: 0.4 },
   'radio-backend': { url: containersUrl },
-  'olimp-virtual': { url: scoreboardUrl },
+  'olimp-preact': { url: shoeUrl },
+  'olimp-virtual': { url: scoreboardUrl, level: 0.4 },
   'olimp-apps': { url: podiumUrl, level: 0.4 },
   'salyut-assemblies': { url: circuitBoardUrl, level: 0.4 },
   'salyut-macros': { url: scrollUrl, level: 0.4 },

@@ -273,7 +273,9 @@ const SOUNDS = {
   },
   'olimp-preact': {
     seconds: 2.6,
-    prompt: 'A winged running shoe dashing off, soft feathery wing flaps and a quick airy whoosh.',
+    prompt:
+      'Cartoon sound from a hand-drawn animated film: quick feathery wing flaps, then a fast zoom ' +
+      'whoosh like a cartoon character dashing off. Light and speedy, not realistic, not harsh.',
   },
   'olimp-virtual': {
     seconds: 2.6,
@@ -319,6 +321,7 @@ const PICKS = {
   // and podium-confetti-2 at 2.3 s, the podium's spotlight and confetti cues.
   'olimp-apps': 'olimp-apps-11',
   'olimp-virtual': 'olimp-virtual-4',
+  'olimp-preact': 'olimp-preact-9',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
