@@ -215,6 +215,21 @@ const SOUNDS = {
       'Whimsical and dreamy, not realistic, not harsh.',
   },
 
+  // Arena. The podium's sound is assembled from these two parts on its animation's timeline
+  // (see docs/plan/phase-6-polish.md): models fill long requests with silence.
+  'podium-spot': {
+    seconds: 0.7,
+    prompt:
+      'Cartoon sound from a hand-drawn animated film: one soft spotlight switching on with a gentle ' +
+      'clunk and a single bright chime note. Cheerful, not realistic, not harsh.',
+  },
+  'podium-confetti': {
+    seconds: 1.6,
+    prompt:
+      'Cartoon sound from a hand-drawn animated film: a burst of confetti with a sparkly ta-da ' +
+      'shimmer, then confetti fluttering gently down. Celebratory and soft, not realistic, not harsh.',
+  },
+
   // Arena.
   'olimp-apps': {
     seconds: 3.6,
