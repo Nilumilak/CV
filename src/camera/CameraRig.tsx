@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { CameraControls, CameraControlsImpl } from '@react-three/drei';
 import { easing } from 'maath';
+import { useReducedMotion } from 'motion/react';
 import * as THREE from 'three';
 import type { Vec3 } from '@/data/types';
 import { layoutOf, OVERVIEW } from '@/data/world';
@@ -65,6 +66,8 @@ function ActiveCameraRig() {
   const focused = useWorld((s) => s.focused);
   const { size, camera } = useThree();
   const first = useRef(true);
+  /** With reduced motion the camera cuts to each island instead of flying there. */
+  const reduceMotion = useReducedMotion() ?? false;
   /**
    * The panel shift is applied to the picture (the camera's view offset), not by moving
    * the camera. A pixel shift stays the same at every zoom, so the island stays centred
@@ -104,7 +107,7 @@ function ActiveCameraRig() {
 
     const k = backoffFor(size.width / size.height);
     const pose = scalePose(focused ? layoutOf(focused).camera : OVERVIEW, k);
-    void c.setLookAt(...pose.position, ...pose.target, true);
+    void c.setLookAt(...pose.position, ...pose.target, !reduceMotion);
 
     const limits = focused ? DISTANCE.focus : DISTANCE.overview;
     c.minDistance = limits.min * k;
@@ -112,7 +115,8 @@ function ActiveCameraRig() {
 
     const [sx, sy] = focused ? panelShift(size.width, size.height) : [0, 0];
     shiftTarget.current.set(sx, sy);
-  }, [focused, size.width, size.height]);
+    if (reduceMotion) shift.current.set(sx, sy);
+  }, [focused, size.width, size.height, reduceMotion]);
 
   // Slide the picture towards its target shift; it eases like the camera flights.
   useFrame((_, delta) => {
