@@ -1,23 +1,22 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useProgress } from '@react-three/drei';
 import { useWorld } from '@/store/useWorld';
 
-/** Frames to wait before trusting "nothing is loading": loaders may not have started yet. */
+/** Frames to render after the sky is ready, so shaders compile before the welcome fade. */
 const SETTLE_FRAMES = 12;
 
 /**
- * Moves the app from 'loading' to 'welcome' once the scene has rendered a few frames
- * and drei's loading manager reports no pending assets. The Enter button appears then.
+ * Moves the app from 'loading' to 'welcome' once the sky and cloud sea have loaded and the
+ * scene has rendered a few frames. The Enter button appears then; the islands may still be
+ * loading below the clouds (FlyIn waits for them in the cloud bank).
  */
 export function LoadingReporter() {
-  const { active } = useProgress();
   const frames = useRef(0);
 
   useFrame(() => {
-    const { phase, setPhase } = useWorld.getState();
-    if (phase !== 'loading') return;
-    frames.current = active ? 0 : frames.current + 1;
+    const { phase, skyReady, setPhase } = useWorld.getState();
+    if (phase !== 'loading' || !skyReady) return;
+    frames.current += 1;
     if (frames.current >= SETTLE_FRAMES) setPhase('welcome');
   });
 

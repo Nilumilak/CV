@@ -17,6 +17,10 @@ export interface WorldState {
   hintObject: string | null;
   sound: boolean;
   quality: Quality;
+  /** The cloud sea has loaded: the welcome view is complete, so Enter can show. */
+  skyReady: boolean;
+  /** Islands whose art has loaded. Until all have, the dive waits inside the cloud bank. */
+  islandsLoaded: IslandId[];
   /** Persisted across visits. */
   visited: IslandId[];
   /** Persisted across visits. */
@@ -30,6 +34,8 @@ export interface WorldState {
   setHint: (id: string | null) => void;
   toggleSound: () => void;
   setQuality: (quality: Quality) => void;
+  markSkyReady: () => void;
+  markIslandLoaded: (id: IslandId) => void;
 }
 
 /** Storage that never throws: private windows and blocked storage just skip persistence. */
@@ -61,6 +67,8 @@ export const useWorld = create<WorldState>()(
       hintObject: null,
       sound: false,
       quality: 'high',
+      skyReady: false,
+      islandsLoaded: [],
       visited: [],
       found: [],
 
@@ -90,6 +98,8 @@ export const useWorld = create<WorldState>()(
       setHint: (hintObject) => set({ hintObject }),
       toggleSound: () => set((s) => ({ sound: !s.sound })),
       setQuality: (quality) => set({ quality }),
+      markSkyReady: () => set({ skyReady: true }),
+      markIslandLoaded: (id) => set((s) => ({ islandsLoaded: addOnce(s.islandsLoaded, id) })),
     }),
     {
       name: 'sky-cv',

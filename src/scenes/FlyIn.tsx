@@ -1,7 +1,7 @@
 import { useLayoutEffect, useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { FLY_IN_CLOUD, FLY_IN_POINTS, OVERVIEW } from '@/data/world';
+import { FLY_IN_CLOUD, FLY_IN_POINTS, ISLANDS, OVERVIEW } from '@/data/world';
 import { introAt } from '@/debug/isDebug';
 import { useWorld } from '@/store/useWorld';
 import { setVeilOpacity } from './introEffects';
@@ -28,6 +28,14 @@ const easeInOutSine = (x: number) => (1 - Math.cos(Math.PI * x)) / 2;
  */
 const OVERSHOOT = 8;
 const SETTLE = 0.22;
+
+/**
+ * If the islands are still loading when the dive reaches the cloud bank, it eases to a stop
+ * deep inside (where the veil hides everything) and goes on once they're in. HOLD_EASE is how
+ * much of the dive the slowing takes; after HOLD_LIMIT seconds it goes on regardless.
+ */
+const HOLD_EASE = 0.05;
+const HOLD_LIMIT = 15;
 const smoothstep = (a: number, b: number, x: number) => {
   const t = THREE.MathUtils.clamp((x - a) / (b - a), 0, 1);
   return t * t * (3 - 2 * t);
@@ -80,7 +88,30 @@ export function FlyIn() {
   }, []);
   const PAST = 1 / overviewAt;
 
+  /** Dive progress k (see placeAt) at time share t: on past the overview, then back to it. */
+  const kAt = (t: number) =>
+    t < 1 - SETTLE
+      ? PAST * easeInOutCubic(t / (1 - SETTLE))
+      : PAST + (1 - PAST) * easeInOutSine((t - (1 - SETTLE)) / SETTLE);
+
+  /** The time share at which the camera is deepest in the cloud bank: where a wait happens. */
+  const holdAt = useMemo(() => {
+    let best = 0;
+    let nearest = Infinity;
+    for (let i = 0; i <= 400; i++) {
+      const t = (i / 400) * (1 - SETTLE);
+      const d = curve.getPointAt(Math.min(kAt(t) * overviewAt, 1)).distanceTo(cloudCenter);
+      if (d < nearest) [nearest, best] = [d, t];
+    }
+    return best;
+    // kAt only depends on the curve's constants.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [curve, overviewAt]);
+
   const progress = useRef(0);
+  /** Speed of the dive, 0 to 1: it eases down to wait in the cloud for the islands. */
+  const pace = useRef(1);
+  const waited = useRef(0);
   const duration = useRef(DURATION);
   const introSeen = useRef(false);
   /** The welcome float where it was when the dive began, faded out as the view tips down. */
@@ -131,6 +162,8 @@ export function FlyIn() {
       const returning = useWorld.getState().visited.length > 0;
       duration.current = returning ? RETURN_DURATION : DURATION;
       progress.current = 0;
+      pace.current = 1;
+      waited.current = 0;
     } else if (phase === 'world' && introSeen.current) {
       // Finished or skipped: land exactly on the overview pose.
       placeAt(1);
@@ -160,12 +193,15 @@ export function FlyIn() {
     }
     if (current !== 'flyIn') return;
 
-    progress.current = Math.min(progress.current + delta / duration.current, 1);
+    const loaded = useWorld.getState().islandsLoaded.length >= ISLANDS.length;
+    const go = loaded || waited.current > HOLD_LIMIT;
+    const towardsHold = THREE.MathUtils.clamp((holdAt - progress.current) / HOLD_EASE, 0, 1);
+    pace.current = THREE.MathUtils.damp(pace.current, go ? 1 : towardsHold, 4, delta);
+    if (!go && towardsHold < 1) waited.current += delta;
+    progress.current = Math.min(progress.current + (delta / duration.current) * pace.current, 1);
+    if (!go) progress.current = Math.min(progress.current, holdAt);
     const t = progress.current;
-    const k =
-      t < 1 - SETTLE
-        ? PAST * easeInOutCubic(t / (1 - SETTLE))
-        : PAST + (1 - PAST) * easeInOutSine((t - (1 - SETTLE)) / SETTLE);
+    const k = kAt(t);
     const tip = 1 - smoothstep(0, TIP_DOWN, progress.current);
     placeAt(k, tip, float.current.drift * tip, float.current.rise * tip);
 

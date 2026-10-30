@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { CameraRig } from '@/camera/CameraRig';
 import { FLY_IN_POINTS, OVERVIEW } from '@/data/world';
@@ -14,6 +14,13 @@ import { Lighting } from '@/world/Lighting';
 import { Route } from '@/world/Route';
 import { WindParticles } from '@/world/WindParticles';
 import { SkyDome } from '@/world/SkyDome';
+
+/** Mounts once the cloud sea has loaded (it sits inside the same Suspense) and says so. */
+function SkyReady() {
+  const markSkyReady = useWorld((s) => s.markSkyReady);
+  useEffect(() => markSkyReady(), [markSkyReady]);
+  return null;
+}
 
 const Debug = lazy(() => import('@/debug/Debug'));
 const DebugControls = lazy(() => import('@/debug/DebugControls'));
@@ -47,12 +54,14 @@ export default function WorldCanvas() {
         {/*
           One boundary for clouds and islands: the islands only appear once the cloud sea
           (whose puff texture loads asynchronously) is there to hide them from the welcome
-          view. Each island still loads its own art behind its own boundary.
+          view. Each island loads its own art behind its own boundary, so the welcome screen
+          is ready as soon as the clouds are; the dive waits in the cloud bank for the rest.
         */}
         <Suspense fallback={null}>
           <CloudLayers />
           <Islands />
           <Route />
+          <SkyReady />
         </Suspense>
         <WindParticles />
         <WelcomeSun />
