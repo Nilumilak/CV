@@ -21,8 +21,10 @@ import {
   LightSwell,
   PARTS_SECONDS,
   PartsFlyIn,
+  SignalWaves,
   SteamBurst,
   Turning,
+  WAVES_SECONDS,
 } from './effects';
 
 /** Props for an object's Interactable, from the shared list in data/islandObjects.ts. */
@@ -136,8 +138,16 @@ export function WorkshopIsland() {
           idle={0.2}
           peak={2.6}
           distance={1.8}
+          pulse={2}
         />
         <LightSwell id="salyut-projects" position={[-0.59, 1.0, -0.2]} idle={0.3} peak={2.4} />
+        <SignalWaves id="salyut-projects" position={[-0.143, 0.96, 0.35]} />
+        <PercentTag
+          id="salyut-projects"
+          position={[0, BENCH_HEIGHT + 1.1, 0]}
+          text="30+ projects"
+          delay={WAVES_SECONDS * 0.45}
+        />
       </group>
 
       <group position={at('board')} rotation-y={deg(FACE_CAMERA + 10)}>

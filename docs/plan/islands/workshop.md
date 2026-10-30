@@ -82,7 +82,7 @@ This replaces the plan's "group of small worker figures": small characters are w
 A sturdy wooden workbench with an old oscilloscope on it (plain dark-green screen), a soldering iron and a few parts.
 
 - **Idle:** the screen and the desk lamp glow faintly.
-- **Click:** the oscilloscope screen glows up green and the desk lamp warm, then both fade back (light only, like the Radio bunker door).
+- **Click:** the oscilloscope screen glows up green, beating in a steady rhythm, and the desk lamp warm. Small glowing green sine waves rise out of the screen one after another and drift up, fading (separate sprites, like the Home cat's z's), then a gold "30+ projects" tag appears. Changed 2026-10-30: the earlier light-only swell was too easy to miss.
 
 ### Big circuit board on an easel · Assemblies of 100+ high-precision elements
 

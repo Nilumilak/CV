@@ -67,11 +67,12 @@ export function SteamBurst({ id, position }: { id: string; position: Vec3 }) {
   );
 }
 
-// --- Oscilloscope and lamp: light swells ---------------------------------------------
+// --- Oscilloscope and lamp: light swells, signal waves ---------------------------------
 
 /**
  * A light that swells up and fades back when the object is activated, with a faint
  * glow while idle. Light only, no shape, so it takes the form of whatever it shines on.
+ * `pulse` (beats per second) makes the swell beat in a steady rhythm, like a signal.
  */
 export function LightSwell({
   id,
@@ -80,6 +81,7 @@ export function LightSwell({
   idle = 0.15,
   peak = 3,
   distance = 2.5,
+  pulse = 0,
 }: {
   id: string;
   position: Vec3;
@@ -87,13 +89,93 @@ export function LightSwell({
   idle?: number;
   peak?: number;
   distance?: number;
+  pulse?: number;
 }) {
   const light = useRef<THREE.PointLight>(null!);
   const progress = useReaction(id, 2.4);
   useFrame(({ clock }) => {
-    light.current.intensity = idle + peak * swellOf(progress(clock.elapsedTime));
+    const p = progress(clock.elapsedTime);
+    const beat = pulse && p !== null ? 0.6 + 0.4 * Math.cos(p * 2.4 * pulse * Math.PI * 2) : 1;
+    light.current.intensity = idle + peak * swellOf(p) * beat;
   });
   return <pointLight ref={light} position={position} color={color} distance={distance} decay={2} />;
+}
+
+export const WAVES_SECONDS = 2.6;
+const WAVES = 5;
+
+/** One and a half periods of a sine wave, glowing green like an oscilloscope trace. */
+function waveTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 256;
+  canvas.height = 128;
+  const g = canvas.getContext('2d')!;
+  g.lineCap = g.lineJoin = 'round';
+  const trace = () => {
+    g.beginPath();
+    for (let x = 24; x <= 232; x += 4) {
+      const y = 64 - Math.sin(((x - 24) / 208) * Math.PI * 3) * 34;
+      if (x === 24) g.moveTo(x, y);
+      else g.lineTo(x, y);
+    }
+    g.stroke();
+  };
+  // A soft glow, then the bright trace on top.
+  g.strokeStyle = 'rgba(120, 235, 150, 0.35)';
+  g.lineWidth = 26;
+  trace();
+  g.strokeStyle = '#d9ffe0';
+  g.lineWidth = 9;
+  trace();
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
+/**
+ * Small glowing sine waves that rise out of the oscilloscope screen one after another,
+ * swaying and fading as they drift up: signals, for the frequency work behind it.
+ * They're separate sprites in the air, so nothing is drawn on the model.
+ */
+export function SignalWaves({ id, position }: { id: string; position: Vec3 }) {
+  const sprites = useRef<THREE.Sprite[]>([]);
+  const texture = useMemo(() => waveTexture(), []);
+  const progress = useReaction(id, WAVES_SECONDS);
+  useFrame(({ clock }) => {
+    const p = progress(clock.elapsedTime);
+    sprites.current.forEach((s, i) => {
+      if (!s) return;
+      const k = p === null ? -1 : (p * WAVES_SECONDS - 0.15 - i * 0.3) / 1.3;
+      s.visible = k > 0 && k < 1;
+      if (!s.visible) return;
+      const side = i % 2 ? 1 : -1;
+      s.position.set(
+        position[0] + side * k * 0.18 + Math.sin(k * 5 + i) * 0.05,
+        position[1] + 0.05 + k * 0.85,
+        position[2] + k * 0.15,
+      );
+      const size = 0.26 * (0.55 + k * 0.6);
+      s.scale.set(size, size / 2, 1);
+      (s.material as THREE.SpriteMaterial).opacity = Math.min(1, k * 6) * (1 - k);
+      (s.material as THREE.SpriteMaterial).rotation = Math.sin(k * 3 + i * 1.3) * 0.2;
+    });
+  });
+  return (
+    <group>
+      {Array.from({ length: WAVES }, (_, i) => (
+        <sprite
+          key={i}
+          ref={(el) => {
+            if (el) sprites.current[i] = el;
+          }}
+          visible={false}
+          raycast={noHit}
+        >
+          <spriteMaterial map={texture} transparent depthWrite={false} toneMapped={false} />
+        </sprite>
+      ))}
+    </group>
+  );
 }
 
 // --- Circuit board: parts fly in and lock on --------------------------------------------
