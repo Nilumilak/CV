@@ -203,9 +203,9 @@ const SOUNDS = {
   'salyut-macros': {
     seconds: 2.6,
     prompt:
-      'Cartoon sound from a hand-drawn animated film: the pages of a magic paper scroll flipping ' +
-      'quickly by themselves, fast fluttery paper flaps, ending with a tiny sparkle. Playful and ' +
-      'light, not realistic.',
+      'Cartoon sound from a hand-drawn animated film: paper pages whooshing past very fast in a ' +
+      'magical riffle, like work being done in a flash, then a satisfied little ding. Whimsical, ' +
+      'not realistic.',
   },
   'salyut-projects': {
     seconds: 2.6,
@@ -267,7 +267,7 @@ const PICKS = {
   'salyut-assemblies': 'salyut-assemblies-3',
   'salyut-lead': 'salyut-lead-2',
   'salyut-projects': 'salyut-projects-5',
-  'salyut-macros': 'salyut-macros-5',
+  'salyut-macros': 'salyut-macros-9',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
