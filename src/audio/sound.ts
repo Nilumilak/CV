@@ -112,8 +112,8 @@ function context(): AudioContext | null {
 }
 
 /**
- * Files are fetched once, early (fetching needs no user gesture), and decoded once the audio
- * context exists. A failed load stays silent rather than throwing.
+ * Files are fetched once, when sound is first turned on, and decoded once the audio context
+ * exists. A failed load stays silent rather than throwing.
  */
 const files = new Map<string, Promise<ArrayBuffer | null>>();
 const decoded = new Map<string, Promise<AudioBuffer | null>>();
@@ -241,19 +241,17 @@ const SYNTHESIZED: Record<string, (ac: AudioContext, t: number) => void> = {
 };
 
 export const sound = {
-  /** Start downloading the sound files, so the first sounds don't wait on the network. */
-  preload() {
-    const objects = Object.values(OBJECT_SOUNDS).map((s) => s.url);
-    for (const url of [musicUrl, windUrl, whooshUrl, rustleUrl, tapUrl, ...objects]) {
-      void fetchFile(url);
-    }
-  },
-
-  /** Turn ambient sound on or off with a short fade. */
+  /**
+   * Turn sound on or off with a short fade. Nothing downloads until sound is first turned on,
+   * so visitors who enter quietly never fetch the files; the first time, the small one-off
+   * sounds are fetched first, then the music and wind loops.
+   */
   setEnabled(on: boolean) {
     enabled = on;
     window.clearTimeout(suspendTimer);
     if (on) {
+      const objects = Object.values(OBJECT_SOUNDS).map((s) => s.url);
+      for (const url of [whooshUrl, tapUrl, rustleUrl, ...objects]) void fetchFile(url);
       const ac = context();
       if (!ac || !master) return;
       if (!ambientStarted) {

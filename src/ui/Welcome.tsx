@@ -16,12 +16,9 @@ export function Welcome() {
   const reduceMotion = useReducedMotion();
   const enterRef = useRef<HTMLButtonElement>(null);
 
-  // Keyboard users can press Enter straight away once the button appears. The sound files
-  // start downloading then too, never earlier: they must not delay the page.
+  // Keyboard users can press Enter straight away once the button appears.
   useEffect(() => {
-    if (!ready) return;
-    enterRef.current?.focus({ preventScroll: true });
-    sound.preload();
+    if (ready) enterRef.current?.focus({ preventScroll: true });
   }, [ready]);
 
   const enter = (withSound: boolean) => {
