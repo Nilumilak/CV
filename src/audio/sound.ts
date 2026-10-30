@@ -17,6 +17,9 @@ import robotUrl from '@/assets/audio/radio-llm.mp3?url';
 import bunkerUrl from '@/assets/audio/radio-platform.mp3?url';
 import dishUrl from '@/assets/audio/radio-services.mp3?url';
 import screenUrl from '@/assets/audio/radio-ui.mp3?url';
+import circuitBoardUrl from '@/assets/audio/salyut-assemblies.mp3?url';
+import whistleUrl from '@/assets/audio/salyut-lead.mp3?url';
+import oscilloscopeUrl from '@/assets/audio/salyut-projects.mp3?url';
 import windmillUrl from '@/assets/audio/mone-packages.mp3?url';
 import fountainUrl from '@/assets/audio/mone-pdl.mp3?url';
 import lighthouseUrl from '@/assets/audio/kafka-auth.mp3?url';
@@ -54,21 +57,24 @@ const OBJECT_SOUNDS: Record<string, { url: string; level?: number }> = {
   'home-mailbox': { url: mailboxUrl, level: 0.4 },
   'home-lantern': { url: lanternUrl },
   'eco-build': { url: saplingsUrl, level: 0.4 },
+  'eco-payments': { url: collectionBoxUrl },
   // Its sharp thumps capped the levelling, so this file is about 5 dB quieter than the rest.
   'eco-lead': { url: binsUrl, level: 0.4 },
   'radio-backend': { url: containersUrl },
-  'radio-ui': { url: screenUrl },
+  'salyut-assemblies': { url: circuitBoardUrl },
+  'salyut-lead': { url: whistleUrl },
+  'salyut-projects': { url: oscilloscopeUrl },
+  'radio-ui': { url: screenUrl, level: 0.4 },
   'radio-services': { url: dishUrl, level: 0.4 },
-  'radio-platform': { url: bunkerUrl },
+  'radio-platform': { url: bunkerUrl, level: 0.4 },
   'radio-llm': { url: robotUrl },
   'mone-bnpl': { url: tramUrl },
-  'mone-packages': { url: windmillUrl, level: 0.8 },
+  'mone-packages': { url: windmillUrl, level: 0.4 },
   'mone-pdl': { url: fountainUrl, level: 0.4 },
   'mone-nextjs': { url: shopUrl },
   'mone-fsd': { url: balloonUrl },
   'mone-account': { url: signpostUrl, level: 0.6 },
   'kafka-auth': { url: lighthouseUrl, level: 0.3 },
-  'eco-payments': { url: collectionBoxUrl },
 };
 
 let ctx: AudioContext | null = null;

@@ -258,6 +258,9 @@ const PICKS = {
   'radio-platform': 'radio-platform-1',
   'radio-services': 'radio-services-6',
   'radio-ui': 'radio-ui-7',
+  'salyut-assemblies': 'salyut-assemblies-3',
+  'salyut-lead': 'salyut-lead-2',
+  'salyut-projects': 'salyut-projects-2',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
