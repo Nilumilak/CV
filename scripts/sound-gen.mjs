@@ -230,6 +230,38 @@ const SOUNDS = {
       'shimmer, then confetti fluttering gently down. Celebratory and soft, not realistic, not harsh.',
   },
 
+  // The tin-can phone and the winged shoe are assembled the same way, from these parts.
+  'phone-travel': {
+    seconds: 1.2,
+    prompt:
+      'Cartoon sound from a hand-drawn animated film: a little message zipping along a taut string ' +
+      'between two tin cans, a twangy wobbly zip. Playful, no words, not realistic, not harsh.',
+  },
+  'phone-pop': {
+    seconds: 0.5,
+    prompt:
+      'Cartoon sound from a hand-drawn animated film: a small tin can giving a happy little jump, ' +
+      'one tinny boing. Playful, not realistic, not harsh.',
+  },
+  'shoe-shake': {
+    seconds: 0.6,
+    prompt:
+      'Cartoon sound from a hand-drawn animated film: a quick rattly shake, then a few small ' +
+      'weights clunking off onto grass. Comical, not realistic, not harsh.',
+  },
+  'shoe-dash': {
+    seconds: 0.6,
+    prompt:
+      'Cartoon sound from a hand-drawn animated film: one fast zippy dash, a quick whoosh with tiny ' +
+      'pitter-patter steps, like a cartoon character zooming off. Light, not realistic, not harsh.',
+  },
+  'shoe-skid': {
+    seconds: 0.5,
+    prompt:
+      'Cartoon sound from a hand-drawn animated film: a short soft skid as a little shoe stops and ' +
+      'spins round, a playful scree. Comical, not realistic, not harsh.',
+  },
+
   // Arena.
   'olimp-apps': {
     seconds: 3.6,
@@ -286,6 +318,7 @@ const PICKS = {
   // Assembled with ffmpeg: podium-spot-2 at 0.2, 0.9 and 1.6 s (each a whole tone higher)
   // and podium-confetti-2 at 2.3 s, the podium's spotlight and confetti cues.
   'olimp-apps': 'olimp-apps-11',
+  'olimp-virtual': 'olimp-virtual-4',
 };
 
 /** Web copies: music in stereo, everything else in mono, at modest bitrates. */
