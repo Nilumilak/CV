@@ -59,7 +59,8 @@
 }
 
 .kicker {
-  margin: 0 0 4px;
+  margin: 0;
+  margin-right: 96px;
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 13px;
