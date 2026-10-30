@@ -81,17 +81,32 @@ function useKeyboardNavigation() {
   }, []);
 }
 
-/** After closing a panel, put keyboard focus back on that island's label. */
+/** How long to keep trying to focus a label while the camera flies back to the overview. */
+const FOCUS_RETURN_MS = 4000;
+
+/**
+ * After closing a panel, put keyboard focus back on that island's label.
+ * The label is visibility:hidden while the camera is still flying and the island is
+ * off screen, and a hidden element refuses focus, so keep trying until it is on screen.
+ */
 function useReturnFocusToLabel(focused: IslandId | null) {
   const previous = useRef<IslandId | null>(null);
   useEffect(() => {
     const last = previous.current;
     previous.current = focused;
     if (focused || !last) return;
-    // Wait a frame so the label is tabbable again before focusing it.
-    const raf = requestAnimationFrame(() =>
-      labelElements.get(last)?.focus({ preventScroll: true }),
-    );
+
+    const started = performance.now();
+    let raf = 0;
+    const tryFocus = () => {
+      const el = labelElements.get(last);
+      if (el && el.style.visibility !== 'hidden') {
+        el.focus({ preventScroll: true });
+        if (document.activeElement === el) return;
+      }
+      if (performance.now() - started < FOCUS_RETURN_MS) raf = requestAnimationFrame(tryFocus);
+    };
+    raf = requestAnimationFrame(tryFocus);
     return () => cancelAnimationFrame(raf);
   }, [focused]);
 }

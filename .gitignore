@@ -32,3 +32,5 @@ playwright-report/
 
 # Raw AI-generated models (large). Only optimised versions are committed.
 art-source/
+
+.vercel
