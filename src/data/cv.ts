@@ -191,8 +191,8 @@ export const chapters: Chapter[] = [
       },
       {
         id: 'eco-payments',
-        title: 'ЮKassa payments integration',
-        text: 'Connected the ЮKassa payment provider so the site could take online payments.',
+        title: 'YooKassa payments integration',
+        text: 'Connected the YooKassa payment provider so the site could take online payments.',
       },
       {
         id: 'eco-admin',
@@ -200,7 +200,7 @@ export const chapters: Chapter[] = [
         text: 'Made the website highly customizable, so administrators can change much of its content themselves.',
       },
     ],
-    tech: ['React', 'JavaScript', 'SCSS', 'Django REST Framework', 'ЮKassa'],
+    tech: ['React', 'JavaScript', 'SCSS', 'Django REST Framework', 'YooKassa'],
     links: [{ label: 'trash-free.ru', href: 'https://trash-free.ru' }],
   },
   {

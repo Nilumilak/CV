@@ -14,12 +14,12 @@ Eco Activists, Full Stack Engineer, December 2020 to December 2022. An environme
 | ------------------------------------------ | -------------------------------- |
 | Led the frontend team (the public website) | Three recycling bins             |
 | Built frontend and APIs, mentored juniors  | A row of young saplings          |
-| ЮKassa payments integration                | A wooden collection box          |
+| YooKassa payments integration              | A wooden collection box          |
 | Admin-editable website content             | The noticeboard (planning board) |
 
 The panel lists all four achievements, the tech chips and the trash-free.ru link, each achievement with a "Show me" button.
 
-(Updated 2026-10-29: the CV now lists the role as full stack and adds the ЮKassa and admin-content achievements, so the island has four objects instead of two.)
+(Updated 2026-10-29: the CV now lists the role as full stack and adds the YooKassa and admin-content achievements, so the island has four objects instead of two.)
 
 ---
 
@@ -88,7 +88,7 @@ Four young saplings in a row, each a thin trunk with a small round crown, staked
 - **Idle:** they sway gently, out of step.
 - **Click:** they grow into small trees one by one (each grows to about twice its size), hold a moment, then settle back, like juniors growing with mentoring.
 
-### Collection box · ЮKassa payments integration
+### Collection box · YooKassa payments integration
 
 A small wooden collection box on a post, with a coin slot on top and a little roof, like a donation box at a nature reserve.
 
@@ -137,7 +137,7 @@ Lessons applied: three-quarter views with volume for every concept, extra care f
 
 ## 7. Decisions (2026-10-29)
 
-All seven proposals accepted as written: the code-made waterfall, the recycling bins with litter and the "trash-free.ru" tag, the growing saplings, the mossy stone shrine under the big tree, the collection box for ЮKassa, the noticeboard for admin-editable content, and about 265 credits.
+All seven proposals accepted as written: the code-made waterfall, the recycling bins with litter and the "trash-free.ru" tag, the growing saplings, the mossy stone shrine under the big tree, the collection box for YooKassa, the noticeboard for admin-editable content, and about 265 credits.
 
 **Landmark tree (2026-10-29).** The first big-tree concept came out looking like Home's tree, so it was redrawn as a weeping willow. The willow then came out flat twice, from one image and from three views: Meshy cannot build long hanging leaf curtains as volume. To spend no more credits on this island, the landmark is now Home's big tree re-toned to a deeper, cooler forest green (the `grove` grade in `scripts/art-grade.mjs`). The sapling's first model also had a flat crown; it was rebuilt from three views and is solid. The shape check now measures every horizontal slice, so a model with one flat part is refused too.
 

@@ -570,15 +570,15 @@ Full design description and decisions: [islands/grove.md](islands/grove.md).
 
 A calm mossy grove: a huge old tree with a small shrine at its foot, recycling bins, saplings, a collection box and a noticeboard. The two trees use the foliage volume line (see the volume rule). The noticeboard's face stays plain; its notes are code-made.
 
-| #   | File name            | Object                                     | Budget           | Interactive          | Status   |
-| --- | -------------------- | ------------------------------------------ | ---------------- | -------------------- | -------- |
-| 1   | `island-base.glb`    | Mossy rock island, grass and moss to edge  | 15,000 triangles | No                   | **Done** |
-| 2   | `big-tree.glb`       | Home's big tree, re-toned (willow failed)  | 8,000            | No (landmark)        | **Done** |
-| 3   | `shrine.glb`         | Small mossy stone shrine                   | 2,000            | No                   | **Done** |
-| 4   | `recycling-bins.glb` | Three recycling bins in a row              | 3,000            | Yes: led the team    | **Done** |
-| 5   | `sapling.glb`        | One staked sapling (placed ×4)             | 1,500            | Yes: built, mentored | **Done** |
-| 6   | `noticeboard.glb`    | Wooden noticeboard on legs, plain face     | 2,000            | Yes: admin content   | **Done** |
-| 7   | `collection-box.glb` | Wooden collection box on a post, coin slot | 1,500            | Yes: ЮKassa payments | **Done** |
+| #   | File name            | Object                                     | Budget           | Interactive            | Status   |
+| --- | -------------------- | ------------------------------------------ | ---------------- | ---------------------- | -------- |
+| 1   | `island-base.glb`    | Mossy rock island, grass and moss to edge  | 15,000 triangles | No                     | **Done** |
+| 2   | `big-tree.glb`       | Home's big tree, re-toned (willow failed)  | 8,000            | No (landmark)          | **Done** |
+| 3   | `shrine.glb`         | Small mossy stone shrine                   | 2,000            | No                     | **Done** |
+| 4   | `recycling-bins.glb` | Three recycling bins in a row              | 3,000            | Yes: led the team      | **Done** |
+| 5   | `sapling.glb`        | One staked sapling (placed ×4)             | 1,500            | Yes: built, mentored   | **Done** |
+| 6   | `noticeboard.glb`    | Wooden noticeboard on legs, plain face     | 2,000            | Yes: admin content     | **Done** |
+| 7   | `collection-box.glb` | Wooden collection box on a post, coin slot | 1,500            | Yes: YooKassa payments | **Done** |
 
 ### 1. Island base
 

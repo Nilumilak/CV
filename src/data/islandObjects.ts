@@ -37,7 +37,7 @@ export const ISLAND_OBJECTS = [
   // Green Grove (design: docs/plan/islands/grove.md)
   { id: 'eco-lead', label: 'Led the team', name: 'the recycling bins', cue: 'knock' },
   { id: 'eco-build', label: 'Frontend, APIs, mentoring', name: 'the saplings', cue: 'chime' },
-  { id: 'eco-payments', label: 'ЮKassa payments', name: 'the collection box', cue: 'coins' },
+  { id: 'eco-payments', label: 'YooKassa payments', name: 'the collection box', cue: 'coins' },
   { id: 'eco-admin', label: 'Admin-editable content', name: 'the noticeboard', cue: 'paper' },
   // Workshop (design: docs/plan/islands/workshop.md)
   { id: 'salyut-lead', label: 'Led 5+ projects', name: 'the steam whistle', cue: 'bell' },
