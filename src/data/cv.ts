@@ -10,6 +10,7 @@ export const profile: Profile = {
   role: 'Senior Frontend Developer',
   tagline: 'React / TypeScript · Fintech',
   location: 'Remote · Sole proprietor, Armenia',
+  photo: '/photo.jpg',
   summary:
     'Senior frontend developer with 5+ years shipping production web applications in HTML, CSS, TypeScript, and React across fintech lending, betting, and internal platforms. Owns end-to-end user flows and the frontend platform around them: Feature-Sliced Design, a shared UI kit for web and React Native, typed REST API contracts (OpenAPI), and CI/CD release pipelines. At a lending fintech, ran two products, PDL and BNPL, and the release pipeline while the team had no frontend lead. At Radio Gigabit, designed and built the internal test platform end to end, including the rebuilt UI. Rebuilt an authorization service in Preact and cut bundle size 40%. Tests UI with Vitest, Jest, and Testing Library, and delivers FastAPI and PostgreSQL when the product needs it.',
   contacts: {
