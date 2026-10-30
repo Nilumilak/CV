@@ -83,6 +83,33 @@ function useKeyboardNavigation() {
 
 /** How long to keep trying to focus a label while the camera flies back to the overview. */
 const FOCUS_RETURN_MS = 4000;
+/** How long a focus-return may be followed by a click that the finger never pressed. */
+const GHOST_CLICK_MS = 1000;
+
+/**
+ * Touch browsers can emit a click on an element that receives focus, reusing the
+ * press that already happened. Ignore one such click, and keep a real tap.
+ */
+function swallowClickWithoutPress(el: HTMLElement) {
+  let pressed = false;
+  const onPress = () => {
+    pressed = true;
+  };
+  const onClick = (e: Event) => {
+    if (!pressed) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    cleanup();
+  };
+  const cleanup = () => {
+    el.removeEventListener('pointerdown', onPress, true);
+    el.removeEventListener('click', onClick, true);
+  };
+  el.addEventListener('pointerdown', onPress, true);
+  el.addEventListener('click', onClick, true);
+  window.setTimeout(cleanup, GHOST_CLICK_MS);
+}
 
 /**
  * After closing a panel, put keyboard focus back on that island's label.
@@ -98,9 +125,16 @@ function useReturnFocusToLabel(focused: IslandId | null) {
 
     const started = performance.now();
     let raf = 0;
+    let armed = false;
     const tryFocus = () => {
       const el = labelElements.get(last);
       if (el && el.style.visibility !== 'hidden') {
+        // A touch click just opened this island. Focusing its label again can emit
+        // another click with no new press, which would reopen the panel.
+        if (!armed) {
+          swallowClickWithoutPress(el);
+          armed = true;
+        }
         el.focus({ preventScroll: true });
         if (document.activeElement === el) return;
       }

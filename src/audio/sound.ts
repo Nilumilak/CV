@@ -45,11 +45,11 @@ const FADE_IN = 2.5;
 const FADE_OUT = 0.6;
 
 /**
- * Every file is levelled to the same loudness, so these set the mix: the music sits under
- * the wind, and object sounds come through clearly over both.
+ * Every file is levelled to the same loudness, so these set the mix: the wind stays
+ * under the music, and object sounds come through clearly over both.
  */
 const MUSIC_LEVEL = 0.45;
-const WIND_LEVEL = 0.35;
+const WIND_LEVEL = 0.25;
 const WHOOSH_LEVEL = 0.8;
 const OBJECT_LEVEL = 0.9;
 /** Interface sounds stay in the background: a page turning, a soft tap. */
