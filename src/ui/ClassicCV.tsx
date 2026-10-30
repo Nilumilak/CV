@@ -56,30 +56,26 @@ export function ClassicCV({ noWebGL = false }: { noWebGL?: boolean }) {
 
       <main className={styles.page}>
         <header className={styles.header}>
-          <div className={styles.identity}>
-            {profile.photo && (
-              <img className={styles.photo} src={profile.photo} alt={profile.name} />
-            )}
-            <div>
-              <h1 className={styles.name}>{profile.name}</h1>
-              <p className={styles.role}>
-                {profile.role} · {profile.tagline}
-              </p>
-            </div>
+          {profile.photo && <img className={styles.photo} src={profile.photo} alt={profile.name} />}
+          <div className={styles.intro}>
+            <h1 className={styles.name}>{profile.name}</h1>
+            <p className={styles.role}>
+              {profile.role} · {profile.tagline}
+            </p>
+            <ul className={styles.contacts}>
+              <li>{profile.location}</li>
+              <li>
+                <a href={`mailto:${contacts.email}`}>{contacts.email}</a>
+              </li>
+              {contacts.phone && <li>{contacts.phone}</li>}
+              <li>
+                <a href={contacts.linkedin}>{prettyUrl(contacts.linkedin)}</a>
+              </li>
+              <li>
+                <a href={contacts.github}>{prettyUrl(contacts.github)}</a>
+              </li>
+            </ul>
           </div>
-          <ul className={styles.contacts}>
-            <li>{profile.location}</li>
-            <li>
-              <a href={`mailto:${contacts.email}`}>{contacts.email}</a>
-              {contacts.phone && <> · {contacts.phone}</>}
-            </li>
-            <li>
-              <a href={contacts.linkedin}>{prettyUrl(contacts.linkedin)}</a>
-            </li>
-            <li>
-              <a href={contacts.github}>{prettyUrl(contacts.github)}</a>
-            </li>
-          </ul>
         </header>
 
         <h2 className={styles.section}>Summary</h2>

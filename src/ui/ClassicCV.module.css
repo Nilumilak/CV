@@ -58,27 +58,24 @@
   background: #fff;
 }
 
+/* Photo on the left; name, role and a single row of contacts beside it. */
 .header {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 14px;
+  gap: 5mm;
   align-items: center;
   border-bottom: 2px solid var(--cv-accent);
   padding-bottom: 10px;
   margin-bottom: 12px;
 }
 
-.identity {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.intro {
   min-width: 0;
 }
 
 .photo {
-  width: 20mm;
-  height: 24mm;
+  flex: none;
+  width: 22mm;
+  height: 26.4mm;
   object-fit: cover;
   object-position: center 18%;
   border-radius: 2px;
@@ -100,13 +97,20 @@
 }
 
 .contacts {
-  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 8px 0 0;
   padding: 0;
   list-style: none;
-  text-align: right;
   color: var(--cv-muted);
   font-size: 9.5pt;
   line-height: 1.5;
+}
+
+.contacts li + li::before {
+  content: '·';
+  margin: 0 6px;
+  color: var(--cv-line);
 }
 
 .contacts a {
