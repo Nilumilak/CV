@@ -69,7 +69,7 @@ const OBJECT_SOUNDS: Record<string, { url: string; level?: number }> = {
   'olimp-preact': { url: shoeUrl, level: 0.4 },
   'olimp-virtual': { url: scoreboardUrl, level: 0.4 },
   // About 2 dB under the other files (a peak capped its levelling), hence a little higher.
-  'olimp-iframe': { url: phoneUrl, level: 1.1 },
+  'olimp-iframe': { url: phoneUrl, level: 0.8 },
   'olimp-apps': { url: podiumUrl, level: 0.4 },
   'salyut-assemblies': { url: circuitBoardUrl, level: 0.4 },
   'salyut-macros': { url: scrollUrl, level: 0.4 },
