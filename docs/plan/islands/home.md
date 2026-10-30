@@ -205,17 +205,17 @@ Agreed on 2026-10-28.
 
 Positions are in island units: the island's own frame before its 1.2 scale, with the grass surface at height 0. **+Z faces the overview camera, +X is the visitor's right.** "Turn" is the rotation around the vertical axis in degrees; positive turns the front towards the visitor's right, where the focus camera sits.
 
-| Object          | Position (x, z)                            | Size                      | Turn   | Notes                                                       |
-| --------------- | ------------------------------------------ | ------------------------- | ------ | ----------------------------------------------------------- |
-| Cottage         | 0.2, −1.0                                  | 5 tall (done)             | 17°    | Round window glows warmly                                   |
-| Big tree        | −3.0, −1.0                                 | 5.6 tall                  | 90°    | Left of the house, clear of the roof                        |
-| Bookshelf       | −1.4, 1.0                                  | 1.4 tall                  | 35°    | Left of the door, turned towards the camera                 |
-| Bench + cat     | 2.6, −1.0                                  | bench 1.6 long (cat done) | −30°   | Sunny side, beside the house right of the door              |
-| Stump + globe   | −1.6, 2.6                                  | stump 0.6 tall, globe 0.8 | 30°    | Study corner, in front of the bookshelf                     |
-| Garden lantern  | 1.0, 2.8                                   | 2.1 tall                  | 0°     | Front, left of the path                                     |
-| Mailbox         | 3.0, 2.1                                   | 1.2 tall                  | −120°  | Where the path ends; red flag faces the camera              |
-| Stepping stones | 0.8, 0.7 → 1.2, 1.4 → 1.8, 1.85 → 2.0, 2.6 | 0.6 to 0.8 wide           | random | From the door towards the front, the mailbox on the right   |
-| Flower bushes   | none                                       |                           |        | **Dropped**, see below |
+| Object          | Position (x, z)                            | Size                      | Turn   | Notes                                                     |
+| --------------- | ------------------------------------------ | ------------------------- | ------ | --------------------------------------------------------- |
+| Cottage         | 0.2, −1.0                                  | 5 tall (done)             | 17°    | Round window glows warmly                                 |
+| Big tree        | −3.0, −1.0                                 | 5.6 tall                  | 90°    | Left of the house, clear of the roof                      |
+| Bookshelf       | −1.4, 1.0                                  | 1.4 tall                  | 35°    | Left of the door, turned towards the camera               |
+| Bench + cat     | 2.6, −1.0                                  | bench 1.6 long (cat done) | −30°   | Sunny side, beside the house right of the door            |
+| Stump + globe   | −1.6, 2.6                                  | stump 0.6 tall, globe 0.8 | 30°    | Study corner, in front of the bookshelf                   |
+| Garden lantern  | 1.0, 2.8                                   | 2.1 tall                  | 0°     | Front, left of the path                                   |
+| Mailbox         | 3.0, 2.1                                   | 1.2 tall                  | −120°  | Where the path ends; red flag faces the camera            |
+| Stepping stones | 0.8, 0.7 → 1.2, 1.4 → 1.8, 1.85 → 2.0, 2.6 | 0.6 to 0.8 wide           | random | From the door towards the front, the mailbox on the right |
+| Flower bushes   | none                                       |                           |        | **Dropped**, see below                                    |
 
 **Flower bushes are dropped (2026-10-29).** A pink hydrangea dome and a white-and-yellow daisy ball were made from front, side and back views of approved concepts, then multi-image-to-3D. Both came out solid, but the user removed them from the island; Home stays without bushes. The models remain in `art-source/home/` (bush-hydrangea.glb, bush-daisy.glb). Their files are heavy for bushes (about 830 KB and 660 KB): Meshy splits their texture layout into tiny pieces, so the optimizer's simplify step can't reduce them; a Meshy remesh to a lower polycount would.
 
@@ -255,7 +255,7 @@ What is built now:
 | ------------- | ---------------------------------------------------------------------------- |
 | Whole island  | Bobs slowly (shared by all islands)                                          |
 | Big tree      | Sways very gently                                                            |
-| Flower bushes | None: dropped                                                                  |
+| Flower bushes | None: dropped                                                                |
 | Cat           | Breathes slowly                                                              |
 | Cottage       | Smoke puffs curl from the chimney; the round window glows warmly             |
 | Lantern       | Flickers softly, a dim warm light on the grass, a few fireflies drift nearby |
